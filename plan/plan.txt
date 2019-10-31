@@ -1,0 +1,32 @@
+1 Se genera una nocon, la ve ISM
+  status=inicio
+2 ISM se lo asigna a un responsable de accion correctiva
+  status=pendiente-propuesta
+3 el responsable agrega una propuesta
+  status=pendiente-revision
+4 si ISM rechaza la propuesta,
+  agregar retroalimentación a la propuesta y regresar a 2
+  status=inicio
+5 de otra manera, continuar
+  status=en-progreso
+6 cuando la accion correctiva haya sido realizada, 
+  status=completada
+7 ISM verifica el resultado de la accion correctiva
+8 Si no es suficiente, 
+  agregar retroalimentación a la propuesta y regresar a 2
+  status=inicio
+9 de otra manera, continuar
+  status=verificada
+10 el generador ve la noco verificada, terminar.
+  status=cerrada
+
+ISM es un rol, varios usuarios pueden pertenecer a ISM
+
+Visibilidad de estados:
+ inicio			(generador, ISM)
+ pendiente-propuesta	(generador, ISM, responsable)
+ pendiente-revision	(generador, ISM)
+ en-progreso		(generador, ISM, responsable)
+ completada		(generador, ISM)
+ verificada		(generador)
+ cerrada 		(generador)
