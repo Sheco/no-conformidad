@@ -10,15 +10,15 @@
 5 de otra manera, continuar
   status=en-progreso
 6 cuando la accion correctiva haya sido realizada, 
-  status=completada
-7 ISM verifica el resultado de la accion correctiva
-8 Si no es suficiente, 
-  agregar retroalimentación a la propuesta y regresar a 2
+  status=completado
+7 ISM verifica el resultado de la accion correctiva, 
+  Si no es suficiente, 
+  regresar a 2
   status=inicio
-9 de otra manera, continuar
-  status=verificada
-10 el generador ve la noco verificada, terminar.
-  status=cerrada
+8 de otra manera, continuar
+  status=verificado
+9 el generador ve la noco verificada, terminar.
+  status=cerrado
 
 ISM es un rol, varios usuarios pueden pertenecer a ISM
 
@@ -27,6 +27,6 @@ Visibilidad de estados:
  pendiente-propuesta	(generador, ISM, responsable)
  pendiente-revision	(generador, ISM)
  en-progreso		(generador, ISM, responsable)
- completada		(generador, ISM)
- verificada		(generador)
- cerrada 		(generador)
+ completado		(generador, ISM)
+ verificado		(generador)
+ cerrado 		(generador)
