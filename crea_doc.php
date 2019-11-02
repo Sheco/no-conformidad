@@ -17,7 +17,7 @@ $tipo = App\Tipo::find(1);
 
 /* paso 1, nuevo documento */
 echo "Creando nuevo documento...\n";
-$doc = App\Documento::nuevo($barco, $tipo, 'prueba');
+$doc = App\Documento::nuevo($barco, $tipo, 'hay un hueco');
 //$doc = App\Documento::find(5);
 espera();
 
@@ -31,14 +31,15 @@ do {
 
     /* paso 3, el responsable agrega una propuesta */
     echo "Agregando propuesta...\n";
-    $propuesta = $doc->agregarPropuesta($responsable, 'propuesta');
+    $texto = ($rechazos<$totalRechazos? 'no hacer nada': 'tapar el hueco');
+    $propuesta = $doc->agregarPropuesta($responsable, $texto);
     $doc->save();
     espera();
 
     /* paso 4, rechazar y reasignar */
     if($rechazos<$totalRechazos) {
         echo "Rechazando propuesta...\n";
-        $doc->rechazarPropuesta($propuesta, $ism, 'no me gusta');
+        $doc->rechazarPropuesta($propuesta, $ism, 'mala idea');
         $propuesta->save();
         $doc->save();
         espera();
