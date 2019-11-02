@@ -109,6 +109,9 @@ class Documento extends Model
         if($ism->departamento->nombre != "ISM") 
             throw new \Exception("Solo ISM puede rechazar propuestas");
 
+        if($this->status->codigo != 'pendiente-revision')
+            throw new \Exception('Solo se puede rechazar propuestas cuando estan pendientes de revisión');
+
         if($this->propuestas()->get()->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
 
@@ -121,6 +124,9 @@ class Documento extends Model
     public function aceptarPropuesta(Propuesta $propuesta, User $ism, $comentarios) {
         if($ism->departamento->nombre != "ISM")
             throw new \Exception("Solo ISM puede aceptar propuestas");
+
+        if($this->status->codigo != 'pendiente-revision')
+            throw new \Exception('Solo se puede aceptar propuestas cuando estan pendientes de revisión');
 
         if($this->propuestas()->get()->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
