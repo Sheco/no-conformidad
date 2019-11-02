@@ -55,7 +55,7 @@ class Documento extends Model
                        
         // si el usuario es ISM, siempre puede ver todos los documentos
         // hasta el punto en el que que el status es verificado
-        if($user->departamento->nombre == "ISM") {
+        if($user->hasRole("ism")) {
             $query = $query->orWhere('status_id', '<=', 5);
         }
 
@@ -63,6 +63,9 @@ class Documento extends Model
     }
 
     static function nuevo(User $user, Tipo $tipo, $descripcion) {
+        if(!$user->hasRole('creador'))
+            throw new \Exception("El usuario $user->name no es un creador");
+
         $nueva = new self;
         $nueva->creador_usr_id = $user->id;
         $nueva->setStatus('inicio');
@@ -81,8 +84,8 @@ class Documento extends Model
         if($this->status->codigo != 'inicio')
             throw new \Exception('Para asignar un responsable, el documento tiene que esta al inicio de su proceso');
 
-        if($this->status->codigo != 'inicio')
-            throw new \Exception('Solo puede asignarse un responsable a aquellos documentos que esten al inicio del proceso');
+        if(!$user->hasRole('responsable'))
+            throw new \Exception("El usuario $user->name no es un responsable");
 
         $this->responsable()->associate($user);
         $this->setStatus('pendiente-propuesta');
@@ -105,8 +108,8 @@ class Documento extends Model
         return $propuesta;
     }
 
-    public function rechazarPropuesta(Propuesta $propuesta, User $ism, $comentarios) {
-        if($ism->departamento->nombre != "ISM") 
+    public function rechazarPropuesta(Propuesta $propuesta, User $user, $comentarios) {
+        if(!$user->hasRole('ism')) 
             throw new \Exception("Solo ISM puede rechazar propuestas");
 
         if($this->status->codigo != 'pendiente-revision')
@@ -115,14 +118,14 @@ class Documento extends Model
         if($this->propuestas()->get()->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
 
-        $propuesta->retroalimentador()->associate($ism);
+        $propuesta->retroalimentador()->associate($user);
         $propuesta->retro = $comentarios;
 
         $this->setStatus('inicio');
     }
 
-    public function aceptarPropuesta(Propuesta $propuesta, User $ism, $comentarios) {
-        if($ism->departamento->nombre != "ISM")
+    public function aceptarPropuesta(Propuesta $propuesta, User $user, $comentarios) {
+        if(!$user->hasRole('ism'))
             throw new \Exception("Solo ISM puede aceptar propuestas");
 
         if($this->status->codigo != 'pendiente-revision')
@@ -131,14 +134,14 @@ class Documento extends Model
         if($this->propuestas()->get()->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
 
-        $propuesta->retroalimentador()->associate($ism);
+        $propuesta->retroalimentador()->associate($user);
         $propuesta->retro = $comentarios;
 
         $this->setStatus('en-progreso');
     } 
 
-    public function corregido(User $responsable) {
-        if($responsable->id != $this->responsable_usr_id)
+    public function corregido(User $user) {
+        if($user->id != $this->responsable_usr_id)
             throw new \Exception("Solo el responsable pude marcar el documento como corregido");
 
         if($this->status->codigo != 'en-progreso')
@@ -147,8 +150,8 @@ class Documento extends Model
         $this->setStatus('corregido');
     }
 
-    public function verificado(User $creador) {
-        if($creador->id != $this->creador_usr_id) 
+    public function verificado(User $user) {
+        if($user->id != $this->creador_usr_id) 
             throw new \Exception("Solo el creador puede marcar el documento como verificado");
 
         if($this->status->codigo != 'corregido')
@@ -157,8 +160,8 @@ class Documento extends Model
         $this->setStatus('verificado');
     }
 
-    public function cerrar(User $creador) {
-        if($creador->id != $this->creador_usr_id) 
+    public function cerrar(User $user) {
+        if($user->id != $this->creador_usr_id) 
             throw new \Exception("Solo el creador puede cerrar el documento.");
 
         if($this->status->codigo != 'verificado')

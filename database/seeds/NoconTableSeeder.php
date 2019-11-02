@@ -6,6 +6,7 @@ use App\Departamento;
 use App\Tipo;
 use App\Status;
 use App\User;
+use App\Role;
 
 use Illuminate\Support\Facades\Hash;
 
@@ -66,24 +67,45 @@ class NoconTableSeeder extends Seeder
             'codigo'=> 'cerrado', 
             'nombre'=>'Cerrado' 
         ]);
+
+        Role::create([
+            'name'=>'admin',
+        ]);
+
+        Role::create([
+            'name' => 'ism',
+        ]);
+
+        Role::create([
+            'name' => 'responsable'
+        ]);
+
+        Role::create([
+            'name' => 'creador'
+        ]);
             
-        User::create([
+        $user = User::create([
             'name'=>'Barco',
             'email'=>'barco@nocon.com',
             'password'=>Hash::make('nocon'),
             'departamento_id'=>$barco->id,
         ]);
-        User::create([
+        $user->addRole('creador');
+
+        $user = User::create([
             'name'=>'ISM',
             'email'=>'ism@nocon.com',
             'password'=>Hash::make('nocon'),
             'departamento_id'=>$ism->id,
         ]);
-        User::create([
+        $user->addRole('ism');
+
+        $user = User::create([
             'name'=>'Responsable',
             'email'=>'responsable@nocon.com',
             'password'=>Hash::make('nocon'),
             'departamento_id'=>$responsable->id,
         ]);
+        $user->addRole('responsable');
     }
 }

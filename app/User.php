@@ -41,4 +41,22 @@ class User extends Authenticatable
         return $this->belongsTo('App\Departamento');
     }
 
+    public function roles() {
+        return $this->belongsToMany('App\Role', 'user_roles');
+    }
+
+    public function addRole($name) {
+        $role = Role::where('name', $name)->first();
+        $this->roles()->attach($role->id);
+    }
+
+    public function delRole($name) {
+        $role = Role::where('name', $name)->first();
+        $this->roles()->dettach($role->id);
+    }
+
+    public function hasRole($name) {
+        return $this->roles()->where('name', $name)->exists();
+    }
+
 }
