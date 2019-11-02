@@ -31,6 +31,10 @@ class CreateDocumentos extends Migration
             $table->foreign('status_id')->references('id')->on('status');
             $table->foreign('creador_usr_id')->references('id')->on('users');
             $table->foreign('responsable_usr_id')->references('id')->on('users');
+
+            $table->index('status_id');
+            $table->index('responsable_usr_id');
+            $table->index('creador_id');
         });
     }
 
