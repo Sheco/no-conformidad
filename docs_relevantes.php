@@ -15,7 +15,7 @@ foreach($personas as $persona) {
         echo "- documento: $doc->id, folio: $doc->folio, {$doc->status->nombre}, $doc->descripcion\n";
         echo " creador: {$doc->creador->name}, responsable: ". ($doc->responsable? $doc->responsable->name: '') ."\n";
         foreach($doc->propuestas as $prop) {
-            echo "-- propuesta: $prop->id, {$prop->responsable->name}, $prop->descripcion\n";
+            echo "-- propuesta: $prop->id, {$prop->responsable->name}, $prop->descripcion, $prop->retro\n";
         }
     }
     echo "\n";
