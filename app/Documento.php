@@ -62,6 +62,14 @@ class Documento extends Model
         return $query;
     }
 
+    public function scopeStatus($query, $codigo) {
+        $status = Status::where('codigo', $codigo)->first();
+        if(!$status)
+            throw new \Exception("No se encontro el status con codigo $codigo");
+
+        $query->where('status_id', $status->id);
+    }
+
     static function nuevo(User $user, Tipo $tipo, $descripcion) {
         if(!$user->hasRole('creador'))
             throw new \Exception("El usuario $user->name no es un creador");
