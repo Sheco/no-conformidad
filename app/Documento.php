@@ -109,8 +109,9 @@ class Documento extends Model
         if($ism->departamento->nombre != "ISM") 
             throw new \Exception("Solo ISM puede rechazar propuestas");
 
-        // FIXME: verificar que $propuesta sea la ultima propuesta de este 
-        // documento, no se pueden rechazar/aceptas otras pasadas.
+        if($this->propuestas()->get()->last()->id != $propuesta->id)
+            throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
+
         $propuesta->retroalimentador()->associate($ism);
         $propuesta->retro = $comentarios;
 
@@ -121,8 +122,9 @@ class Documento extends Model
         if($ism->departamento->nombre != "ISM")
             throw new \Exception("Solo ISM puede aceptar propuestas");
 
-        // FIXME: verificar que $propuesta sea la ultima propuesta de este 
-        // documento, no se pueden rechazar/aceptas otras pasadas.
+        if($this->propuestas()->get()->last()->id != $propuesta->id)
+            throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
+
         $propuesta->retroalimentador()->associate($ism);
         $propuesta->retro = $comentarios;
 
