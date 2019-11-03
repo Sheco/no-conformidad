@@ -25,7 +25,7 @@ $rechazos = 0;
 do {
     /* paso 2, se asigna responsable */ 
     echo "Asignando responsable...\n";
-    $doc->asignarResponsable($responsable);
+    $doc->asignarResponsable($ism, $responsable);
     $doc->save();
     espera();
 
@@ -39,7 +39,7 @@ do {
     /* paso 4, rechazar y reasignar */
     if($rechazos<$totalRechazos) {
         echo "Rechazando propuesta...\n";
-        $doc->rechazarPropuesta($propuesta, $ism, 'mala idea');
+        $doc->rechazarPropuesta($ism, $propuesta, 'mala idea');
         $propuesta->save();
         $doc->save();
         espera();
@@ -49,7 +49,7 @@ do {
 
 /* paso 5, aceptar la propuesta */
 echo "Aceptando propuesta...\n";
-$doc->aceptarPropuesta($propuesta, $ism, 'perfecto');
+$doc->aceptarPropuesta($ism, $propuesta, 'perfecto');
 $propuesta->save();
 $doc->save();
 espera();

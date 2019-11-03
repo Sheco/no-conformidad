@@ -72,7 +72,7 @@ class Documento extends Model
 
     static function nuevo(User $user, Tipo $tipo, $titulo, $descripcion) {
         if(!$user->hasRole('creador'))
-            throw new \Exception("El usuario $user->name no es un creador");
+            throw new \Exception("El usuario $user->name no puede crear documentos, no tiene el rol apropiado.");
 
         $nueva = new self;
         $nueva->creador_usr_id = $user->id;
@@ -89,23 +89,29 @@ class Documento extends Model
         return $nueva;
     }
 
-    public function asignarResponsable(User $user) {
+    public function asignarResponsable(User $user, User $responsable) {
         if($this->status->codigo != 'inicio')
             throw new \Exception('Para asignar un responsable, el documento tiene que esta al inicio de su proceso');
 
-        if(!$user->hasRole('responsable'))
-            throw new \Exception("El usuario $user->name no es un responsable");
+        if(!$user->hasRole('ism'))
+            throw new \Exception("El usuario $user->name no puede asignar responsables, no tiene el rol apropiado.");
 
-        $this->responsable()->associate($user);
+        if(!$responsable->hasRole('responsable'))
+            throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, on tiene el rol apropiado.");
+
+        $this->responsable()->associate($responsable);
         $this->setStatus('pendiente-propuesta');
     }
 
     public function agregarPropuesta(User $user, $descripcion) {
         if($user->id != $this->responsable_usr_id)
-            throw new \Exception("Solo el responsable del documento puede agregar propuestas.");
+            throw new \Exception("Solo {$this->responsable->name} puede agregar propuestas a este documento.");
 
         if($this->status->codigo != 'pendiente-propuesta') 
             throw new \Exception('Solo se puede agregar una propuesta a aquellos documentos que esten esperando una propuesta');
+
+        if(!$user->hasRole('responsable'))
+            throw new \Exception("El usuario $user->name no puede agregar propuestas, no tiene el rol apropiado.");
 
         $propuesta = new Propuesta;
         $propuesta->responsable()->associate($user);
@@ -117,15 +123,15 @@ class Documento extends Model
         return $propuesta;
     }
 
-    public function rechazarPropuesta(Propuesta $propuesta, User $user, $comentarios) {
+    public function rechazarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
         if(!$user->hasRole('ism')) 
-            throw new \Exception("Solo ISM puede rechazar propuestas");
+            throw new \Exception("El usuario $user->name no puede rechazar propuestas, no tiene el rol apropiado.");
 
         if($this->status->codigo != 'pendiente-revision')
             throw new \Exception('Solo se puede rechazar propuestas cuando estan pendientes de revisión');
 
         if($this->propuestas()->get()->last()->id != $propuesta->id)
-            throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
+            throw new \Exception("Solo se puede aceptar la ultima propuesta del documento, ");
 
         $propuesta->retroalimentador()->associate($user);
         $propuesta->retro = $comentarios;
@@ -133,7 +139,7 @@ class Documento extends Model
         $this->setStatus('inicio');
     }
 
-    public function aceptarPropuesta(Propuesta $propuesta, User $user, $comentarios) {
+    public function aceptarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
         if(!$user->hasRole('ism'))
             throw new \Exception("Solo ISM puede aceptar propuestas");
 
@@ -154,24 +160,28 @@ class Documento extends Model
             throw new \Exception("Solo el responsable pude marcar el documento como corregido");
 
         if($this->status->codigo != 'en-progreso')
-            throw new \Exception("Solo se pueden marcar como corregido aquellos documentos que esten en progreso.");
+            throw new \Exception("Solo se pueden marcar como corregidos aquellos documentos que esten en progreso.");
+
+        if(!$user->hasRole('responsable'))
+            throw new \Exception("El usuario $user->name no puede marcar el documento como corregido, no tiene el rol apropiado");
 
         $this->setStatus('corregido');
     }
 
     public function verificado(User $user) {
         if($user->id != $this->creador_usr_id) 
-            throw new \Exception("Solo el creador puede marcar el documento como verificado");
+            throw new \Exception("Solo {$this->creador->name} puede marcar este documento como verificado");
 
         if($this->status->codigo != 'corregido')
             throw new \Exception("Solo se pueden marcar como verificado aquellos documentos que esten marcados como corregidos.");
+
 
         $this->setStatus('verificado');
     }
 
     public function cerrar(User $user) {
         if($user->id != $this->creador_usr_id) 
-            throw new \Exception("Solo el creador puede cerrar el documento.");
+            throw new \Exception("Solo {$this->creador->name} puede cerrar este documento.");
 
         if($this->status->codigo != 'verificado')
             throw new \Exception("Solo se pueden cerrar aquellos documentos que esten marcados como verificados.");
