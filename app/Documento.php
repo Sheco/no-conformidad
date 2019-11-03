@@ -70,7 +70,7 @@ class Documento extends Model
         $query->where('status_id', $status->id);
     }
 
-    static function nuevo(User $user, Tipo $tipo, $descripcion) {
+    static function nuevo(User $user, Tipo $tipo, $titulo, $descripcion) {
         if(!$user->hasRole('creador'))
             throw new \Exception("El usuario $user->name no es un creador");
 
@@ -80,6 +80,7 @@ class Documento extends Model
         $nueva->tipo_id = $tipo->id;
         $nueva->folio = $user->contador_documentos;
         $nueva->fecha = Carbon::now();
+        $nueva->titulo = $titulo;
         $nueva->descripcion = $descripcion;
         $nueva->save();
 

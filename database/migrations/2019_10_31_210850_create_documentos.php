@@ -24,6 +24,7 @@ class CreateDocumentos extends Migration
             $table->unsignedBigInteger('status_id');
             $table->unsignedBigInteger('creador_usr_id');
             $table->unsignedBigInteger('responsable_usr_id')->nullable();
+            $table->string('titulo');
             $table->string('descripcion');
 
             $table->foreign('departamento_id')->references('id')->on('departamentos');
