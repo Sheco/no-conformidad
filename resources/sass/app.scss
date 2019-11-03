@@ -6,3 +6,35 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+.formaTabular label {
+    font-weight: bold;
+}
+
+.status-cerrado {
+    color: #6c757d;
+}
+
+.status-inicio {
+    color: #dc3545;
+}
+
+.status-pendiente-propuesta {
+    color: #ffc107;
+}
+
+.status-pendiente-revision {
+    color: #17a2b8;
+}
+
+.status-en-progreso {
+    color: #007bff;
+}
+
+.status-corregido {
+    color: #28a745;
+}
+
+.status-verificado {
+    color: #28a745;
+}
