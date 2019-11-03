@@ -4,18 +4,19 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <div class="nav flex-column">
-                <li class="nav-item">
+            <nav class="nav flex-column">
                     @foreach ($statuses as $_status)
                         <a class="nav-link" href="{{ url('docs/status', $_status->codigo) }}">
-                            <span class="badge badge-success text-light">
-                                {{ $_status->documentosVisibles($user) }}
-                            </span>
-                            {!! $_status->nombreColoreado !!}
-                        </a>
+                        <span class="badge badge-success text-light">
+                            {{ $_status->documentosVisibles($user) }}
+                        </span>
+                        {!! $_status->nombreColoreado !!}
+                        @if ($_status->codigo == $status)
+                            *
+                        @endif
+                    </a>
                     @endforeach
-                </li>                
-            </div>
+            </nav>
         </div>
         <div class="col-md-9">
             <table class="table table-bordered table-striped">
