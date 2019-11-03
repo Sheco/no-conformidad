@@ -11,11 +11,14 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes(['register'=>false]);
 
-Route::get('/home', 'HomeController@index')->name('home');
-
+Route::middleware(['auth'])->group(function() {
+    $redirectDocs = function() { return redirect('/docs'); };
+    Route::get('/', $redirectDocs);
+    Route::get('/home', $redirectDocs);
+    
+    Route::get('/docs', 'DocumentosController@index');
+    Route::get('/docs/status/{status}', 'DocumentosController@index');
+    Route::get('/docs/{documento}', 'DocumentosController@show');
+});   
