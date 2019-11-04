@@ -1,0 +1,7 @@
+- Agregar al listado los campos id_general, id_barco, creador, tipo de no conformidad, fecha limite de corrección, fecha de cierre
+- Consecutivo del barco debe estar conformado por nombre_barco+id_barco+2 digitos del año (cada año debe empezar con el id 1)
+- permitir adjuntar archivos cuando se crea el documento
+- Fechas maximas
+- Para la selección de la fecha máxima para la corrección, se debe tomar en cuenta desde el día que se asigna un responsable
+- cuando no se cumplan los tiempos, marcar de alguna forma el documento como retrasado
+- Log de movimientos
