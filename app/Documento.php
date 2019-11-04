@@ -72,9 +72,6 @@ class Documento extends Model
     }
 
     function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion) {
-        if(!$user->hasRole('creador'))
-            throw new \Exception("El usuario $user->name no puede crear documentos, no tiene el rol apropiado.");
-
         $this->creador_usr_id = $user->id;
         $this->setStatus('inicio');
         $this->tipo_id = $tipo->id;
@@ -90,11 +87,6 @@ class Documento extends Model
     }
 
     public function asignarResponsable(User $user, ?User $responsable) {
-        if(!in_array($this->status->codigo, ['inicio', 'pendiente-propuesta']))
-            throw new \Exception('Para asignar un responsable, el documento tiene que esta al inicio de su proceso o estar pendiente de una propuesta.');
-
-        if(!$user->hasRole('ism'))
-            throw new \Exception("El usuario $user->name no puede asignar responsables, no tiene el rol apropiado.");
         if(!$responsable) {
             $this->responsable()->dissociate();
             $this->setStatus('inicio');
@@ -109,17 +101,6 @@ class Documento extends Model
     }
 
     public function agregarPropuesta(User $user, $descripcion) {
-        if(!$this->responsable_usr_id)
-            throw new \Exception('En este momento nadie puede agregar propuestas a este documento.');
-        elseif($user->id != $this->responsable_usr_id)
-            throw new \Exception("Solo {$this->responsable->name} puede agregar propuestas a este documento.");
-
-        if($this->status->codigo != 'pendiente-propuesta') 
-            throw new \Exception('Solo se puede agregar una propuesta a aquellos documentos que esten esperando una propuesta');
-
-        if(!$user->hasRole('responsable'))
-            throw new \Exception("El usuario $user->name no puede agregar propuestas, no tiene el rol apropiado.");
-
         $propuesta = new Propuesta;
         $propuesta->responsable()->associate($user);
         $propuesta->descripcion = $descripcion;
@@ -148,12 +129,6 @@ class Documento extends Model
     }
 
     public function aceptarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
-        if(!$user->hasRole('ism'))
-            throw new \Exception("Solo ISM puede aceptar propuestas");
-
-        if($this->status->codigo != 'pendiente-revision')
-            throw new \Exception('Solo se puede aceptar propuestas cuando estan pendientes de revisión');
-
         if($this->propuestas()->get()->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
 
@@ -165,36 +140,14 @@ class Documento extends Model
     } 
 
     public function corregir(User $user) {
-        if($user->id != $this->responsable_usr_id)
-            throw new \Exception("Solo el responsable pude marcar el documento como corregido");
-
-        if($this->status->codigo != 'en-progreso')
-            throw new \Exception("Solo se pueden marcar como corregidos aquellos documentos que esten en progreso.");
-
-        if(!$user->hasRole('responsable'))
-            throw new \Exception("El usuario $user->name no puede marcar el documento como corregido, no tiene el rol apropiado");
-
         $this->setStatus('corregido');
     }
 
     public function verificar(User $user) {
-        if($user->id != $this->creador_usr_id) 
-            throw new \Exception("Solo {$this->creador->name} puede marcar este documento como verificado");
-
-        if($this->status->codigo != 'corregido')
-            throw new \Exception("Solo se pueden marcar como verificado aquellos documentos que esten marcados como corregidos.");
-
-
         $this->setStatus('verificado');
     }
 
     public function cerrar(User $user) {
-        if($user->id != $this->creador_usr_id) 
-            throw new \Exception("Solo {$this->creador->name} puede cerrar este documento.");
-
-        if($this->status->codigo != 'verificado')
-            throw new \Exception("Solo se pueden cerrar aquellos documentos que esten marcados como verificados.");
-
         $this->setStatus('cerrado');
     }
 }
