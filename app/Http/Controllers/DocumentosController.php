@@ -25,6 +25,7 @@ class DocumentosController extends Controller
         $statuses = Status::all();
         $docs = Documento::visible($user)
             ->status($status)
+            ->orderBy('fecha_limite', 'asc')
             ->get();
 
         return view("documentos.index", compact('status', 'statuses', 'docs', 'user'));
