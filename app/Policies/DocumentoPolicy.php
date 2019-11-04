@@ -28,7 +28,9 @@ class DocumentoPolicy
     }
 
     public function agregarPropuesta(User $user, Documento $doc) {
-        if($user->id != $doc->responsable_usr_id)
+        if(!$doc->responsable_usr_id)
+            return Response::deny('En este momento nadie puede agregar propuestas a este documento.');
+        else if($user->id != $doc->responsable_usr_id)
             return Response::deny("Solo {$doc->responsable->name} puede agregar propuestas a este documento.");
 
         if($doc->status->codigo != 'pendiente-propuesta') 
