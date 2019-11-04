@@ -35,9 +35,8 @@
                         <label>Responsable</label>
                         @if ($puedeAsignarResponsable)
                             {{ Form::open([
-                                'url'=>'/docs/asignarResponsable', 
+                                'url'=>"/docs/{$documento->id}/asignarResponsable", 
                                 'method'=>'post']) }}
-                                {{ Form::hidden('documento_id', $documento->id) }}
                                 {{ Form::select('responsable_usr_id', [''=>'- Seleccionar']+$responsables, $documento->responsable_usr_id, ['class'=>'form-control', 'onchange'=>'this.form.submit()']) }}
                                 <span class="status"></span>
                             {{ Form::close() }}

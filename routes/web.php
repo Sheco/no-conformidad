@@ -23,6 +23,6 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/docs/ver/{documento}', 'DocumentosController@ver');
     Route::post('/docs/crear', 'DocumentosController@guardar');
     Route::get('/docs/crear', 'DocumentosController@crear');
-    Route::post('/docs/asignarResponsable', 'DocumentosController@asignarResponsable');
+    Route::post('/docs/{documento}/asignarResponsable', 'DocumentosController@asignarResponsable');
     Route::post('/docs/{documento}/agregarPropuesta', 'DocumentosController@agregarPropuesta');
 });   
