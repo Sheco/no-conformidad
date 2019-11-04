@@ -24,7 +24,7 @@ class DocumentosController extends Controller
             ->status($status)
             ->get();
 
-        return view("documentos.index", compact('statuses', 'docs', 'user'));
+        return view("documentos.index", compact('status', 'statuses', 'docs', 'user'));
     }
 
     /**
