@@ -12,7 +12,7 @@ window.guardarResponsable = function(field) {
   if(status) status.html('Guardando...');
   $.post(form.attr('action'), form.serialize(), function(response) {
     if(status) status.html(response);
-  }).fail(function() {
-    if(status) status.html('Error');
+  }).fail(function(xhr, statusmsg, error) {
+    if(status) status.html(error);
   });;
 }
