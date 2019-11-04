@@ -28,7 +28,7 @@
                 </tr>
                 @foreach ($docs as $doc) 
                 <tr>
-                    <td><a href="{{ url('/docs', $doc->id)}}">{{ $doc->titulo }}</a></td>
+                    <td><a href="{{ url('/docs/ver', $doc->id)}}">{{ $doc->titulo }}</a></td>
                     <td>{{ $doc->fecha }}</td>
                     <td>@if ($doc->responsable_usr_id) 
                             {{ $doc->responsable->name }}

@@ -30,12 +30,26 @@
                         <label>Creador</label>
                         <div>{{ $documento->creador->name }}</div>
                     </div>
+
                     <div class="col-md-4 form-group">
                         <label>Responsable</label>
-                        <div>@if ($documento->responsable_usr_id)
-                            {{ $documento->responsable->name }}
+                        @if ($puedeAsignarResponsable)
+                            {{ Form::open([
+                                'url'=>'/docs/asignarResponsable', 
+                                'method'=>'post']) }}
+                                {{ $documento->responsable_usr_id }}
+                                {{ Form::hidden('documento_id', $documento->id) }}
+                                {{ Form::select('responsable_usr_id', [''=>'- Seleccionar']+$responsables, $documento->responsable_usr_id, ['class'=>'form-control', 'onchange'=>'guardarResponsable(this)']) }}
+                                <span class="status"></span>
+                            {{ Form::close() }}
+                        @else
+                            <div>@if ($documento->responsable_usr_id)
+                                    {{ $documento->responsable->name }}
+                                @else
+                                    N/A
+                                @endif
+                            </div>
                         @endif
-                        </div>
                     </div>
                     <div class="col-md-12 form-group">
                         <label>Descripción</label>

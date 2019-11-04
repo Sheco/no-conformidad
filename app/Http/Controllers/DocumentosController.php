@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\Status;
 use App\Documento;
+use App\User;
 
 class DocumentosController extends Controller
 {
@@ -52,42 +54,25 @@ class DocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Documento $documento)
+    public function ver(Documento $documento)
     {
-        return view('documentos.show', compact('documento'));
+        $responsables = User::whereHas('roles', function($q) {
+            $q->where('name', 'responsable');
+        })->get()->pluck('name', 'id')->toArray();
+
+        $puedeAsignarResponsable = Gate::allows('asignarResponsable', $documento);
+
+        return view('documentos.ver', compact('documento', 'responsables',
+            'puedeAsignarResponsable'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+    public function asignarResponsable(Request $request) {
+        $documento = Documento::findOrFail($request->input('documento_id'));
+        Gate::authorize('asignarResponsable', $documento);
+        $responsable = User::findOrFail($request->input('responsable_usr_id'));
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        $documento->asignarResponsable(Auth::user(), $responsable);
+        $documento->save();
+        return "Guardado";
     }
 }
