@@ -36925,18 +36925,6 @@ module.exports = function(module) {
  */
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-window.guardarResponsable = function (field) {
-  var form = $(field.form);
-  var status = form.find('.status');
-  if (status) status.html('Guardando...');
-  $.post(form.attr('action'), form.serialize(), function (response) {
-    if (status) status.html(response);
-  }).fail(function (xhr, statusmsg, error) {
-    if (status) status.html(error);
-  });
-  ;
-};
-
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":

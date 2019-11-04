@@ -6,13 +6,3 @@
 
 require('./bootstrap');
 
-window.guardarResponsable = function(field) {
-  let form = $(field.form);
-  let status = form.find('.status');
-  if(status) status.html('Guardando...');
-  $.post(form.attr('action'), form.serialize(), function(response) {
-    if(status) status.html(response);
-  }).fail(function(xhr, statusmsg, error) {
-    if(status) status.html(error);
-  });;
-}

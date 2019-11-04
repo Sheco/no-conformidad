@@ -88,6 +88,6 @@ class DocumentosController extends Controller
 
         $documento->asignarResponsable(Auth::user(), $responsable);
         $documento->save();
-        return "Guardado";
+        return back();
     }
 }
