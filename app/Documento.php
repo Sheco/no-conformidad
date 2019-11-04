@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 use App\Status;
 use App\Tipo;
@@ -72,6 +73,7 @@ class Documento extends Model
     }
 
     function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion) {
+        Gate::forUser($user)->authorize('crear', Documento::class);
         $this->creador_usr_id = $user->id;
         $this->setStatus('inicio');
         $this->tipo_id = $tipo->id;
@@ -87,6 +89,7 @@ class Documento extends Model
     }
 
     public function asignarResponsable(User $user, ?User $responsable) {
+        Gate::forUser($user)->authorize('asignarResponsable', $this);
         if(!$responsable) {
             $this->responsable()->dissociate();
             $this->setStatus('inicio');
@@ -101,6 +104,7 @@ class Documento extends Model
     }
 
     public function agregarPropuesta(User $user, $descripcion) {
+        Gate::forUser($user)->authorize('agregarPropuesta', $this);
         $propuesta = new Propuesta;
         $propuesta->responsable()->associate($user);
         $propuesta->descripcion = $descripcion;
@@ -112,11 +116,7 @@ class Documento extends Model
     }
 
     public function rechazarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
-        if(!$user->hasRole('ism')) 
-            throw new \Exception("El usuario $user->name no puede rechazar propuestas, no tiene el rol apropiado.");
-
-        if($this->status->codigo != 'pendiente-revision')
-            throw new \Exception('Solo se puede rechazar propuestas cuando estan pendientes de revisión');
+        Gate::forUser($user)->authorize('rechazarPropuesta', $this);
 
         if($this->propuestas()->get()->last()->id != $propuesta->id)
             throw new \Exception("Solo se puede aceptar la ultima propuesta del documento, ");
@@ -129,6 +129,8 @@ class Documento extends Model
     }
 
     public function aceptarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
+        Gate::forUser($user)->authorize('aceptarPropuesta', $this);
+
         if($this->propuestas()->get()->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
 
@@ -140,14 +142,17 @@ class Documento extends Model
     } 
 
     public function corregir(User $user) {
+        Gate::forUser($user)->authorize('corregir', $this);
         $this->setStatus('corregido');
     }
 
     public function verificar(User $user) {
+        Gate::forUser($user)->authorize('verificar', $this);
         $this->setStatus('verificado');
     }
 
     public function cerrar(User $user) {
+        Gate::forUser($user)->authorize('cerrar', $this);
         $this->setStatus('cerrado');
     }
 }

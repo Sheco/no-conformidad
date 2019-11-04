@@ -52,7 +52,6 @@ class DocumentosController extends Controller
      */
     public function guardar(Request $request)
     {
-        Gate::authorize('crear', Documento::class);
         $tipo = Tipo::findOrFail($request->input('tipo_id'));
         $departamento = Departamento::findOrFail($request->input('departamento_id'));
 
@@ -86,7 +85,6 @@ class DocumentosController extends Controller
     }
 
     public function asignarResponsable(Request $request, Documento $documento) {
-        Gate::authorize('asignarResponsable', $documento);
         $responsable = User::find($request->input('responsable_usr_id'));
 
         $documento->asignarResponsable(Auth::user(), $responsable);
@@ -95,7 +93,6 @@ class DocumentosController extends Controller
     }
 
     public function agregarPropuesta(Request $request, Documento $documento) {
-        Gate::authorize('agregarPropuesta', $documento);
         $documento->agregarPropuesta(Auth::user(), $request->input('descripcion'));
         $documento->save();
         return back();
@@ -103,7 +100,6 @@ class DocumentosController extends Controller
 
     public function rechazarPropuesta(Request $request, Propuesta $propuesta) {
         $documento = $propuesta->documento;
-        Gate::authorize('rechazarPropuesta', $documento);
         $documento->rechazarPropuesta(Auth::user(), $propuesta, '');
         $propuesta->save();
         $documento->save();
@@ -112,7 +108,6 @@ class DocumentosController extends Controller
 
     public function aceptarPropuesta(Request $request, Propuesta $propuesta) {
         $documento = $propuesta->documento;
-        Gate::authorize('aceptarPropuesta', $documento);
         $documento->aceptarPropuesta(Auth::user(), $propuesta, '');
         $propuesta->save();
         $documento->save();
@@ -120,21 +115,18 @@ class DocumentosController extends Controller
     }
 
     public function corregir(Request $request, Documento $documento) {
-        Gate::authorize('corregir', $documento);
         $documento->corregir(Auth::user());
         $documento->save();
         return back();
     }
 
     public function verificar(Request $request, Documento $documento) {
-        Gate::authorize('verificar', $documento);
         $documento->verificar(Auth::user());
         $documento->save();
         return back();
     }
 
     public function cerrar(Request $request, Documento $documento) {
-        Gate::authorize('cerrar', $documento);
         $documento->cerrar(Auth::user());
         $documento->save();
         return back();
