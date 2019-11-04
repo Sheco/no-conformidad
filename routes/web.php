@@ -25,4 +25,6 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/docs/crear', 'DocumentosController@crear');
     Route::post('/docs/{documento}/asignarResponsable', 'DocumentosController@asignarResponsable');
     Route::post('/docs/{documento}/agregarPropuesta', 'DocumentosController@agregarPropuesta');
+    Route::post('/docs/{propuesta}/rechazarPropuesta', 'DocumentosController@rechazarPropuesta');
+    Route::post('/docs/{propuesta}/aceptarPropuesta', 'DocumentosController@aceptarPropuesta');
 });   

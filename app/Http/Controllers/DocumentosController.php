@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Status;
 use App\Documento;
+use App\Propuesta;
 use App\Tipo;
 use App\Departamento;
 use App\User;
@@ -76,9 +77,12 @@ class DocumentosController extends Controller
         })->get()->pluck('name', 'id')->toArray();
 
         $puedeAsignarResponsable = Gate::allows('asignarResponsable', $documento);
+        $ultimaPropuesta = $documento->propuestas->count()
+            ? $documento->propuestas->last()->id
+            : 0;
 
         return view('documentos.ver', compact('documento', 'responsables',
-            'puedeAsignarResponsable'));
+            'puedeAsignarResponsable', 'ultimaPropuesta'));
     }
 
     public function asignarResponsable(Request $request, Documento $documento) {
@@ -93,6 +97,24 @@ class DocumentosController extends Controller
     public function agregarPropuesta(Request $request, Documento $documento) {
         Gate::authorize('agregarPropuesta', $documento);
         $documento->agregarPropuesta(Auth::user(), $request->input('descripcion'));
+        $documento->save();
+        return back();
+    }
+
+    public function rechazarPropuesta(Request $request, Propuesta $propuesta) {
+        $documento = $propuesta->documento;
+        Gate::authorize('rechazarPropuesta', $documento);
+        $documento->rechazarPropuesta(Auth::user(), $propuesta, '');
+        $propuesta->save();
+        $documento->save();
+        return back();
+    }
+
+    public function aceptarPropuesta(Request $request, Propuesta $propuesta) {
+        $documento = $propuesta->documento;
+        Gate::authorize('aceptarPropuesta', $documento);
+        $documento->aceptarPropuesta(Auth::user(), $propuesta, '');
+        $propuesta->save();
         $documento->save();
         return back();
     }

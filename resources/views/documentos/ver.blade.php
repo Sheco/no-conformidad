@@ -88,6 +88,30 @@
                         </div>
                         @endif
                     </div>
+                    <div class="row" style="margin-top: 1em">
+                    @if ($propuesta->id == $ultimaPropuesta and 
+                        Gate::allows('rechazarPropuesta', $documento))
+                        <div class="offset-md-6 col-md-3 text-right">
+                        {{ Form::open([
+                            'url'=>"/docs/$propuesta->id/rechazarPropuesta",
+                            'method'=>'post'
+                            ]) }}
+                            {{ Form::submit('Rechazar', ['class'=>'btn btn-danger']) }}
+                        {{ Form::close() }}
+                        </div>
+                    @endif
+                    @if ($propuesta->id == $ultimaPropuesta and 
+                        Gate::allows('aceptarPropuesta', $documento))
+                        <div class="col-md-3 text-right">
+                        {{ Form::open([
+                            'url'=>"/docs/$propuesta->id/aceptarPropuesta",
+                            'method'=>'post',
+                            ]) }}
+                            {{ Form::submit('Aceptar', ['class'=>'btn btn-primary']) }}
+                        {{ Form::close() }}
+                        </div>
+                    @endif
+                    </div>
                 </div>
             </div>
         </div>
