@@ -101,11 +101,18 @@ class NoconTableSeeder extends Seeder
         $user->addRole('ism');
 
         $user = User::create([
-            'name'=>'Responsable',
-            'email'=>'responsable@nocon.com',
+            'name'=>'Responsable1',
+            'email'=>'responsable1@nocon.com',
             'password'=>Hash::make('nocon'),
             'departamento_id'=>$responsable->id,
-        ]);
+          ]);
+        $user->addRole('responsable');
+        $user = User::create([
+            'name'=>'Responsable2',
+            'email'=>'responsable2@nocon.com',
+            'password'=>Hash::make('nocon'),
+            'departamento_id'=>$responsable->id,
+          ]);
         $user->addRole('responsable');
     }
 }
