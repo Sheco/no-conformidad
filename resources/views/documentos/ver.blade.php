@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="col-md-4">
                         <label>Fecha de creación</label>
-                        <div>{{ $documento->created_at }}</div>
+                        <div>{{ $documento->created_at->format('Y/M/d') }}</div>
                     </div>
                     <div class="col-md-4 form-group">
                         <label>Departamento/Buque</label>
@@ -48,6 +48,10 @@
                                 @endif
                             </div>
                         @endif
+                    </div>
+                    <div class="col-md-4 form-groupo">
+                        <label>Límite actual</label>
+                        <div>{{ $documento->fechaLimiteDiffForHumans }}</div>
                     </div>
                     <div class="col-md-12 form-group">
                         <label>Descripción</label>

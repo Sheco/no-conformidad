@@ -24,25 +24,19 @@
                     <th>Titulo</th>
                     <th>Fecha</th>
                     <th>Responsable</th>
-                    <th>Fecha Ultima propuesta</th>
+                    <th>Límite actual</th>
                 </tr>
                 @foreach ($docs as $doc) 
                 <tr>
                     <td><a href="{{ url('/docs/ver', $doc->id)}}">{{ $doc->titulo }}</a></td>
-                    <td>{{ $doc->fecha }}</td>
+                    <td>{{ $doc->created_at->format("Y/M/d") }}</td>
                     <td>@if ($doc->responsable_usr_id) 
                             {{ $doc->responsable->name }}
                         @else
                             N/A
                         @endif
                     </td>
-                    <td>@if ($doc->responsable_usr_id && $doc->propuestas->count())
-                        {{ $doc->propuestas()->get()->last()->created_at }}
-                        @else
-                            N/A
-                        @endif
-                    </td>
-
+                    <td>{{ $doc->fechaLimiteDiffforHumans }}</td>
                 </tr>
                 @endforeach
             </table>

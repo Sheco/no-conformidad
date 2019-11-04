@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
@@ -72,6 +73,20 @@ class Documento extends Model
         $query->where('status_id', $status->id);
     }
 
+    function getFechaLimiteDiffAttribute() {
+        $limite = new Carbon($this->fecha_limite);
+        $now = Carbon::now();
+        if($now >= $limite) {
+            return CarbonInterval::hours(0);
+        }
+        return $limite->diffAsCarbonInterval($now);
+    }
+    function getFechaLimiteDiffForHumansAttribute() {
+        $diff = $this->fechaLimiteDiff;
+        if($diff->seconds == 0) return "Vencido";
+        return $diff->forHumans(['parts'=>2]);
+    }
+
     function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion) {
         Gate::forUser($user)->authorize('crear', Documento::class);
         $this->creador_usr_id = $user->id;
@@ -79,7 +94,7 @@ class Documento extends Model
         $this->tipo_id = $tipo->id;
         $this->departamento_id = $departamento->id;
         $this->folio = $user->contador_documentos;
-        $this->fecha = Carbon::now();
+        $this->fecha_limite = Carbon::now()->addDays(1);
         $this->titulo = $titulo;
         $this->descripcion = $descripcion;
         $this->save();
@@ -101,6 +116,7 @@ class Documento extends Model
 
         $this->responsable()->associate($responsable);
         $this->setStatus('pendiente-propuesta');
+        $this->fecha_limite = Carbon::now()->addDays(3);
     }
 
     public function agregarPropuesta(User $user, $descripcion) {
@@ -113,6 +129,7 @@ class Documento extends Model
             $this->propuestas()->save($propuesta);
 
             $this->setStatus('pendiente-revision');
+            $this->fecha_limite = Carbon::now()->addDays(90);
             return $propuesta;
         });
     }
