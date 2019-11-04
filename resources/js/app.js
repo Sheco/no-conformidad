@@ -6,6 +6,7 @@
 
 require('./bootstrap');
 
+
 window.Vue = require('vue');
 
 /**
@@ -30,3 +31,14 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 const app = new Vue({
     el: '#app',
 });
+
+window.guardarResponsable = function(field) {
+  let form = $(field.form);
+  let status = form.find('.status');
+  if(status) status.html('Guardando...');
+  $.post(form.attr('action'), form.serialize(), function(response) {
+    if(status) status.html(response);
+  }).fail(function() {
+    if(status) status.html('Error');
+  });;
+}

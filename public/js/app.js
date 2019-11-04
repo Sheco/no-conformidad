@@ -49372,6 +49372,18 @@ var app = new Vue({
   el: '#app'
 });
 
+window.guardarResponsable = function (field) {
+  var form = $(field.form);
+  var status = form.find('.status');
+  if (status) status.html('Guardando...');
+  $.post(form.attr('action'), form.serialize(), function (response) {
+    if (status) status.html(response);
+  }).fail(function () {
+    if (status) status.html('Error');
+  });
+  ;
+};
+
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
