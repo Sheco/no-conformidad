@@ -105,14 +105,16 @@ class Documento extends Model
 
     public function agregarPropuesta(User $user, $descripcion) {
         Gate::forUser($user)->authorize('agregarPropuesta', $this);
-        $propuesta = new Propuesta;
-        $propuesta->responsable()->associate($user);
-        $propuesta->descripcion = $descripcion;
+        return DB::transaction(function() use ($user, $descripcion) {
+            $propuesta = new Propuesta;
+            $propuesta->responsable()->associate($user);
+            $propuesta->descripcion = $descripcion;
 
-        $this->propuestas()->save($propuesta);
+            $this->propuestas()->save($propuesta);
 
-        $this->setStatus('pendiente-revision');
-        return $propuesta;
+            $this->setStatus('pendiente-revision');
+            return $propuesta;
+        });
     }
 
     public function rechazarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
@@ -121,11 +123,13 @@ class Documento extends Model
         if($this->propuestas()->get()->last()->id != $propuesta->id)
             throw new \Exception("Solo se puede aceptar la ultima propuesta del documento, ");
 
-        $propuesta->retroalimentador()->associate($user);
-        $propuesta->retro = $comentarios;
-        $propuesta->status = false;
+        return DB::transaction(function() use ($propuesta, $user, $comentarios) {
+            $propuesta->retroalimentador()->associate($user);
+            $propuesta->retro = $comentarios;
+            $propuesta->status = false;
 
-        $this->setStatus('pendiente-propuesta');
+            $this->setStatus('pendiente-propuesta');
+        });
     }
 
     public function aceptarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
@@ -134,11 +138,13 @@ class Documento extends Model
         if($this->propuestas()->get()->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
 
-        $propuesta->retroalimentador()->associate($user);
-        $propuesta->retro = $comentarios;
-        $propuesta->status = true;
+        return DB::transaction(function() use ($propuesta, $user, $comentarios) {
+            $propuesta->retroalimentador()->associate($user);
+            $propuesta->retro = $comentarios;
+            $propuesta->status = true;
 
-        $this->setStatus('en-progreso');
+            $this->setStatus('en-progreso');
+        });
     } 
 
     public function corregir(User $user) {
