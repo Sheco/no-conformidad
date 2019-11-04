@@ -84,7 +84,7 @@ class DocumentosController extends Controller
     public function asignarResponsable(Request $request) {
         $documento = Documento::findOrFail($request->input('documento_id'));
         Gate::authorize('asignarResponsable', $documento);
-        $responsable = User::findOrFail($request->input('responsable_usr_id'));
+        $responsable = User::find($request->input('responsable_usr_id'));
 
         $documento->asignarResponsable(Auth::user(), $responsable);
         $documento->save();

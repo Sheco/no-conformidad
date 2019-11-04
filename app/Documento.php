@@ -89,12 +89,17 @@ class Documento extends Model
         $user->save();
     }
 
-    public function asignarResponsable(User $user, User $responsable) {
+    public function asignarResponsable(User $user, ?User $responsable) {
         if(!in_array($this->status->codigo, ['inicio', 'pendiente-propuesta']))
             throw new \Exception('Para asignar un responsable, el documento tiene que esta al inicio de su proceso o estar pendiente de una propuesta.');
 
         if(!$user->hasRole('ism'))
             throw new \Exception("El usuario $user->name no puede asignar responsables, no tiene el rol apropiado.");
+        if(!$responsable) {
+            $this->responsable()->dissociate();
+            $this->setStatus('inicio');
+            return;
+        }
 
         if(!$responsable->hasRole('responsable'))
             throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, on tiene el rol apropiado.");
