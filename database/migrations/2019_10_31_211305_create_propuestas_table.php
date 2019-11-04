@@ -20,6 +20,7 @@ class CreatePropuestasTable extends Migration
             $table->unsignedBigInteger('documento_id');
             $table->unsignedBigInteger('responsable_usr_id');
             $table->unsignedBigInteger('retro_usr_id')->nullable();
+            $table->boolean('status')->nullable();
             $table->string('descripcion');
             $table->string('retro')->nullable();
 

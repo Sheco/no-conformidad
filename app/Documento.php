@@ -142,6 +142,7 @@ class Documento extends Model
 
         $propuesta->retroalimentador()->associate($user);
         $propuesta->retro = $comentarios;
+        $propuesta->status = false;
 
         $this->setStatus('inicio');
     }
@@ -158,6 +159,7 @@ class Documento extends Model
 
         $propuesta->retroalimentador()->associate($user);
         $propuesta->retro = $comentarios;
+        $propuesta->status = true;
 
         $this->setStatus('en-progreso');
     } 

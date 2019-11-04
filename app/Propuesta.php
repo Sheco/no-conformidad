@@ -21,4 +21,9 @@ class Propuesta extends Model
         return $this->belongsTo('App\Documento', 'documento_id');
     }
 
+    public function getHeaderStyleAttribute() {
+      if($this->status === "1") return " bg-success text-light";
+      else if($this->status === "0") return " bg-danger text-light";
+    }
+
 }
