@@ -90,4 +90,12 @@ class DocumentosController extends Controller
         $documento->save();
         return back();
     }
+
+    public function agregarPropuesta(Request $request, Documento $documento) {
+        Gate::authorize('agregarPropuesta', $documento);
+        $documento->agregarPropuesta(Auth::user(), $request->input('descripcion'));
+        $documento->save();
+        return back();
+    }
+
 }
