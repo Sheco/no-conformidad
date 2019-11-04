@@ -21,14 +21,22 @@
         <div class="col-md-9">
             <table class="table table-bordered table-striped">
                 <tr>
+                    <th>ID</th>
+                    <th>Creador</th>
+                    <th>Folio</th>
                     <th>Titulo</th>
+                    <th>Tipo</th>
                     <th>Fecha</th>
                     <th>Responsable</th>
                     <th>Límite actual</th>
                 </tr>
                 @foreach ($docs as $doc) 
                 <tr>
+                    <td>{{ $doc->id }}</td>
+                    <td>{{ $doc->creador->name }}</td>
+                    <td>{{ $doc->folio }}</td>
                     <td><a href="{{ url('/docs/ver', $doc->id)}}">{{ $doc->titulo }}</a></td>
+                    <td>{{ $doc->tipo->nombre }}</td>
                     <td>{{ $doc->created_at->format("Y/M/d") }}</td>
                     <td>@if ($doc->responsable_usr_id) 
                             {{ $doc->responsable->name }}
