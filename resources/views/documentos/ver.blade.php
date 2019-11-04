@@ -50,7 +50,7 @@
                         @endif
                     </div>
                     <div class="col-md-4 form-groupo">
-                        <label>Límite actual</label>
+                        <label>Límite de entrega</label>
                         <div>{{ $documento->fechaLimiteDiffForHumans }}</div>
                     </div>
                     <div class="col-md-12 form-group">
