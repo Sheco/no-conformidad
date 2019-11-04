@@ -119,4 +119,24 @@ class DocumentosController extends Controller
         return back();
     }
 
+    public function corregir(Request $request, Documento $documento) {
+        Gate::authorize('corregir', $documento);
+        $documento->corregir(Auth::user());
+        $documento->save();
+        return back();
+    }
+
+    public function verificar(Request $request, Documento $documento) {
+        Gate::authorize('verificar', $documento);
+        $documento->verificar(Auth::user());
+        $documento->save();
+        return back();
+    }
+
+    public function cerrar(Request $request, Documento $documento) {
+        Gate::authorize('cerrar', $documento);
+        $documento->cerrar(Auth::user());
+        $documento->save();
+        return back();
+    }
 }

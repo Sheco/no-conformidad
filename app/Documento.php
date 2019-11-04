@@ -164,7 +164,7 @@ class Documento extends Model
         $this->setStatus('en-progreso');
     } 
 
-    public function corregido(User $user) {
+    public function corregir(User $user) {
         if($user->id != $this->responsable_usr_id)
             throw new \Exception("Solo el responsable pude marcar el documento como corregido");
 
@@ -177,7 +177,7 @@ class Documento extends Model
         $this->setStatus('corregido');
     }
 
-    public function verificado(User $user) {
+    public function verificar(User $user) {
         if($user->id != $this->creador_usr_id) 
             throw new \Exception("Solo {$this->creador->name} puede marcar este documento como verificado");
 

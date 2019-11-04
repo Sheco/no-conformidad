@@ -27,4 +27,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/docs/{documento}/agregarPropuesta', 'DocumentosController@agregarPropuesta');
     Route::post('/docs/{propuesta}/rechazarPropuesta', 'DocumentosController@rechazarPropuesta');
     Route::post('/docs/{propuesta}/aceptarPropuesta', 'DocumentosController@aceptarPropuesta');
+    Route::post('/docs/{documento}/corregir', 'DocumentosController@corregir');
+    Route::post('/docs/{documento}/verificar', 'DocumentosController@verificar');
+    Route::post('/docs/{documento}/cerrar', 'DocumentosController@cerrar');
 });   

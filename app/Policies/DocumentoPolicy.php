@@ -59,7 +59,7 @@ class DocumentoPolicy
         return Response::allow();
     } 
 
-    public function corregido(User $user, Documento $doc) {
+    public function corregir(User $user, Documento $doc) {
         if($user->id != $doc->responsable_usr_id)
             return Response::deny("Solo el responsable pude marcar el documento como corregido");
 
@@ -71,9 +71,9 @@ class DocumentoPolicy
         return Response::allow();
     }
 
-    public function verificado(User $user, Documento $doc) {
-        if($user->id != $this->creador_usr_id) 
-            return Response::deny("Solo {$this->creador->name} puede marcar este documento como verificado");
+    public function verificar(User $user, Documento $doc) {
+        if($user->id != $doc->creador_usr_id) 
+            return Response::deny("Solo {$doc->creador->name} puede marcar este documento como verificado");
 
         if($doc->status->codigo != 'corregido')
             return Response::deny("Solo se pueden marcar como verificado aquellos documentos que esten marcados como corregidos.");
@@ -81,8 +81,8 @@ class DocumentoPolicy
     }
 
     public function cerrar(User $user, Documento $doc) {
-        if($user->id != $this->creador_usr_id) 
-            return Response::deny("Solo {$this->creador->name} puede cerrar este documento.");
+        if($user->id != $doc->creador_usr_id) 
+            return Response::deny("Solo {$doc->creador->name} puede cerrar este documento.");
 
         if($doc->status->codigo != 'verificado')
             return Response::deny("Solo se pueden cerrar aquellos documentos que esten marcados como verificados.");

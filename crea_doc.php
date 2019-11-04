@@ -57,13 +57,13 @@ espera();
 
 /* paso 6, marcar como completado */
 echo "Marcando el documento como corregido...\n";
-$doc->corregido($responsable);
+$doc->corregir($responsable);
 $doc->save();
 espera();
 
 /* paso 7, marcar como verificado */
 echo "Marcando el documento como verificado...\n";
-$doc->verificado($barco);
+$doc->verificar($barco);
 $doc->save();
 espera();
 

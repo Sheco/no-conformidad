@@ -54,6 +54,40 @@
                         <div>{{ $documento->descripcion }}</div>
                     </div>
                 </div>
+                <div class="row" style="margin-top: 1em">
+                    <div class="col-md-4">
+                        @if (Gate::allows('corregir', $documento)) 
+                            {{ Form::open([
+                                'url' => "/docs/$documento->id/corregir",
+                                'method'=>'post'
+                                ]) }}
+                                {{ Form::submit('Marcar como corregido', ['class'=>'btn btn-info']) }}
+                            {{ Form::close() }}
+                        @endif
+                    </div>
+                    <div class="col-md-4">
+                        @if (Gate::allows('verificar', $documento)) 
+                            {{ Form::open([
+                                'url' => "/docs/$documento->id/verificar",
+                                'method'=>'post'
+                                ]) }}
+                                {{ Form::submit('Marcar como verificado', 
+                                    ['class'=>'btn btn-success']) }}
+                            {{ Form::close() }}
+                        @endif
+                    </div>
+                    <div class="col-md-4">
+                        @if (Gate::allows('cerrar', $documento)) 
+                            {{ Form::open([
+                                'url' => "/docs/$documento->id/cerrar",
+                                'method'=>'post'
+                                ]) }}
+                                {{ Form::submit('Cerrar', 
+                                    ['class'=>'btn btn-secondary']) }}
+                            {{ Form::close() }}
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>
