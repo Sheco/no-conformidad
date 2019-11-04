@@ -100,7 +100,7 @@
         @foreach ($documento->propuestas as $propuesta)
         <div class="col-md-6" style="margin-top: 1em">
             <div class="card">
-                <div class="card-header{{ $propuesta->headerStyle }}">Propuesta {{ $propuesta->id }}</div>
+                <div class="card-header{{ $propuesta->headerStyle }}">Propuesta {{ $loop->iteration }}</div>
                 <div class="card-body container">
                     <div class="row formaTabular">
                         <div class="col-md-6">
