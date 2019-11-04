@@ -37,7 +37,6 @@
                             {{ Form::open([
                                 'url'=>'/docs/asignarResponsable', 
                                 'method'=>'post']) }}
-                                {{ $documento->responsable_usr_id }}
                                 {{ Form::hidden('documento_id', $documento->id) }}
                                 {{ Form::select('responsable_usr_id', [''=>'- Seleccionar']+$responsables, $documento->responsable_usr_id, ['class'=>'form-control', 'onchange'=>'guardarResponsable(this)']) }}
                                 <span class="status"></span>
