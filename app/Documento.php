@@ -93,7 +93,8 @@ class Documento extends Model
         $this->setStatus('inicio');
         $this->tipo_id = $tipo->id;
         $this->departamento_id = $departamento->id;
-        $this->folio = $user->contador_documentos;
+        $year = date('y');
+        $this->folio = "$user->serie_documentos $user->contador_documentos/$year";
         $this->fecha_limite = Carbon::now()->addDays(1);
         $this->titulo = $titulo;
         $this->descripcion = $descripcion;
