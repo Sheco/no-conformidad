@@ -70,23 +70,21 @@ class Documento extends Model
         $query->where('status_id', $status->id);
     }
 
-    static function nuevo(User $user, Tipo $tipo, $titulo, $descripcion) {
+    function crear(User $user, Tipo $tipo, $titulo, $descripcion) {
         if(!$user->hasRole('creador'))
             throw new \Exception("El usuario $user->name no puede crear documentos, no tiene el rol apropiado.");
 
-        $nueva = new self;
-        $nueva->creador_usr_id = $user->id;
-        $nueva->setStatus('inicio');
-        $nueva->tipo_id = $tipo->id;
-        $nueva->folio = $user->contador_documentos;
-        $nueva->fecha = Carbon::now();
-        $nueva->titulo = $titulo;
-        $nueva->descripcion = $descripcion;
-        $nueva->save();
+        $this->creador_usr_id = $user->id;
+        $this->setStatus('inicio');
+        $this->tipo_id = $tipo->id;
+        $this->folio = $user->contador_documentos;
+        $this->fecha = Carbon::now();
+        $this->titulo = $titulo;
+        $this->descripcion = $descripcion;
+        $this->save();
 
         $user->contador_documentos++;
         $user->save();
-        return $nueva;
     }
 
     public function asignarResponsable(User $user, User $responsable) {

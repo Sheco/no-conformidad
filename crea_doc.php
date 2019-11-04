@@ -17,7 +17,8 @@ $tipo = App\Tipo::find(1);
 
 /* paso 1, nuevo documento */
 echo "Creando nuevo documento...\n";
-$doc = App\Documento::nuevo($barco, $tipo, 'huecote', 'hay un hueco');
+$doc = new App\Documento;
+$doc->crear($barco, $tipo, 'huecote', 'hay un hueco');
 //$doc = App\Documento::find(5);
 espera();
 
