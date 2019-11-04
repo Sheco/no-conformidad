@@ -109,7 +109,7 @@ class Documento extends Model
     }
 
     public function agregarPropuesta(User $user, $descripcion) {
-        if(!$doc->responsable_usr_id)
+        if(!$this->responsable_usr_id)
             throw new \Exception('En este momento nadie puede agregar propuestas a este documento.');
         elseif($user->id != $this->responsable_usr_id)
             throw new \Exception("Solo {$this->responsable->name} puede agregar propuestas a este documento.");
