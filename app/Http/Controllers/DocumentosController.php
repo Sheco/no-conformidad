@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Status;
 use App\Documento;
+use App\Tipo;
+use App\Departamento;
 use App\User;
 
 class DocumentosController extends Controller
@@ -32,9 +34,13 @@ class DocumentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function crear()
     {
-        //
+        Gate::authorize('crear', Documento::class);
+        $documento = new Documento;
+        $tipos = Tipo::all()->pluck('nombre', 'id');
+        $departamentos = Departamento::all()->pluck('nombre', 'id');
+        return view('documentos.crear', compact('documento', 'tipos', 'departamentos'));
     }
 
     /**
@@ -43,9 +49,16 @@ class DocumentosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function guardar(Request $request)
     {
-        //
+        Gate::authorize('crear', Documento::class);
+        $tipo = Tipo::findOrFail($request->input('tipo_id'));
+        $doc = new Documento;
+        $doc->crear(Auth::user(), $tipo, 
+            $request->input('titulo'),  
+            $request->input('descripcion')
+        );
+        return redirect('/docs');
     }
 
     /**
