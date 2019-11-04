@@ -144,7 +144,7 @@ class Documento extends Model
         $propuesta->retro = $comentarios;
         $propuesta->status = false;
 
-        $this->setStatus('inicio');
+        $this->setStatus('pendiente-propuesta');
     }
 
     public function aceptarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
