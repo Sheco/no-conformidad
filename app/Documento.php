@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Status;
 use App\Tipo;
+use App\Departamento;
 
 class Documento extends Model
 {
@@ -70,13 +71,14 @@ class Documento extends Model
         $query->where('status_id', $status->id);
     }
 
-    function crear(User $user, Tipo $tipo, $titulo, $descripcion) {
+    function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion) {
         if(!$user->hasRole('creador'))
             throw new \Exception("El usuario $user->name no puede crear documentos, no tiene el rol apropiado.");
 
         $this->creador_usr_id = $user->id;
         $this->setStatus('inicio');
         $this->tipo_id = $tipo->id;
+        $this->departamento_id = $departamento->id;
         $this->folio = $user->contador_documentos;
         $this->fecha = Carbon::now();
         $this->titulo = $titulo;

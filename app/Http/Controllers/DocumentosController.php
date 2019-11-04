@@ -53,8 +53,10 @@ class DocumentosController extends Controller
     {
         Gate::authorize('crear', Documento::class);
         $tipo = Tipo::findOrFail($request->input('tipo_id'));
+        $departamento = Departamento::findOrFail($request->input('departamento_id'));
+
         $doc = new Documento;
-        $doc->crear(Auth::user(), $tipo, 
+        $doc->crear(Auth::user(), $tipo, $departamento,
             $request->input('titulo'),  
             $request->input('descripcion')
         );
