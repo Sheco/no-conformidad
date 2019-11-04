@@ -90,8 +90,8 @@ class Documento extends Model
     }
 
     public function asignarResponsable(User $user, User $responsable) {
-        if($this->status->codigo != 'inicio')
-            throw new \Exception('Para asignar un responsable, el documento tiene que esta al inicio de su proceso');
+        if(!in_array($this->status->codigo, ['inicio', 'pendiente-propuesta']))
+            throw new \Exception('Para asignar un responsable, el documento tiene que esta al inicio de su proceso o estar pendiente de una propuesta.');
 
         if(!$user->hasRole('ism'))
             throw new \Exception("El usuario $user->name no puede asignar responsables, no tiene el rol apropiado.");

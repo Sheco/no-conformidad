@@ -18,8 +18,8 @@ class DocumentoPolicy
     }
 
     public function asignarResponsable(User $user, Documento $doc) {
-        if($doc->status->codigo != 'inicio')
-            return Response::deny('Para asignar un responsable, el documento tiene que esta al inicio de su proceso');
+        if(!in_array($doc->status->codigo, ['inicio', 'pendiente-propuesta']))
+            return Response::deny('Para asignar un responsable, el documento tiene que esta al inicio de su proceso o estar pendiente de una propuesta.');
 
         if(!$user->hasRole('ism'))
             return Response::deny("El usuario $user->name no puede asignar responsables, no tiene el rol apropiado.");
