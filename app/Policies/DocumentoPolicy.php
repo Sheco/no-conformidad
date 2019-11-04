@@ -21,7 +21,7 @@ class DocumentoPolicy
         if(!in_array($doc->status->codigo, ['inicio', 'pendiente-propuesta']))
             return Response::deny('Para asignar un responsable, el documento tiene que esta al inicio de su proceso o estar pendiente de una propuesta.');
 
-        if(!$user->hasRole('ism'))
+        if(!$user->hasRole('gestionador'))
             return Response::deny("El usuario $user->name no puede asignar responsables, no tiene el rol apropiado.");
 
         return Response::allow();
@@ -42,7 +42,7 @@ class DocumentoPolicy
     }
 
     public function rechazarPropuesta(User $user, Documento $doc) {
-        if(!$user->hasRole('ism')) 
+        if(!$user->hasRole('gestionador')) 
             return Response::deny("El usuario $user->name no puede rechazar propuestas, no tiene el rol apropiado.");
 
         if($doc->status->codigo != 'pendiente-revision')
@@ -51,8 +51,8 @@ class DocumentoPolicy
     }
 
     public function aceptarPropuesta(User $user, Documento $doc) {
-        if(!$user->hasRole('ism'))
-            return Response::deny("Solo ISM puede aceptar propuestas");
+        if(!$user->hasRole('gestionador'))
+            return Response::deny("Solo los gestionadores pueden aceptar propuestas.");
 
         if($doc->status->codigo != 'pendiente-revision')
             return Response::deny('Solo se puede aceptar propuestas cuando estan pendientes de revisión');

@@ -73,7 +73,7 @@ class NoconTableSeeder extends Seeder
         ]);
 
         Role::create([
-            'name' => 'ism',
+            'name' => 'gestionador',
         ]);
 
         Role::create([
@@ -98,7 +98,7 @@ class NoconTableSeeder extends Seeder
             'password'=>Hash::make('nocon'),
             'departamento_id'=>$ism->id,
         ]);
-        $user->addRole('ism');
+        $user->addRole('gestionador');
 
         $user = User::create([
             'name'=>'Responsable1',
