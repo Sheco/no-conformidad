@@ -99,7 +99,7 @@ class NoconTableSeeder extends Seeder
             'password'=>Hash::make('nocon'),
             'departamento_id'=>$ism->id,
         ]);
-        $user->addRole('gestionador');
+        $user->addRole('director');
 
         $user = User::create([
             'name'=>'Responsable1',

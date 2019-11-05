@@ -56,9 +56,9 @@ class Documento extends Model
                       ->whereIn('status_id', [2, 4]);
             });
                        
-        // si el usuario es gestionador, siempre puede ver todos los documentos
+        // si el usuario es director, siempre puede ver todos los documentos
         // hasta el punto en el que que el status es verificado
-        if($user->hasRole("gestionador")) {
+        if($user->hasRole("director")) {
             $query = $query->orWhere('status_id', '<=', 5);
         }
 
