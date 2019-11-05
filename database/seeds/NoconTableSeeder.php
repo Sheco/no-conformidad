@@ -19,14 +19,14 @@ class NoconTableSeeder extends Seeder
      */
     public function run()
     {
-        $barco = Departamento::create([
-            'nombre'=> 'Barco I'
+        $departamento1 = Departamento::create([
+            'nombre'=> 'Empresa 1, Barcos I'
         ]);
-        $ism = Departamento::create([
-            'nombre' => 'ISM'
+        $departamento2 = Departamento::create([
+            'nombre' => 'Empresa 1, Barco II'
         ]);
-        $responsable = Departamento::create([
-            'nombre' => 'Responsables de acción correctiva'
+        $departamento3 = Departamento::create([
+            'nombre' => 'Empresa 2, Barco X'
         ]);
 
         Tipo::create([ 
@@ -73,7 +73,7 @@ class NoconTableSeeder extends Seeder
         ]);
 
         Role::create([
-            'name' => 'gestionador',
+            'name' => 'director',
         ]);
 
         Role::create([
@@ -83,37 +83,65 @@ class NoconTableSeeder extends Seeder
         Role::create([
             'name' => 'creador'
         ]);
-            
+
+        /* Creadores */
         $user = User::create([
-            'name'=>'Barco',
-            'email'=>'barco@nocon.com',
+            'name'=>'Creador1',
+            'email'=>'creador1@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$barco->id,
+            'departamento_id'=>$departamento1->id,
             'serie_documentos'=>'MX1'
         ]);
         $user->addRole('creador');
-
+        $user->departamentos()->attach($departamento1->id);
+        $user->departamentos()->attach($departamento2->id);
         $user = User::create([
-            'name'=>'ISM',
-            'email'=>'ism@nocon.com',
+            'name'=>'Creador2',
+            'email'=>'creador2@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$ism->id,
+            'departamento_id'=>$departamento3->id,
+            'serie_documentos'=>'MXX'
+        ]);
+        $user->addRole('creador');
+        $user->departamentos()->attach($departamento3->id);
+
+        /* Directores */
+        $user = User::create([
+            'name'=>'Director1',
+            'email'=>'director1@nocon.com',
+            'password'=>Hash::make('nocon'),
+            'departamento_id'=>$departamento1->id,
         ]);
         $user->addRole('director');
+        $user->departamentos()->attach($departamento1->id);
+        $user->departamentos()->attach($departamento2->id);
+        $user = User::create([
+            'name'=>'Director2',
+            'email'=>'director2@nocon.com',
+            'password'=>Hash::make('nocon'),
+            'departamento_id'=>$departamento3->id,
+        ]);
+        $user->addRole('director');
+        $user->departamentos()->attach($departamento3->id);
 
+        /* Responsables */
         $user = User::create([
             'name'=>'Responsable1',
             'email'=>'responsable1@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$responsable->id,
+            'departamento_id'=>$departamento1->id,
           ]);
         $user->addRole('responsable');
+        $user->departamentos()->attach($departamento1->id);
+        $user->departamentos()->attach($departamento2->id);
+
         $user = User::create([
             'name'=>'Responsable2',
             'email'=>'responsable2@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$responsable->id,
+            'departamento_id'=>$departamento3->id,
           ]);
         $user->addRole('responsable');
+        $user->departamentos()->attach($departamento3->id);
     }
 }

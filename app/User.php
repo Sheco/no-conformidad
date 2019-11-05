@@ -45,6 +45,10 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Role', 'user_roles');
     }
 
+    public function departamentos() {
+        return $this->belongsToMany('App\Departamento', 'user_departamentos');
+    }
+
     public function addRole($name) {
         $role = Role::where('name', $name)->first();
         $this->roles()->attach($role->id);

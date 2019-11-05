@@ -19,7 +19,10 @@ class Status extends Model
     }
 
     public function documentosVisibles(User $user) {
-        return Documento::visible($user)->status($this->codigo)->count();
+        return Documento::visible($user)
+            ->status($this->codigo)
+            ->whereIn('departamento_id', $user->departamentos->pluck('id'))
+            ->count();
     }
 
     public function getNombreColoreadoAttribute() {

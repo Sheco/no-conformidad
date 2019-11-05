@@ -25,6 +25,7 @@ class DocumentosController extends Controller
         $statuses = Status::all();
         $docs = Documento::visible($user)
             ->status($status)
+            ->whereIn('departamento_id', $user->departamentos->pluck('id'))
             ->orderBy('fecha_limite', 'asc')
             ->get();
 
@@ -41,7 +42,8 @@ class DocumentosController extends Controller
         Gate::authorize('crear', Documento::class);
         $documento = new Documento;
         $tipos = Tipo::all()->pluck('nombre', 'id');
-        $departamentos = Departamento::all()->pluck('nombre', 'id');
+        $user = Auth::user();
+        $departamentos = $user->departamentos->pluck('nombre', 'id');
         return view('documentos.crear', compact('documento', 'tipos', 'departamentos'));
     }
 
@@ -72,9 +74,12 @@ class DocumentosController extends Controller
      */
     public function ver(Documento $documento)
     {
+        $user = Auth::user();
         $responsables = User::whereHas('roles', function($q) {
             $q->where('name', 'responsable');
-        })->get()->pluck('name', 'id')->toArray();
+        })->whereIn('departamento_id', $user->departamentos->pluck('id'))
+          ->get()
+          ->pluck('name', 'id')->toArray();
 
         $puedeAsignarResponsable = Gate::allows('asignarResponsable', $documento);
         $ultimaPropuesta = $documento->propuestas->count()

@@ -18,6 +18,11 @@ class CreateDepartamentos extends Migration
             $table->timestamps();
             $table->string('nombre');
         });
+
+        Schema::create('user_departamentos', function (Blueprint $table) {
+          $table->unsignedBigInteger('user_id');
+          $table->unsignedBigInteger('departamento_id');
+        });
     }
 
     /**
@@ -28,5 +33,6 @@ class CreateDepartamentos extends Migration
     public function down()
     {
         Schema::dropIfExists('departamentos');
+        Schema::dropIfExists('user_departamentos');
     }
 }
