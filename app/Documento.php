@@ -43,7 +43,7 @@ class Documento extends Model
     public function puedeAvanzar(User $user) {
         $politicasAvance = [
             'inicio'=>'asignarResponsable',
-            'pendiente-responsable'=>'agregarPropuesta',
+            'pendiente-propuesta'=>'agregarPropuesta',
             'pendiente-revision'=>'aceptarPropuesta',
             'en-progreso'=>'corregir',
             'corregido'=>'verificar',
