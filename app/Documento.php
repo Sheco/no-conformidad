@@ -145,7 +145,9 @@ class Documento extends Model
 
         $this->responsable()->associate($responsable);
         $this->setStatus('pendiente-propuesta');
-        $this->fecha_maxima = Carbon::now()->addDays(3);
+        if(!$this->propuestas->last()) {
+            $this->fecha_maxima = Carbon::now()->addDays(3);
+        }
         $this->save();
     }
 
