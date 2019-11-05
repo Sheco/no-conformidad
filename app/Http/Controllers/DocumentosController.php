@@ -25,7 +25,6 @@ class DocumentosController extends Controller
         $statuses = Status::all();
         $docs = Documento::visible($user)
             ->status($status)
-            ->whereIn('departamento_id', $user->departamentos->pluck('id'))
             ->orderBy('fecha_limite', 'asc')
             ->get();
 
