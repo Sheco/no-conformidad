@@ -8,9 +8,7 @@
                     @foreach ($statuses as $_status)
                         <li class="list-group-item{{ ($_status->codigo == $status? " active": "") }}">
                         <a class="nav-link" href="{{ url('docs/status', $_status->codigo) }}">
-                        <span class="badge badge-light">
-                            {{ $_status->documentosVisibles($user) }}
-                        </span>
+                        {!! $_status->documentosVisiblesBadge($user) !!}
                         {!! $_status->nombreColoreado !!}
                     </a>
                     </li>

@@ -24,6 +24,13 @@ class Status extends Model
             ->count();
     }
 
+    public function documentosVisiblesBadge(User $user) {
+        $total = $this->documentosVisibles($user);
+        if(!$total)
+            return "<span class=\"badge badge-light\">0</span>";
+        else return "<span class=\"badge badge-danger text-light\">$total</span>";
+    }
+
     public function getNombreColoreadoAttribute() {
         return "<span class=\"bg-light status-$this->codigo\">$this->nombre</span>";
     }
