@@ -48,7 +48,7 @@
                             N/A
                         @endif
                     </td>
-                    <td>{{ $doc->fechaLimiteDiffforHumans }}</td>
+                    <td>{{ $doc->fechaMaximaDiffForHumans }}</td>
                 </tr>
                 @endforeach
             </table>

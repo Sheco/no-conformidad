@@ -51,7 +51,7 @@
                     </div>
                     <div class="col-md-4 form-groupo">
                         <label>Límite de entrega</label>
-                        <div>{{ $documento->fechaLimiteDiffForHumans }}</div>
+                        <div>{{ $documento->fechaMaximaDiffForHumans }}</div>
                     </div>
                     <div class="col-md-12 form-group">
                         <label>Descripción</label>
@@ -111,6 +111,10 @@
                             <label>Responsable:</label>
                             <div>{{ $propuesta->responsable->name }}</div>
                         </div>
+                        <div class="col-md-6">
+                            <label>Fecha propuesta de entrega</label>
+                            <div>{{ $propuesta->fecha_entrega }}</div>
+                        </div>
                         <div class="col-md-12">
                             <label>Comentarios:</label>
                             <div>{{ $propuesta->descripcion }}</div>
@@ -164,6 +168,10 @@
                 <div class="card-header">Nueva Propuesta</div>
                 <div class="card-body container">
                     <div class="row formaTabular">
+                        <div class="col-md-12">
+                            <label>Fecha de entrega</label>
+                            {{ Form::date('fecha_entrega', '', ['class'=>'form-control', 'max'=>$fechaMaximaEntrega->format('Y-m-d'), 'min'=>date('Y-m-d')]) }}
+                        </div>
                         <div class="col-md-12">
                             <label>Comentarios:</label>
                             {{ Form::textarea('descripcion', '', ['class'=>'form-control']) }}

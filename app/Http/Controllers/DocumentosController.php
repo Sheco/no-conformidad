@@ -12,6 +12,8 @@ use App\Tipo;
 use App\Departamento;
 use App\User;
 
+use Carbon\Carbon;
+
 class DocumentosController extends Controller
 {
     /**
@@ -81,12 +83,21 @@ class DocumentosController extends Controller
           ->pluck('name', 'id')->toArray();
 
         $puedeAsignarResponsable = Gate::allows('asignarResponsable', $documento);
-        $ultimaPropuesta = $documento->propuestas->count()
-            ? $documento->propuestas->last()->id
-            : 0;
+        if($documento->propuestas->count()>0) {
+            $ultimaPropuesta = $documento->propuestas->last()->id;
+            $fechaMaximaEntrega = new Carbon($documento->fecha_maxima);
+        } else {
+            $ultimaPropuesta = 0;
+            $fechaMaximaEntrega = Carbon::now()->addDays(90);
+        }
 
-        return view('documentos.ver', compact('documento', 'responsables',
-            'puedeAsignarResponsable', 'ultimaPropuesta'));
+        return view('documentos.ver', compact(
+            'documento', 
+            'responsables',
+            'puedeAsignarResponsable', 
+            'ultimaPropuesta', 
+            'fechaMaximaEntrega'
+        ));
     }
 
     public function asignarResponsable(Request $request, Documento $documento) {
@@ -98,7 +109,7 @@ class DocumentosController extends Controller
     }
 
     public function agregarPropuesta(Request $request, Documento $documento) {
-        $documento->agregarPropuesta(Auth::user(), $request->input('descripcion'));
+        $documento->agregarPropuesta(Auth::user(), $request->input('descripcion'), $request->input('fecha_entrega'));
         $documento->save();
         return back();
     }

@@ -16,6 +16,7 @@ class CreatePropuestasTable extends Migration
         Schema::create('propuestas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            $table->datetime('fecha_entrega')->nullable();
 
             $table->unsignedBigInteger('documento_id');
             $table->unsignedBigInteger('responsable_usr_id');

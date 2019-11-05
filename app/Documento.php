@@ -88,17 +88,22 @@ class Documento extends Model
         $query->where('status_id', $status->id);
     }
 
-    function getFechaLimiteDiffAttribute() {
-        $limite = new Carbon($this->fecha_limite);
+    function getFechaMaximaDiffAttribute() {
+        $propuesta = $this->propuestas->last();
+        $fecha = $propuesta
+            ?new Carbon($propuesta->fecha_entrega)
+            :new Carbon($this->fecha_maxima);
+
         $now = Carbon::now();
-        if($now >= $limite) {
+        if($now >= $fecha) {
             return CarbonInterval::hours(0);
         }
-        return $limite->diffAsCarbonInterval($now);
+        return $fecha->diffAsCarbonInterval($now);
     }
-    function getFechaLimiteDiffForHumansAttribute() {
-        if(!$this->fecha_limite) return "N/A";
-        $diff = $this->fechaLimiteDiff;
+
+    function getFechaMaximaDiffForHumansAttribute() {
+        if(!$this->fecha_maxima) return "N/A";
+        $diff = $this->fechaMaximaDiff;
         if($diff->seconds == 0) return "Vencido";
         return $diff->forHumans(['parts'=>2]);
     }
@@ -114,7 +119,7 @@ class Documento extends Model
         $this->departamento_id = $departamento->id;
         $year = date('y');
         $this->folio = "$user->serie_documentos $user->contador_documentos/$year";
-        $this->fecha_limite = Carbon::now()->addDays(1);
+        $this->fecha_maxima = Carbon::now()->addDays(1);
         $this->titulo = $titulo;
         $this->descripcion = $descripcion;
         $this->save();
@@ -140,20 +145,29 @@ class Documento extends Model
 
         $this->responsable()->associate($responsable);
         $this->setStatus('pendiente-propuesta');
-        $this->fecha_limite = Carbon::now()->addDays(3);
+        $this->fecha_maxima = Carbon::now()->addDays(3);
     }
 
-    public function agregarPropuesta(User $user, $descripcion) {
+    public function agregarPropuesta(User $user, $descripcion, $fecha_entrega) {
         Gate::forUser($user)->authorize('agregarPropuesta', $this);
-        return DB::transaction(function() use ($user, $descripcion) {
+        $fecha_entrega = new Carbon("$fecha_entrega 12:00:00");
+        $fecha_maxima = $this->propuestas()->count()==0?
+            Carbon::now()->addDays(90):
+            $this->fecha_maxima;
+
+        if($fecha_entrega > $fecha_maxima)
+            throw new \Exception("La fecha propuesta de entrega no puede exceder la fecha maxima de ". $this->fecha_maxima);
+
+        return DB::transaction(function() use ($user, $descripcion, $fecha_entrega, $fecha_maxima) {
             $propuesta = new Propuesta;
             $propuesta->responsable()->associate($user);
             $propuesta->descripcion = $descripcion;
+            $propuesta->fecha_entrega = $fecha_entrega;
 
             $this->propuestas()->save($propuesta);
 
             $this->setStatus('pendiente-revision');
-            $this->fecha_limite = Carbon::now()->addDays(90);
+            $this->fecha_maxima = $fecha_maxima;
             return $propuesta;
         });
     }
@@ -196,7 +210,7 @@ class Documento extends Model
     public function verificar(User $user) {
         Gate::forUser($user)->authorize('verificar', $this);
         $this->setStatus('verificado');
-        $this->fecha_limite = null;
+        $this->fecha_maxima = null;
     }
 
     public function cerrar(User $user) {
