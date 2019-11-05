@@ -146,6 +146,7 @@ class Documento extends Model
         $this->responsable()->associate($responsable);
         $this->setStatus('pendiente-propuesta');
         $this->fecha_maxima = Carbon::now()->addDays(3);
+        $this->save();
     }
 
     public function agregarPropuesta(User $user, $descripcion, $fecha_entrega) {
@@ -168,6 +169,7 @@ class Documento extends Model
 
             $this->setStatus('pendiente-revision');
             $this->fecha_maxima = $fecha_maxima;
+            $this->save();
             return $propuesta;
         });
     }
@@ -182,8 +184,10 @@ class Documento extends Model
             $propuesta->retroalimentador()->associate($user);
             $propuesta->retro = $comentarios;
             $propuesta->status = false;
+            $propuesta->save();
 
             $this->setStatus('pendiente-propuesta');
+            $this->save();
         });
     }
 
@@ -197,24 +201,29 @@ class Documento extends Model
             $propuesta->retroalimentador()->associate($user);
             $propuesta->retro = $comentarios;
             $propuesta->status = true;
+            $propuesta->save();
 
             $this->setStatus('en-progreso');
+            $this->save();
         });
     } 
 
     public function corregir(User $user) {
         Gate::forUser($user)->authorize('corregir', $this);
         $this->setStatus('corregido');
+        $this->save();
     }
 
     public function verificar(User $user) {
         Gate::forUser($user)->authorize('verificar', $this);
         $this->setStatus('verificado');
         $this->fecha_maxima = null;
+        $this->save();
     }
 
     public function cerrar(User $user) {
         Gate::forUser($user)->authorize('cerrar', $this);
         $this->setStatus('cerrado');
+        $this->save();
     }
 }

@@ -1,5 +1,5 @@
 <?php
-
+use Carbon\Carbon;
 
 // cuantas veces rechazar
 $totalRechazos = 2;
@@ -30,22 +30,20 @@ do {
     /* paso 2, se asigna responsable */ 
     echo "Asignando responsable...\n";
     $doc->asignarResponsable($director, $responsable);
-    $doc->save();
     espera();
 
     /* paso 3, el responsable agrega una propuesta */
     echo "Agregando propuesta...\n";
     $texto = ($rechazos<$totalRechazos? 'no hacer nada': 'tapar el hueco');
-    $propuesta = $doc->agregarPropuesta($responsable, $texto);
-    $doc->save();
+    $fecha = Carbon::now()->addDays(30)->format('Y-m-d');
+    $propuesta = $doc->agregarPropuesta($responsable, $texto, $fecha);
+    $doc->refresh();
     espera();
 
     /* paso 4, rechazar y reasignar */
     if($rechazos<$totalRechazos) {
         echo "Rechazando propuesta...\n";
         $doc->rechazarPropuesta($director, $propuesta, 'mala idea');
-        $propuesta->save();
-        $doc->save();
         espera();
         $rechazos++;
     } else break;
@@ -54,24 +52,19 @@ do {
 /* paso 5, aceptar la propuesta */
 echo "Aceptando propuesta...\n";
 $doc->aceptarPropuesta($director, $propuesta, 'perfecto');
-$propuesta->save();
-$doc->save();
 espera();
 
 /* paso 6, marcar como completado */
 echo "Marcando el documento como corregido...\n";
 $doc->corregir($responsable);
-$doc->save();
 espera();
 
 /* paso 7, marcar como verificado */
 echo "Marcando el documento como verificado...\n";
 $doc->verificar($creador);
-$doc->save();
 espera();
 
 /* paso 9, cerrar el documento */
 echo "Marcando el documento como cerrado...\n";
 $doc->cerrar($creador);
-$doc->save();
 espera();

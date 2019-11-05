@@ -104,47 +104,38 @@ class DocumentosController extends Controller
         $responsable = User::find($request->input('responsable_usr_id'));
 
         $documento->asignarResponsable(Auth::user(), $responsable);
-        $documento->save();
         return back();
     }
 
     public function agregarPropuesta(Request $request, Documento $documento) {
         $documento->agregarPropuesta(Auth::user(), $request->input('descripcion'), $request->input('fecha_entrega'));
-        $documento->save();
         return back();
     }
 
     public function rechazarPropuesta(Request $request, Propuesta $propuesta) {
         $documento = $propuesta->documento;
         $documento->rechazarPropuesta(Auth::user(), $propuesta, '');
-        $propuesta->save();
-        $documento->save();
         return back();
     }
 
     public function aceptarPropuesta(Request $request, Propuesta $propuesta) {
         $documento = $propuesta->documento;
         $documento->aceptarPropuesta(Auth::user(), $propuesta, '');
-        $propuesta->save();
-        $documento->save();
         return back();
     }
 
     public function corregir(Request $request, Documento $documento) {
         $documento->corregir(Auth::user());
-        $documento->save();
         return back();
     }
 
     public function verificar(Request $request, Documento $documento) {
         $documento->verificar(Auth::user());
-        $documento->save();
         return back();
     }
 
     public function cerrar(Request $request, Documento $documento) {
         $documento->cerrar(Auth::user());
-        $documento->save();
         return back();
     }
 }
