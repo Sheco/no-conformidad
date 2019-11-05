@@ -91,6 +91,9 @@ class Documento extends Model
 
     function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion) {
         Gate::forUser($user)->authorize('crear', Documento::class);
+        if(!$user->departamentos->pluck('id', 'id')->has($departamento->id)) {
+            throw new \Exception("El usuario $user->name no esta suscrito al departamento $departamento->nombre");
+        }
         $this->creador_usr_id = $user->id;
         $this->setStatus('inicio');
         $this->tipo_id = $tipo->id;
@@ -116,6 +119,10 @@ class Documento extends Model
 
         if(!$responsable->hasRole('responsable'))
             throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, on tiene el rol apropiado.");
+
+        if(!$user->departamentos->pluck('id', 'id')->has($responsable->departamento_id)) {
+            throw new \Exception("El usuario $user->name no puede asignar al usuario $responsable->name, pues no esta suscrito al departamento {$responsable->departamento->nombre}");
+        }
 
         $this->responsable()->associate($responsable);
         $this->setStatus('pendiente-propuesta');
