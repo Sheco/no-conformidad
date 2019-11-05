@@ -49,9 +49,13 @@
                             </div>
                         @endif
                     </div>
-                    <div class="col-md-4 form-groupo">
-                        <label>Límite de entrega</label>
+                    <div class="col-md-4 form-group">
+                        <label>Tiempo estimado para la siguiente etapa</label>
                         <div>{{ $documento->fechaMaximaDiffForHumans }}</div>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label>Fecha maxima de entrega</label>
+                        <div>{{ $documento->fecha_maxima }}</div>
                     </div>
                     <div class="col-md-12 form-group">
                         <label>Descripción</label>

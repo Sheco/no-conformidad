@@ -88,12 +88,14 @@ class Documento extends Model
         $query->where('status_id', $status->id);
     }
 
-    function getFechaMaximaDiffAttribute() {
-        $propuesta = $this->propuestas->last();
-        $fecha = $propuesta
+    function getFechaEntregaAttribute() {
+        $propuesta = $this->propuestas->where('status', 1)->last();
+        return $propuesta
             ?new Carbon($propuesta->fecha_entrega)
             :new Carbon($this->fecha_maxima);
-
+    }
+    function getFechaMaximaDiffAttribute() {
+        $fecha = $this->fechaEntrega;
         $now = Carbon::now();
         if($now >= $fecha) {
             return CarbonInterval::hours(0);
