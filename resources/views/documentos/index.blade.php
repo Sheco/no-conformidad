@@ -4,22 +4,24 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <nav class="nav flex-column">
+            <ul class="list-group">
                     @foreach ($statuses as $_status)
+                        <li class="list-group-item{{ ($_status->codigo == $status? " active": "") }}">
                         <a class="nav-link" href="{{ url('docs/status', $_status->codigo) }}">
-                        <span class="badge badge-success text-light">
+                        <span class="badge badge-light">
                             {{ $_status->documentosVisibles($user) }}
                         </span>
                         {!! $_status->nombreColoreado !!}
-                        @if ($_status->codigo == $status)
-                            *
-                        @endif
                     </a>
+                    </li>
                     @endforeach
             </nav>
         </div>
         <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
             <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
                 <tr>
                     <th>ID</th>
                     <th>Folio</th>
@@ -28,8 +30,9 @@
                     <th>Tipo</th>
                     <th>Fecha</th>
                     <th>Responsable</th>
-                    <th>Límite de entrega</th>
+                    <th>Límite&nbsp;de&nbsp;entrega</th>
                 </tr>
+                </thead>
                 @foreach ($docs as $doc) 
                 <tr>
                     <td>{{ $doc->id }}</td>
@@ -48,6 +51,8 @@
                 </tr>
                 @endforeach
             </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

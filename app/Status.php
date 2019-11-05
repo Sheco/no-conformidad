@@ -25,6 +25,6 @@ class Status extends Model
     }
 
     public function getNombreColoreadoAttribute() {
-        return "<span class=\"status-$this->codigo\">$this->nombre</span>";
+        return "<span class=\"bg-light status-$this->codigo\">$this->nombre</span>";
     }
 }
