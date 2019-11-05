@@ -7,10 +7,10 @@
             <ul class="list-group">
                     @foreach ($statuses as $_status)
                         <li class="list-group-item{{ ($_status->codigo == $status? " active": "") }}">
-                        <a class="nav-link" href="{{ url('docs/status', $_status->codigo) }}">
-                        {!! $_status->documentosVisiblesBadge($user) !!}
-                        {!! $_status->nombreColoreado !!}
-                    </a>
+                            <a class="nav-link {{ ($_status->codigo == $status? " text-warning": "") }}" href="{{ url('docs/status', $_status->codigo) }}">
+                            {!! $_status->documentosVisiblesBadge($user) !!}
+                            {{ $_status->nombre }}
+                        </a>
                     </li>
                     @endforeach
             </nav>
@@ -24,7 +24,7 @@
                     <th>ID</th>
                     <th>Folio</th>
                     <th>Creador</th>
-                    <th>Titulo</th>
+                    <th>Título</th>
                     <th>Tipo</th>
                     <th>Fecha</th>
                     <th>Responsable</th>
