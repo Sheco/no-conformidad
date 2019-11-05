@@ -15,4 +15,8 @@ class Departamento extends Model
     public function documentos() {
         return $this->hasMany('App\Documento');
     }
+
+    public function suscribed_users() {
+        return $this->belongsToMany('App\User', 'user_departamentos');
+    }
 }
