@@ -100,7 +100,7 @@ class NoconTableSeeder extends Seeder
             'email'=>'creador2@nocon.com',
             'password'=>Hash::make('nocon'),
             'departamento_id'=>$departamento3->id,
-            'serie_documentos'=>'MXX'
+            'serie_documentos'=>'ABC'
         ]);
         $user->addRole('creador');
         $user->departamentos()->attach($departamento3->id);
