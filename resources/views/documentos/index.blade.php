@@ -16,9 +16,7 @@
             </nav>
         </div>
         <div class="col-md-9">
-            <div class="card">
-                <div class="card-body">
-            <table class="table table-bordered table-striped">
+            <table class="table table-sm table-bordered table-hover">
                 <thead class="thead-dark">
                 <tr>
                     <th><span class="oi oi-star text-warning" title="Puedes avanzar este documento" aria-hidden="true"></span></th>
@@ -54,8 +52,6 @@
                 </tr>
                 @endforeach
             </table>
-                </div>
-            </div>
         </div>
     </div>
 </div>
