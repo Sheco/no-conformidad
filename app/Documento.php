@@ -48,7 +48,7 @@ class Documento extends Model
             'en-progreso'=>'corregir',
             'corregido'=>'verificar',
             'verificado'=>'cerrar',
-            'cerrar'=>''
+            'cerrado'=>''
         ];
         return Gate::allows($politicasAvance[$this->status->codigo], $this);
     }
