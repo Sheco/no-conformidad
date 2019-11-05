@@ -40,6 +40,19 @@ class Documento extends Model
         return $this->belongsTo('App\User', 'responsable_usr_id');
     }
 
+    public function puedeAvanzar(User $user) {
+        $politicasAvance = [
+            'inicio'=>'asignarResponsable',
+            'pendiente-responsable'=>'agregarPropuesta',
+            'pendiente-revision'=>'aceptarPropuesta',
+            'en-progreso'=>'corregir',
+            'corregido'=>'verificar',
+            'verificado'=>'cerrar',
+            'cerrar'=>''
+        ];
+        return Gate::allows($politicasAvance[$this->status->codigo], $this);
+    }
+
     public function setStatus($codigo) {
         $this->status()->associate(Status::where('codigo', $codigo)->first());
     }

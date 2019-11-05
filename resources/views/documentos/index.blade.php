@@ -21,6 +21,7 @@
             <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
                 <tr>
+                    <th><span class="oi oi-star text-warning" title="Puedes avanzar este documento" aria-hidden="true"></span></th>
                     <th>ID</th>
                     <th>Folio</th>
                     <th>Creador</th>
@@ -33,6 +34,10 @@
                 </thead>
                 @foreach ($docs as $doc) 
                 <tr>
+                    <td>@if ($doc->puedeAvanzar(Auth::user())) 
+                        <span class="oi oi-star text-warning" title="Puedes avanzar este documento" aria-hidden="true"></span>
+
+                    @endif</td>
                     <td>{{ $doc->id }}</td>
                     <td><a href="{{ url('/docs/ver', $doc->id)}}">{{ $doc->folio }}</a></td>
                     <td>{{ $doc->creador->name }}</td>
