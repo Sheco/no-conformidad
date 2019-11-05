@@ -4,9 +4,9 @@
 // cuantas veces rechazar
 $totalRechazos = 2;
 $personas = [
-    $creador = App\User::find(1),
-    $director = App\User::find(2),
-    $responsable = App\User::find(3),
+    $creador = App\User::where('email', 'creador1@nocon.com')->first(),
+    $director = App\User::where('email', 'director1@nocon.com')->first(),
+    $responsable = App\User::where('email', 'responsable1@nocon.com')->first(),
 ];
 function espera() {
     sleep(5);
