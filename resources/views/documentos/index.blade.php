@@ -33,9 +33,9 @@
                 @foreach ($docs as $doc) 
                 <tr>
                     <td>{{ $doc->id }}</td>
-                    <td>{{ $doc->folio }}</td>
+                    <td><a href="{{ url('/docs/ver', $doc->id)}}">{{ $doc->folio }}</a></td>
                     <td>{{ $doc->creador->name }}</td>
-                    <td><a href="{{ url('/docs/ver', $doc->id)}}">{{ $doc->titulo }}</a></td>
+                    <td>{{ $doc->titulo }}</td>
                     <td>{{ $doc->tipo->nombre }}</td>
                     <td>{{ $doc->created_at->format("Y/M/d") }}</td>
                     <td>@if ($doc->responsable_usr_id) 
