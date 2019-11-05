@@ -97,6 +97,7 @@ class Documento extends Model
         return $limite->diffAsCarbonInterval($now);
     }
     function getFechaLimiteDiffForHumansAttribute() {
+        if(!$this->fecha_limite) return "N/A";
         $diff = $this->fechaLimiteDiff;
         if($diff->seconds == 0) return "Vencido";
         return $diff->forHumans(['parts'=>2]);
@@ -195,6 +196,7 @@ class Documento extends Model
     public function verificar(User $user) {
         Gate::forUser($user)->authorize('verificar', $this);
         $this->setStatus('verificado');
+        $this->fecha_limite = null;
     }
 
     public function cerrar(User $user) {
