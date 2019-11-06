@@ -56,6 +56,10 @@ class DocumentosController extends Controller
      */
     public function guardar(Request $request)
     {
+        $request->validate([
+            "titulo"=>"required",
+            "descripcion"=>"required"
+        ]);
         $tipo = Tipo::findOrFail($request->input('tipo_id'));
         $departamento = Departamento::findOrFail($request->input('departamento_id'));
 
@@ -108,6 +112,10 @@ class DocumentosController extends Controller
     }
 
     public function agregarPropuesta(Request $request, Documento $documento) {
+        $request->validate([
+            'fecha_entrega'=>'required',
+            'descripcion'=>'required'
+        ]);
         $documento->agregarPropuesta(Auth::user(), $request->input('descripcion'), $request->input('fecha_entrega'));
         return back();
     }
