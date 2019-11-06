@@ -87,7 +87,7 @@ class DocumentosController extends Controller
           ->pluck('name', 'id')->toArray();
 
         $puedeAsignarResponsable = Gate::allows('asignarResponsable', $documento);
-        if($documento->propuestas->count()>0) {
+        if($documento->tienePropuestas) {
             $ultimaPropuesta = $documento->propuestas->last()->id;
             $fechaMaximaEntrega = new Carbon($documento->fecha_maxima);
         } else {
