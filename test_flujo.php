@@ -9,7 +9,7 @@ $personas = [
     $responsable = App\User::where('email', 'responsable1@nocon.com')->first(),
 ];
 function espera() {
-    sleep(5);
+    sleep(0);
 }
 
 DB::table('propuestas')->truncate();
