@@ -174,7 +174,7 @@
                     <div class="row formaTabular">
                         <div class="col-md-12">
                             <label>Fecha de entrega</label>
-                            {{ Form::date('fecha_entrega', '', ['class'=>'form-control', 'max'=>$fechaMaximaEntrega->format('Y-m-d'), 'min'=>date('Y-m-d')]) }}
+                            {{ Form::date('fecha_entrega', '', ['class'=>'form-control', 'max'=>$fechaMaximaEntrega->format('Y-m-d'), 'min'=>date('Y-m-d', strtotime("tomorrow"))]) }}
                         </div>
                         <div class="col-md-12">
                             <label>Comentarios:</label>
