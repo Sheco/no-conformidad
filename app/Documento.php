@@ -53,6 +53,10 @@ class Documento extends Model
         return Gate::allows($politicasAvance[$this->status->codigo], $this);
     }
 
+    public function getTienePropuestasAttribute() {
+        return $this->propuestas->count() > 0;
+    }
+
     public function setStatus($codigo) {
         $this->status()->associate(Status::where('codigo', $codigo)->first());
     }
@@ -147,7 +151,7 @@ class Documento extends Model
 
         $this->responsable()->associate($responsable);
         $this->setStatus('pendiente-propuesta');
-        if(!$this->propuestas->last()) {
+        if(!$this->tienePropuestas) {
             $this->fecha_maxima = Carbon::now()->addDays(3);
         }
         $this->save();
@@ -156,7 +160,7 @@ class Documento extends Model
     public function agregarPropuesta(User $user, $descripcion, $fecha_entrega) {
         Gate::forUser($user)->authorize('agregarPropuesta', $this);
         $fecha_entrega = new Carbon("$fecha_entrega 12:00:00");
-        $fecha_maxima = $this->propuestas()->count()==0?
+        $fecha_maxima = !$this->tienePropuestas?
             Carbon::now()->addDays(90):
             $this->fecha_maxima;
 
@@ -181,7 +185,7 @@ class Documento extends Model
     public function rechazarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
         Gate::forUser($user)->authorize('rechazarPropuesta', $this);
 
-        if($this->propuestas()->get()->last()->id != $propuesta->id)
+        if($this->propuestas->last()->id != $propuesta->id)
             throw new \Exception("Solo se puede aceptar la ultima propuesta del documento, ");
 
         return DB::transaction(function() use ($propuesta, $user, $comentarios) {
@@ -198,7 +202,7 @@ class Documento extends Model
     public function aceptarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
         Gate::forUser($user)->authorize('aceptarPropuesta', $this);
 
-        if($this->propuestas()->get()->last()->id != $propuesta->id)
+        if($this->propuestas->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
 
         return DB::transaction(function() use ($propuesta, $user, $comentarios) {
