@@ -41,5 +41,6 @@ Route::middleware(['auth'])->group(function() {
         Route::post('/admin/users/{user}/addDepartamento',
             'Admin\UsersController@addDepartamento');
 
+        Route::resource('admin/departamentos', 'Admin\DepartamentosController');
     });
 });   
