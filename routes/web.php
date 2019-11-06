@@ -29,4 +29,17 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/docs/{documento}/corregir', 'DocumentosController@corregir');
     Route::post('/docs/{documento}/verificar', 'DocumentosController@verificar');
     Route::post('/docs/{documento}/cerrar', 'DocumentosController@cerrar');
+
+    Route::middleware(['role:admin'])->group(function() {
+        Route::resource('/admin/users', 'Admin\UsersController');
+        Route::post('/admin/users/{user}/delRole/{role}',
+            'Admin\UsersController@delRole');
+        Route::post('/admin/users/{user}/addRole',
+            'Admin\UsersController@addRole');
+        Route::post('/admin/users/{user}/delDepartamento/{departamento}',
+            'Admin\UsersController@delDepartamento');
+        Route::post('/admin/users/{user}/addDepartamento',
+            'Admin\UsersController@addDepartamento');
+
+    });
 });   

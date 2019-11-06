@@ -22,6 +22,9 @@ class CreateDepartamentos extends Migration
         Schema::create('user_departamentos', function (Blueprint $table) {
           $table->unsignedBigInteger('user_id');
           $table->unsignedBigInteger('departamento_id');
+          $table->foreign('user_id')->references('id')->on('users');
+          $table->foreign('departamento_id')->references('id')->on('departamentos');
+          $table->primary(['user_id', 'departamento_id']);
         });
     }
 
