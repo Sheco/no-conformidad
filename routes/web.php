@@ -14,9 +14,8 @@
 Auth::routes(['register'=>false]);
 
 Route::middleware(['auth'])->group(function() {
-    $redirectDocs = function() { return redirect('/docs'); };
-    Route::get('/', $redirectDocs);
-    Route::get('/home', $redirectDocs);
+    Route::redirect('/', '/docs');
+    Route::redirect('/home', '/docs');
     
     Route::get('/docs', 'DocumentosController@index');
     Route::get('/docs/status/{status}', 'DocumentosController@index');
