@@ -12,7 +12,7 @@
                         <div>{{ $documento->created_at->format('Y/M/d') }}</div>
                     </div>
                     <div class="col-md-4 form-group">
-                        <label>Departamento/Buque</label>
+                        <label>Departamento</label>
                         <div>@if ($documento->departamento_id)
                             {{ $documento->departamento->nombre }}
                         @endif
