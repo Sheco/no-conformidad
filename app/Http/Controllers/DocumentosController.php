@@ -25,7 +25,11 @@ class DocumentosController extends Controller
     {
         $user  = Auth::user();
         $statuses = Status::all();
-        $docs = Documento::visible($user)
+        $docs = Documento::with('creador')
+            ->with('responsable')
+            ->with('tipo')
+            ->with('status')
+            ->visible($user)
             ->status($status)
             ->orderBy('fecha_limite', 'asc')
             ->get();

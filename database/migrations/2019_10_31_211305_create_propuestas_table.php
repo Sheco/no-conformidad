@@ -28,6 +28,8 @@ class CreatePropuestasTable extends Migration
             $table->foreign('documento_id')->references('id')->on('documentos');
             $table->foreign('retro_usr_id')->references('id')->on('users');
             $table->foreign('responsable_usr_id')->references('id')->on('users');
+
+            $table->index('documento_id');
         });
     }
 
