@@ -142,7 +142,7 @@
                         @endif
                     </div>
                     <div class="row" style="margin-top: 1em">
-                    @if ($propuesta->id == $ultimaPropuesta and 
+                    @if ($loop->last and 
                         Gate::allows('rechazarPropuesta', $documento))
                         <div class="offset-md-6 col-md-3 text-right">
                         {{ Form::open([
@@ -153,7 +153,7 @@
                         {{ Form::close() }}
                         </div>
                     @endif
-                    @if ($propuesta->id == $ultimaPropuesta and 
+                    @if ($loop->last and 
                         Gate::allows('aceptarPropuesta', $documento))
                         <div class="col-md-3 text-right">
                         {{ Form::open([

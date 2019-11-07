@@ -92,10 +92,8 @@ class DocumentosController extends Controller
 
         $puedeAsignarResponsable = Gate::allows('asignarResponsable', $documento);
         if($documento->tienePropuestas) {
-            $ultimaPropuesta = $documento->propuestas->last()->id;
             $fechaMaximaEntrega = new Carbon($documento->fecha_maxima);
         } else {
-            $ultimaPropuesta = 0;
             $fechaMaximaEntrega = Carbon::now()->addDays(90);
         }
 
@@ -103,7 +101,6 @@ class DocumentosController extends Controller
             'documento', 
             'responsables',
             'puedeAsignarResponsable', 
-            'ultimaPropuesta', 
             'fechaMaximaEntrega'
         ));
     }
