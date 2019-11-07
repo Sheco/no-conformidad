@@ -89,7 +89,6 @@ class NoconTableSeeder extends Seeder
             'name'=>'Creador1',
             'email'=>'creador1@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$departamento1->id,
             'serie_documentos'=>'MX1'
         ]);
         $user->addRole('creador');
@@ -99,7 +98,6 @@ class NoconTableSeeder extends Seeder
             'name'=>'Creador2',
             'email'=>'creador2@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$departamento3->id,
             'serie_documentos'=>'ABC'
         ]);
         $user->addRole('creador');
@@ -110,7 +108,6 @@ class NoconTableSeeder extends Seeder
             'name'=>'Director1',
             'email'=>'director1@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$departamento1->id,
         ]);
         $user->addRole('director');
         $user->departamentos()->attach($departamento1->id);
@@ -119,7 +116,6 @@ class NoconTableSeeder extends Seeder
             'name'=>'Director2',
             'email'=>'director2@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$departamento3->id,
         ]);
         $user->addRole('director');
         $user->departamentos()->attach($departamento3->id);
@@ -129,7 +125,6 @@ class NoconTableSeeder extends Seeder
             'name'=>'Responsable1',
             'email'=>'responsable1@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$departamento1->id,
           ]);
         $user->addRole('responsable');
         $user->departamentos()->attach($departamento1->id);
@@ -139,7 +134,6 @@ class NoconTableSeeder extends Seeder
             'name'=>'Responsable2',
             'email'=>'responsable2@nocon.com',
             'password'=>Hash::make('nocon'),
-            'departamento_id'=>$departamento3->id,
           ]);
         $user->addRole('responsable');
         $user->departamentos()->attach($departamento3->id);
@@ -148,7 +142,6 @@ class NoconTableSeeder extends Seeder
             'name' =>'Admin',
             'email'=>'admin@nocon.com',
             'password'=>Hash::make('admin'),
-            'departamento_id'=>$departamento1->id,
             'serie_documentos'=>'ADM',
         ]);
         $user->addRole('admin');

@@ -10,7 +10,7 @@
   <div class="row" style="margin-top: 1em">
       <div class="col-md-6">
           <div class="card">
-              <div class="card-header">Departamentos suscritos</div>
+              <div class="card-header">Departamentos</div>
               <div class="card-body">
                   {{ Form::open(['url'=>action('Admin\UsersController@addDepartamento', [$user->id]), 'method'=>'post', 'style'=>'margin-bottom: 1em']) }}
                   {{ Form::select('departamento_id', [''=>'- Asignar un departamento']+$departamentosDisponibles->pluck('nombre', 'id')->toArray(), '', ['class'=>'form-control', 'onchange'=>'this.form.submit()']) }}
@@ -24,6 +24,11 @@
 
                       {{ Form::close() }}
                   @endforeach
+                  <small><ul>
+                          <li>El usuario podra ver documentos que pertenezcan a cualquiera de estos departamentos.</li>
+                          <li>Los directores podran asignar responsables a un documento si tienen el departamento del documento</li>
+
+                  </small>
               </div>
           </div>
       </div>

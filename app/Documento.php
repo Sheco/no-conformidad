@@ -159,8 +159,10 @@ class Documento extends Model
         if(!$responsable->hasRole('responsable'))
             throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, on tiene el rol apropiado.");
 
-        if(!$user->departamentos()->where('id', $responsable->departamento_id)->exists()) {
-            throw new \Exception("El usuario $user->name no puede asignar al usuario $responsable->name, pues no esta suscrito al departamento {$responsable->departamento->nombre}");
+        if(!$responsable->departamentos
+            ->where('id', $this->departamento_id) 
+            ->count()) {
+            throw new \Exception("El usuario $user->name no puede asignar al usuario $responsable->name, pues este no esta suscrito al departamento {$this->departamento->nombre}");
         }
 
         $this->responsable()->associate($responsable);

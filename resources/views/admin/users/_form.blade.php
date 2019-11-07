@@ -25,8 +25,6 @@
             </div>
 
             <div class="col-md-6 form-group">
-                <label>Departamento asignado</label>
-                {{ Form::select('departamento_id', [''=>' - Seleccionar']+$departamentos->pluck('nombre', 'id')->toArray(), null, ['class'=>'form-control']) }}
             </div>
 
             <div class="col-md-6 form-group">

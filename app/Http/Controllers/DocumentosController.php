@@ -86,7 +86,9 @@ class DocumentosController extends Controller
         $user = Auth::user();
         $responsables = User::whereHas('roles', function($q) {
             $q->where('name', 'responsable');
-        })->whereIn('departamento_id', $user->departamentos->pluck('id'))
+        })->whereHas('departamentos', function($q) use ($documento) {
+            $q->where('id', $documento->departamento_id);
+        })
           ->get()
           ->pluck('name', 'id')->toArray();
 
