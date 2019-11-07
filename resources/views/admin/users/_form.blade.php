@@ -50,8 +50,7 @@
             <div class="card-header">Departamentos suscritos</div>
             <div class="card-body">
                 {{ Form::open(['url'=>action('Admin\UsersController@addDepartamento', [$user->id]), 'method'=>'post']) }}
-                {{ Form::select('departamento_id', $departamentos->pluck('nombre', 'id'), '') }}
-                {{ Form::submit('Agregar', ['class'=>'btn btn-primary']) }}
+                {{ Form::select('departamento_id', [''=>'- Asignar un departamento']+$departamentos->pluck('nombre', 'id')->toArray(), '', ['class'=>'form-control', 'onchange'=>'this.form.submit()']) }}
                 
                 {{ Form::close() }}
                 
@@ -71,8 +70,7 @@
             <div class="card-header">Roles</div>
             <div class="card-body">
                 {{ Form::open(['url'=>action('Admin\UsersController@addRole', [$user->id]), 'method'=>'post']) }}
-                {{ Form::select('role_id', $roles->pluck('name', 'id'), '') }}
-                {{ Form::submit('Agregar', ['class'=>'btn btn-primary']) }}
+                {{ Form::select('role_id', [''=>'- Asignar un rol']+$roles->pluck('name', 'id')->toArray(), '', ['class'=>'form-control', 'onchange'=>'this.form.submit()']) }}
                 
                 {{ Form::close() }}
                 
