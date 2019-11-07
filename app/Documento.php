@@ -70,24 +70,27 @@ class Documento extends Model
     }
 
     public function scopeVisible($query, User $user) {
-        // el creador puede siempre ver sus documentos
+        // solo se pueden ver documentos de los departamentos a los que uno
+        // pertenece.
         $query->whereIn('departamento_id', $user->departamentos->pluck('id'))
            ->where(function($query) use ($user) {
-               $query->where('creador_usr_id', $user->id)
+                // el creador puede siempre ver sus documentos
+                $query->where('creador_usr_id', $user->id)
 
-            // si el documento esta asignado a un responsable,
-            // este lo podra ver si el status es pendiente-propuesta
-            // y en-progreso
+                // si el documento esta asignado a un responsable,
+                // este lo podra ver si el status es pendiente-propuesta
+                // y en-progreso
                 ->orWhere(function($query) use ($user) {
                     $query->where('responsable_usr_id', $user->id)
                           ->whereIn('status_id', [2, 4]);
                 });
                            
-            // si el usuario es director, siempre puede ver todos los documentos
-            // hasta el punto en el que que el status es verificado
-            if($user->hasRole("director")) {
-                $query->orWhere('status_id', '<=', 5);
-            }
+                // si el usuario es director, siempre puede ver todos los 
+                // documentos hasta el punto en el que que el status es 
+                // verificado
+                if($user->hasRole("director")) {
+                    $query->orWhere('status_id', '<=', 5);
+                }
         });
 
     }
