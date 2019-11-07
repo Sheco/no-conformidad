@@ -98,11 +98,23 @@ class Documento extends Model
     }
 
     function getFechaEntregaAttribute() {
+        // si tiena una propuesta aceptada, la fecha limite es la fecha
+        // especificada en la propuesta
         $propuesta = $this->propuestas->where('status', 1)->last();
-        return $propuesta
-            ?new Carbon($propuesta->fecha_entrega)
-            :new Carbon($this->fecha_maxima);
+        if($propuesta)
+            return new Carbon($propuesta->fecha_entrega);
+
+        // de otra manera si no tiene propuestas aceptadas, si tiene alguna
+        // propuesta (rechazada o aun no revisada), devolver la fecha
+        // limite guardada en el documento
+        if($this->tienePropuestas)
+            return new Carbon($this->fecha_maxima);
+
+        // de otra manera, si no tiene ninguna propuesta, la fecha limite
+        // es dentro de 3 meses
+        return Carbon::now()->addDays(90);
     }
+
     function getFechaMaximaDiffAttribute() {
         $fecha = $this->fechaEntrega;
         $now = Carbon::now();
@@ -157,12 +169,12 @@ class Documento extends Model
         }
 
         if(!$responsable->hasRole('responsable'))
-            throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, on tiene el rol apropiado.");
+            throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, no tiene el rol apropiado.");
 
         if(!$responsable->departamentos
             ->where('id', $this->departamento_id) 
             ->count()) {
-            throw new \Exception("El usuario $user->name no puede asignar al usuario $responsable->name, pues este no esta suscrito al departamento {$this->departamento->nombre}");
+            throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, no tiene el departamento {$this->departamento->nombre}");
         }
 
         $this->responsable()->associate($responsable);
@@ -180,9 +192,7 @@ class Documento extends Model
         Gate::forUser($user)->authorize('agregarPropuesta', $this);
 
         $fecha_entrega = new Carbon("$fecha_entrega 12:00:00");
-        $fecha_maxima = !$this->tienePropuestas?
-            Carbon::now()->addDays(90):
-            $this->fecha_maxima;
+        $fecha_maxima = $this->fechaEntrega;
 
         if($fecha_entrega > $fecha_maxima)
             throw new \Exception("La fecha propuesta de entrega no puede exceder la fecha maxima de ". $this->fecha_maxima);
