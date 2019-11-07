@@ -57,6 +57,12 @@
                         <label>Fecha maxima de entrega</label>
                         <div>{{ $documento->fecha_maxima }}</div>
                     </div>
+                    <div class="col-md-4">
+                        <label>Acciones</label>
+                        <div>
+                            <a href="{{ action("DocumentosController@logs", $documento->id) }}">Ver log</a>
+                        </div>
+                    </div>
                     <div class="col-md-12 form-group">
                         <label>Descripción</label>
                         <div>{{ $documento->descripcion }}</div>

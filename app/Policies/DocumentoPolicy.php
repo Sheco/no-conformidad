@@ -86,6 +86,18 @@ class DocumentoPolicy
 
         if($doc->status->codigo != 'verificado')
             return Response::deny("Solo se pueden cerrar aquellos documentos que esten marcados como verificados.");
+
+        return Response::allow();
+    }
+
+    public function ver(User $user, Documento $doc) {
+        $visible = Documento::visible($user)
+            ->where('id', $doc->id)
+            ->exists();
+
+        if(!$visible) 
+            return Response::deny("El usuario {$user->name} no puede ver el documento {$doc->folio}");
+
         return Response::allow();
     }
 

@@ -41,6 +41,10 @@ class Documento extends Model
         return $this->belongsTo('App\User', 'responsable_usr_id');
     }
 
+    public function logs() {
+        return $this->hasMany('App\DocumentoLog');
+    }
+
     public function puedeAvanzar(User $user) {
         $politicasAvance = [
             'inicio'=>'asignarResponsable',

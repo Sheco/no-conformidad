@@ -146,4 +146,10 @@ class DocumentosController extends Controller
         $documento->cerrar(Auth::user());
         return back();
     }
+
+    public function logs(Documento $documento) {
+        Gate::authorize('ver', $documento);
+        $logs = $documento->logs;
+        return view("documentos.logs", compact('documento', 'logs'));
+    }
 }

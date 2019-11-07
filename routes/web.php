@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('/docs/{documento}/corregir', 'DocumentosController@corregir');
     Route::post('/docs/{documento}/verificar', 'DocumentosController@verificar');
     Route::post('/docs/{documento}/cerrar', 'DocumentosController@cerrar');
+    Route::get('/docs/{documento}/logs', 'DocumentosController@logs');
 
     Route::middleware(['role:admin'])->group(function() {
         Route::resource('/admin/users', 'Admin\UsersController');
