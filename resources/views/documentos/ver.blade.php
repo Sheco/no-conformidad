@@ -50,7 +50,7 @@
                         @endif
                     </div>
                     <div class="col-md-4 form-group">
-                        <label>Tiempo estimado para la siguiente etapa</label>
+                        <label>Tiempo límite para la siguiente etapa</label>
                         <div>{{ $documento->fechaMaximaDiffForHumans }}</div>
                     </div>
                     <div class="col-md-4 form-group">
@@ -63,6 +63,7 @@
                             <a href="{{ action("DocumentosController@logs", $documento->id) }}">Ver log</a>
                         </div>
                     </div>
+
                     <div class="col-md-12 form-group">
                         <label>Descripción</label>
                         <div>{{ $documento->descripcion }}</div>

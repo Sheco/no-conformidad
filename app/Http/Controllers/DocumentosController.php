@@ -41,10 +41,12 @@ class DocumentosController extends Controller
     public function crear()
     {
         Gate::authorize('crear', Documento::class);
+
         $documento = new Documento;
         $tipos = Tipo::all()->pluck('nombre', 'id');
         $user = Auth::user();
         $departamentos = $user->departamentos->pluck('nombre', 'id');
+
         return view('documentos.crear', compact('documento', 'tipos', 'departamentos'));
     }
 
@@ -60,6 +62,7 @@ class DocumentosController extends Controller
             "titulo"=>"required",
             "descripcion"=>"required"
         ]);
+
         $tipo = Tipo::findOrFail($request->input('tipo_id'));
         $departamento = Departamento::findOrFail($request->input('departamento_id'));
 
@@ -68,6 +71,7 @@ class DocumentosController extends Controller
             $request->input('titulo'),  
             $request->input('descripcion')
         );
+
         return redirect('/docs');
     }
 

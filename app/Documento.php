@@ -121,14 +121,17 @@ class Documento extends Model
 
     function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion) {
         Gate::forUser($user)->authorize('crear', Documento::class);
+
         if(!$user->departamentos()->where('id', $departamento->id)->exists()) {
             throw new \Exception("El usuario $user->name no esta suscrito al departamento $departamento->nombre");
         }
+
+        $year = date('y');
+
         $this->creador_usr_id = $user->id;
         $this->setStatus('inicio');
         $this->tipo_id = $tipo->id;
         $this->departamento_id = $departamento->id;
-        $year = date('y');
         $this->folio = "$user->serie_documentos $user->contador_documentos/$year";
         $this->fecha_maxima = Carbon::now()->addDays(1);
         $this->titulo = $titulo;
@@ -143,6 +146,7 @@ class Documento extends Model
 
     public function asignarResponsable(User $user, ?User $responsable) {
         Gate::forUser($user)->authorize('asignarResponsable', $this);
+
         if(!$responsable) {
             $this->responsable()->dissociate();
             $this->setStatus('inicio');
@@ -158,15 +162,18 @@ class Documento extends Model
 
         $this->responsable()->associate($responsable);
         $this->setStatus('pendiente-propuesta');
+
         if(!$this->tienePropuestas) {
             $this->fecha_maxima = Carbon::now()->addDays(3);
         }
         $this->save();
+
         event(new DocumentoActualizado($this, $user, 'asignarResponsable'));
     }
 
     public function agregarPropuesta(User $user, $descripcion, $fecha_entrega) {
         Gate::forUser($user)->authorize('agregarPropuesta', $this);
+
         $fecha_entrega = new Carbon("$fecha_entrega 12:00:00");
         $fecha_maxima = !$this->tienePropuestas?
             Carbon::now()->addDays(90):
@@ -186,6 +193,7 @@ class Documento extends Model
             $this->setStatus('pendiente-revision');
             $this->fecha_maxima = $fecha_maxima;
             $this->save();
+
             event(new DocumentoActualizado($this, $user, 'agregarPropuesta'));
             return $propuesta;
         });
@@ -205,6 +213,7 @@ class Documento extends Model
 
             $this->setStatus('pendiente-propuesta');
             $this->save();
+
             event(new DocumentoActualizado($this, $user, 'rechazarPropuesta'));
         });
     }
@@ -223,29 +232,36 @@ class Documento extends Model
 
             $this->setStatus('en-progreso');
             $this->save();
+
             event(new DocumentoActualizado($this, $user, 'aceptarPropuesta'));
         });
     } 
 
     public function corregir(User $user) {
         Gate::forUser($user)->authorize('corregir', $this);
+
         $this->setStatus('corregido');
         $this->save();
+
         event(new DocumentoActualizado($this, $user, 'corregir'));
     }
 
     public function verificar(User $user) {
         Gate::forUser($user)->authorize('verificar', $this);
+
         $this->setStatus('verificado');
         $this->fecha_maxima = null;
         $this->save();
+
         event(new DocumentoActualizado($this, $user, 'verificar'));
     }
 
     public function cerrar(User $user) {
         Gate::forUser($user)->authorize('cerrar', $this);
+
         $this->setStatus('cerrado');
         $this->save();
+
         event(new DocumentoActualizado($this, $user, 'cerrar'));
     }
 }

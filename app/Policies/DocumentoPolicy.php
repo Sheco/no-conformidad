@@ -14,6 +14,7 @@ class DocumentoPolicy
     public function crear(User $user) {
         if(!$user->hasRole('creador'))
             return Response::deny("El usuario $user->name no puede crear documentos, no tiene el rol apropiado.");
+        
         return Response::allow();
     }
 
@@ -38,6 +39,7 @@ class DocumentoPolicy
 
         if(!$user->hasRole('responsable'))
             return Response::deny("El usuario $user->name no puede agregar propuestas, no tiene el rol apropiado.");
+        
         return Response::allow();
     }
 
@@ -47,6 +49,7 @@ class DocumentoPolicy
 
         if($doc->status->codigo != 'pendiente-revision')
             return Response::deny('Solo se puede rechazar propuestas cuando estan pendientes de revisión');
+        
         return Response::allow();
     }
 
@@ -56,6 +59,7 @@ class DocumentoPolicy
 
         if($doc->status->codigo != 'pendiente-revision')
             return Response::deny('Solo se puede aceptar propuestas cuando estan pendientes de revisión');
+        
         return Response::allow();
     } 
 
@@ -68,6 +72,7 @@ class DocumentoPolicy
 
         if(!$user->hasRole('responsable'))
             return Response::deny("El usuario $user->name no puede marcar el documento como corregido, no tiene el rol apropiado");
+
         return Response::allow();
     }
 
@@ -77,6 +82,7 @@ class DocumentoPolicy
 
         if($doc->status->codigo != 'corregido')
             return Response::deny("Solo se pueden marcar como verificado aquellos documentos que esten marcados como corregidos.");
+
         return Response::allow();
     }
 

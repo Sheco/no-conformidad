@@ -27,7 +27,7 @@
                     <th>Tipo</th>
                     <th>Fecha</th>
                     <th>Responsable</th>
-                    <th>Límite&nbsp;de&nbsp;entrega</th>
+                    <th>Tiempo&nbsp;Límite&nbsp;</th>
                 </tr>
                 </thead>
                 @foreach ($docs as $doc) 
