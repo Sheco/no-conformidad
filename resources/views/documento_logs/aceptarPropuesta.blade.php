@@ -1,1 +1,1 @@
-{{ $evento->user->name }} aceptó una propuesta a {{ $evento->documento->folio }} 
+{{ $evento->user->name }} aceptó la última propuesta del documento {{ $evento->documento->folio }} 

@@ -1,2 +1,2 @@
-{{ $evento->user->name }} rechazó una propuesta del documento {{ $evento->documento->folio }}
+{{ $evento->user->name }} rechazó la última propuesta del documento {{ $evento->documento->folio }}
 
