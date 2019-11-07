@@ -53,7 +53,7 @@
                         @else
                         @if (Gate::allows('crear', new App\Documento))
                             <li class="nav-item">
-                                <a class="nav-link btn btn-success text-light" href="{{ url('/docs/crear') }}"><span class="oi oi-file"></span> Nuevo documento</a>
+                                <a class="nav-link btn btn-success text-light" href="{{ action('DocumentosController@crear') }}"><span class="oi oi-file"></span> Nuevo documento</a>
                             </li>
                         @endif
                             <li class="nav-item dropdown">
