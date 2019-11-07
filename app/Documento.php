@@ -126,22 +126,25 @@ class Documento extends Model
             throw new \Exception("El usuario $user->name no esta suscrito al departamento $departamento->nombre");
         }
 
-        $year = date('y');
+        return DB::transaction(function() 
+            use ($user, $tipo, $departamento, $titulo, $descripcion) {
+            $year = date('y');
 
-        $this->creador_usr_id = $user->id;
-        $this->setStatus('inicio');
-        $this->tipo_id = $tipo->id;
-        $this->departamento_id = $departamento->id;
-        $this->folio = "$user->serie_documentos $user->contador_documentos/$year";
-        $this->fecha_maxima = Carbon::now()->addDays(1);
-        $this->titulo = $titulo;
-        $this->descripcion = $descripcion;
-        $this->save();
+            $this->creador_usr_id = $user->id;
+            $this->setStatus('inicio');
+            $this->tipo_id = $tipo->id;
+            $this->departamento_id = $departamento->id;
+            $this->folio = "$user->serie_documentos $user->contador_documentos/$year";
+            $this->fecha_maxima = Carbon::now()->addDays(1);
+            $this->titulo = $titulo;
+            $this->descripcion = $descripcion;
+            $this->save();
 
-        $user->contador_documentos++;
-        $user->save();
+            $user->contador_documentos++;
+            $user->save();
 
-        event(new DocumentoActualizado($this, $user, 'crear'));
+            event(new DocumentoActualizado($this, $user, 'crear'));
+        });
     }
 
     public function asignarResponsable(User $user, ?User $responsable) {
