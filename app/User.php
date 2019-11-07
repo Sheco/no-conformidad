@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 
 class User extends Authenticatable
 {
@@ -38,6 +39,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    private $_role_cache = [];
+
     public function departamento() {
         return $this->belongsTo('App\Departamento');
     }
@@ -61,7 +64,10 @@ class User extends Authenticatable
     }
 
     public function hasRole($name) {
-        return $this->roles()->where('name', $name)->exists();
+        if (Arr::has($this->_role_cache, $name))
+            return Arr::get($this->_role_cache, $name);
+
+        return $this->_role_cache[$name] = $this->roles()->where('name', $name)->exists();
     }
 
 }
