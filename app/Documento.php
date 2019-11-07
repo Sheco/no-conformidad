@@ -107,26 +107,8 @@ class Documento extends Model
         $query->where('status_id', $id);
     }
 
-    function getFechaEntregaAttribute() {
-        // si tiena una propuesta aceptada, la fecha limite es la fecha
-        // especificada en la propuesta
-        $propuesta = $this->propuestas->where('status', 1)->last();
-        if($propuesta)
-            return new Carbon($propuesta->fecha_entrega);
-
-        // de otra manera si no tiene propuestas aceptadas, si tiene alguna
-        // propuesta (rechazada o aun no revisada), devolver la fecha
-        // limite guardada en el documento
-        if($this->tienePropuestas)
-            return new Carbon($this->fecha_maxima);
-
-        // de otra manera, si no tiene ninguna propuesta, la fecha limite
-        // es dentro de 3 meses
-        return Carbon::now()->addDays(90);
-    }
-
-    function getFechaMaximaDiffAttribute() {
-        $fecha = $this->fechaEntrega;
+    function getTiempoLimiteAttribute() {
+        $fecha = new Carbon($this->limite_actual);
         $now = Carbon::now();
         if($now >= $fecha) {
             return CarbonInterval::hours(0);
@@ -134,11 +116,18 @@ class Documento extends Model
         return $fecha->diffAsCarbonInterval($now);
     }
 
-    function getFechaMaximaDiffForHumansAttribute() {
-        if(!$this->fecha_maxima) return "N/A";
-        $diff = $this->fechaMaximaDiff;
+    function getTiempoLimiteLegibleAttribute() {
+        if(!$this->limite_actual) return "N/A";
+        $diff = $this->tiempoLimite;
         if($diff->seconds == 0) return "Vencido";
         return $diff->forHumans(['parts'=>2]);
+    }
+
+    function getLimiteMaximoPropuestaAttribute() {
+        if($this->tienePropuestas)
+            return new Carbon($this->limite_maximo);
+
+        return Carbon::now()->addDays(30);
     }
 
     function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion) {
@@ -157,7 +146,8 @@ class Documento extends Model
             $this->tipo_id = $tipo->id;
             $this->departamento_id = $departamento->id;
             $this->folio = "$user->serie_documentos $user->contador_documentos/$year";
-            $this->fecha_maxima = Carbon::now()->addDays(1);
+            $this->limite_maximo = Carbon::now()->addDays(1);
+            $this->limite_actual = $this->limite_maximo;
             $this->titulo = $titulo;
             $this->descripcion = $descripcion;
             $this->save();
@@ -191,7 +181,8 @@ class Documento extends Model
         $this->setStatus('pendiente-propuesta');
 
         if(!$this->tienePropuestas) {
-            $this->fecha_maxima = Carbon::now()->addDays(3);
+            $this->limite_maximo = Carbon::now()->addDays(3);
+            $this->limite_actual = $this->limite_maximo;
         }
         $this->save();
 
@@ -202,12 +193,13 @@ class Documento extends Model
         Gate::forUser($user)->authorize('agregarPropuesta', $this);
 
         $fecha_entrega = new Carbon("$fecha_entrega 12:00:00");
-        $fecha_maxima = $this->fechaEntrega;
+        $limite_maximo = $this->limiteMaximoPropuesta;
 
-        if($fecha_entrega > $fecha_maxima)
-            throw new \Exception("La fecha propuesta de entrega no puede exceder la fecha maxima de ". $this->fecha_maxima);
+        if($fecha_entrega > $limite_maximo)
+            throw new \Exception("La fecha propuesta de entrega no puede exceder la fecha maxima de ". $limite_maximo);
 
-        return DB::transaction(function() use ($user, $descripcion, $fecha_entrega, $fecha_maxima) {
+        return DB::transaction(function() 
+            use ($user, $descripcion, $fecha_entrega, $limite_maximo) {
             $propuesta = new Propuesta;
             $propuesta->responsable()->associate($user);
             $propuesta->descripcion = $descripcion;
@@ -216,7 +208,7 @@ class Documento extends Model
             $this->propuestas()->save($propuesta);
 
             $this->setStatus('pendiente-revision');
-            $this->fecha_maxima = $fecha_maxima;
+            $this->limite_maximo = $limite_maximo;
             $this->save();
 
             event(new DocumentoActualizado($this, $user, 'agregarPropuesta'));
@@ -256,6 +248,7 @@ class Documento extends Model
             $propuesta->save();
 
             $this->setStatus('en-progreso');
+            $this->limite_actual = $propuesta->fecha_entrega;
             $this->save();
 
             event(new DocumentoActualizado($this, $user, 'aceptarPropuesta'));
@@ -275,7 +268,7 @@ class Documento extends Model
         Gate::forUser($user)->authorize('verificar', $this);
 
         $this->setStatus('verificado');
-        $this->fecha_maxima = null;
+        $this->limite_actual = null;
         $this->save();
 
         event(new DocumentoActualizado($this, $user, 'verificar'));

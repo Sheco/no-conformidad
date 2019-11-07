@@ -51,11 +51,11 @@
                     </div>
                     <div class="col-md-4 form-group">
                         <label>Tiempo límite para la siguiente etapa</label>
-                        <div>{{ $documento->fechaMaximaDiffForHumans }}</div>
+                        <div>{{ $documento->tiempoLimiteLegible }}</div>
                     </div>
                     <div class="col-md-4 form-group">
                         <label>Fecha maxima de entrega</label>
-                        <div>{{ $documento->fecha_maxima }}</div>
+                        <div>{{ $documento->limite_maximo }}</div>
                     </div>
                     <div class="col-md-4">
                         <label>Acciones</label>
@@ -181,7 +181,7 @@
                     <div class="row formaTabular">
                         <div class="col-md-12">
                             <label>Fecha de entrega</label>
-                            {{ Form::date('fecha_entrega', '', ['class'=>'form-control', 'max'=>$documento->fechaEntrega->format('Y-m-d'), 'min'=>date('Y-m-d', strtotime("tomorrow"))]) }}
+                            {{ Form::date('fecha_entrega', '', ['class'=>'form-control', 'max'=>$documento->limiteMaximoPropuesta->format('Y-m-d'), 'min'=>date('Y-m-d', strtotime("tomorrow"))]) }}
                         </div>
                         <div class="col-md-12">
                             <label>Comentarios:</label>

@@ -19,7 +19,8 @@ class CreateDocumentos extends Migration
 
             $table->string('folio');
             $table->unique('folio');
-            $table->datetime('fecha_maxima')->nullable();
+            $table->datetime('limite_maximo')->nullable();
+            $table->datetime('limite_actual')->nullable();
 
             $table->unsignedBigInteger('departamento_id')->nullable();
             $table->unsignedBigInteger('tipo_id');
