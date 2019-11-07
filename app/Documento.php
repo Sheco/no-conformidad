@@ -53,8 +53,11 @@ class Documento extends Model
             'en-progreso'=>'corregir',
             'corregido'=>'verificar',
             'verificado'=>'cerrar',
-            'cerrado'=>''
         ];
+
+        if($this->status->codigo == 'cerrado')
+            return false;
+
         return Gate::allows($politicasAvance[$this->status->codigo], $this);
     }
 
