@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Status;
 use App\Tipo;
 use App\Departamento;
+use App\Events\DocumentoActualizado;
 
 class Documento extends Model
 {
@@ -132,6 +133,8 @@ class Documento extends Model
 
         $user->contador_documentos++;
         $user->save();
+
+        event(new DocumentoActualizado($this, $user, 'crear'));
     }
 
     public function asignarResponsable(User $user, ?User $responsable) {
@@ -155,6 +158,7 @@ class Documento extends Model
             $this->fecha_maxima = Carbon::now()->addDays(3);
         }
         $this->save();
+        event(new DocumentoActualizado($this, $user, 'asignarResponsable'));
     }
 
     public function agregarPropuesta(User $user, $descripcion, $fecha_entrega) {
@@ -178,6 +182,7 @@ class Documento extends Model
             $this->setStatus('pendiente-revision');
             $this->fecha_maxima = $fecha_maxima;
             $this->save();
+            event(new DocumentoActualizado($this, $user, 'agregarPropuesta'));
             return $propuesta;
         });
     }
@@ -196,6 +201,7 @@ class Documento extends Model
 
             $this->setStatus('pendiente-propuesta');
             $this->save();
+            event(new DocumentoActualizado($this, $user, 'rechazarPropuesta'));
         });
     }
 
@@ -213,6 +219,7 @@ class Documento extends Model
 
             $this->setStatus('en-progreso');
             $this->save();
+            event(new DocumentoActualizado($this, $user, 'aceptarPropuesta'));
         });
     } 
 
@@ -220,6 +227,7 @@ class Documento extends Model
         Gate::forUser($user)->authorize('corregir', $this);
         $this->setStatus('corregido');
         $this->save();
+        event(new DocumentoActualizado($this, $user, 'corregir'));
     }
 
     public function verificar(User $user) {
@@ -227,11 +235,13 @@ class Documento extends Model
         $this->setStatus('verificado');
         $this->fecha_maxima = null;
         $this->save();
+        event(new DocumentoActualizado($this, $user, 'verificar'));
     }
 
     public function cerrar(User $user) {
         Gate::forUser($user)->authorize('cerrar', $this);
         $this->setStatus('cerrado');
         $this->save();
+        event(new DocumentoActualizado($this, $user, 'cerrar'));
     }
 }
