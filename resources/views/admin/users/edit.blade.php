@@ -13,7 +13,7 @@
               <div class="card-header">Departamentos suscritos</div>
               <div class="card-body">
                   {{ Form::open(['url'=>action('Admin\UsersController@addDepartamento', [$user->id]), 'method'=>'post', 'style'=>'margin-bottom: 1em']) }}
-                  {{ Form::select('departamento_id', [''=>'- Asignar un departamento']+$departamentos->pluck('nombre', 'id')->toArray(), '', ['class'=>'form-control', 'onchange'=>'this.form.submit()']) }}
+                  {{ Form::select('departamento_id', [''=>'- Asignar un departamento']+$departamentosDisponibles->pluck('nombre', 'id')->toArray(), '', ['class'=>'form-control', 'onchange'=>'this.form.submit()']) }}
                   
                   {{ Form::close() }}
                   

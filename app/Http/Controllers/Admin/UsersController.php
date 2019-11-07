@@ -77,10 +77,15 @@ class UsersController extends Controller
      */
     public function edit(User $user)
     {
-        $departamentos = Departamento::whereNotIn('id',$user->departamentos->pluck('id'))->get();
+        $departamentos = Departamento::orderBy('nombre')
+            ->get();
+        $departamentosDisponibles = Departamento::whereNotIn('id',$user->departamentos->pluck('id'))
+            ->orderBy('nombre')
+            ->get();
         $roles = Role::whereNotIn('id', $user->roles->pluck('id'))->get();
         return view("admin.users.edit", compact(
-            'user', 'departamentos', 'roles'
+            'user', 'departamentos', 'roles',
+            'departamentosDisponibles'
         ));
     }
 
