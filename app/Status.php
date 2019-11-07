@@ -20,7 +20,7 @@ class Status extends Model
 
     public function documentosVisibles(User $user) {
         return Documento::visible($user)
-            ->status($this->codigo)
+            ->statusId($this->id)
             ->count();
     }
 

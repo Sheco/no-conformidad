@@ -100,6 +100,10 @@ class Documento extends Model
         $query->where('status_id', $status->id);
     }
 
+    public function scopeStatusId($query, $id) {
+        $query->where('status_id', $id);
+    }
+
     function getFechaEntregaAttribute() {
         // si tiena una propuesta aceptada, la fecha limite es la fecha
         // especificada en la propuesta
