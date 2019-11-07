@@ -19,7 +19,6 @@ Route::middleware(['auth'])->group(function() {
     
     Route::get ('docs', 'DocumentosController@index');
     Route::get ('docs/status/{status}', 'DocumentosController@index');
-    Route::get ('docs/{documento}', 'DocumentosController@ver');
     Route::post('docs/crear', 'DocumentosController@guardar');
     Route::get ('docs/crear', 'DocumentosController@crear');
     Route::post('docs/{documento}/asignarResponsable', 
@@ -34,6 +33,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('docs/{documento}/verificar', 'DocumentosController@verificar');
     Route::post('docs/{documento}/cerrar', 'DocumentosController@cerrar');
     Route::get ('docs/{documento}/logs', 'DocumentosController@logs');
+    Route::get ('docs/{documento}', 'DocumentosController@ver');
 
     Route::middleware(['role:admin'])->group(function() {
         Route::resource('admin/users', 'Admin\UsersController');
