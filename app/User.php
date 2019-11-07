@@ -39,6 +39,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // cache de roles, valido solo por request
     private $_role_cache = [];
 
     public function departamento() {
@@ -64,8 +65,8 @@ class User extends Authenticatable
     }
 
     public function hasRole($name) {
-        if (Arr::has($this->_role_cache, $name))
-            return Arr::get($this->_role_cache, $name);
+        if (isset($this->_role_cache[$name]))
+            return $this->_role_cache[$name];
 
         return $this->_role_cache[$name] = $this->roles()->where('name', $name)->exists();
     }
