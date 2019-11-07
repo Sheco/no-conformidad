@@ -37,7 +37,7 @@
 
                     @endif</td>
                     <td>{{ $doc->id }}</td>
-                    <td><a href="{{ url('/docs/ver', $doc->id)}}">{{ $doc->folio }}</a></td>
+                    <td><a href="{{ url(action('DocumentosController@ver', $doc->id))}}">{{ $doc->folio }}</a></td>
                     <td>{{ $doc->creador->name }}</td>
                     <td>{{ $doc->titulo }}</td>
                     <td>{{ $doc->tipo->nombre }}</td>

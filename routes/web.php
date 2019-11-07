@@ -19,7 +19,7 @@ Route::middleware(['auth'])->group(function() {
     
     Route::get('/docs', 'DocumentosController@index');
     Route::get('/docs/status/{status}', 'DocumentosController@index');
-    Route::get('/docs/ver/{documento}', 'DocumentosController@ver');
+    Route::get('/docs/{documento}', 'DocumentosController@ver');
     Route::post('/docs/crear', 'DocumentosController@guardar');
     Route::get('/docs/crear', 'DocumentosController@crear');
     Route::post('/docs/{documento}/asignarResponsable', 'DocumentosController@asignarResponsable');
