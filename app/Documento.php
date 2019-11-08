@@ -127,7 +127,7 @@ class Documento extends Model
         if($this->tienePropuestas)
             return new Carbon($this->limite_maximo);
 
-        return Carbon::now()->addDays(30);
+        return Carbon::now()->addDays(90);
     }
 
     function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion) {
