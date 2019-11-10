@@ -6,7 +6,7 @@
         <div class="card-header">Usuarios</div>
         <div class="card-body">
             <div class="float-right" style="margin-bottom: 1em">
-                <a href="{{ action('Admin\UsersController@create') }}" class="btn btn-secondary"><span class="oi oi-file"></span> Nuevo usuario</a>
+                <a href="{{ action('Admin\UsersController@create') }}" class="btn btn-primary"><span class="oi oi-file"></span> Nuevo usuario</a>
             </div>
 
             <table class="table table-sm table-bordered table-hover">
@@ -16,6 +16,7 @@
                         <th>Nombre</th>
                         <th>Serie</th>
                         <th>Folio</th>
+                        <th></th>
                     </tr>
                 </thead>
                 @foreach ($users as $user)
@@ -27,6 +28,7 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->serie_documentos }}</td>
                         <td>{{ $user->contador_documentos }}</td>
+                        <td><a href="{{ action('Admin\UsersController@logs', [$user->id]) }}">Logs</a></td>
                     </tr>
                 @endforeach
             </table>

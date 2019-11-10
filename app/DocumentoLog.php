@@ -8,4 +8,7 @@ class DocumentoLog extends Model
 {
     protected $table = "documento_logs";
 
+    public function documento() {
+      return $this->belongsTo('App\Documento');
+    }
 }

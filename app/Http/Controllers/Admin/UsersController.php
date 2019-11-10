@@ -22,6 +22,11 @@ class UsersController extends Controller
         return view("admin/users/index", compact('users'));
     }
 
+    public function logs(User $user) {
+      $logs = $user->logs()->orderBy('fecha', 'desc')->get();
+      return view('admin/users/logs', compact('user', 'logs'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

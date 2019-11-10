@@ -6,7 +6,7 @@
         <div class="card-header">Departamentos</div>
         <div class="card-body">
             <div class="float-right" style="margin-bottom: 1em">
-                <a href="{{ action('Admin\DepartamentosController@create') }}" class="btn btn-secondary"><span class="oi oi-file"></span> Nuevo departamento</a>
+                <a href="{{ action('Admin\DepartamentosController@create') }}" class="btn btn-primary"><span class="oi oi-file"></span> Nuevo departamento</a>
             </div>
 
             <table class="table table-sm table-bordered table-hover">

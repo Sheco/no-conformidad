@@ -152,7 +152,7 @@ class DocumentosController extends Controller
 
     public function logs(Documento $documento) {
         Gate::authorize('ver', $documento);
-        $logs = $documento->logs;
+        $logs = $documento->logs()->orderBy('fecha', 'desc')->get();
         return view("documentos.logs", compact('documento', 'logs'));
     }
 }

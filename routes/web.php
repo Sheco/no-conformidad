@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function() {
             'Admin\UsersController@delDepartamento');
         Route::post('admin/users/{user}/addDepartamento',
             'Admin\UsersController@addDepartamento');
+        Route::get('admin/users/{user}/logs',
+            'Admin\UsersController@logs');
 
         Route::resource('admin/departamentos', 'Admin\DepartamentosController');
     });
