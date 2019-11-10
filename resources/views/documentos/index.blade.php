@@ -32,7 +32,7 @@
                 </thead>
                 @foreach ($docs as $doc) 
                 <tr>
-                    <td>@if ($doc->puedeAvanzar(Auth::user())) 
+                    <td>@if ($doc->puedeAvanzar($authUser)) 
                         <span class="oi oi-star text-warning" title="Puedes avanzar este documento" aria-hidden="true"></span>
 
                     @endif</td>

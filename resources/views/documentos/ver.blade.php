@@ -33,7 +33,7 @@
 
                     <div class="col-md-4 form-group">
                         <label>Responsable</label>
-                        @if ($puedeAsignarResponsable)
+                        @if ($authUser->can('asignarResponsable', $documento))
                             {{ Form::open([
                                 'url'=>"/docs/{$documento->id}/asignarResponsable", 
                                 'method'=>'post']) }}
@@ -81,7 +81,7 @@
                 </div>
                 <div class="row" style="margin-top: 1em">
                     <div class="col-md-4">
-                        @if (Gate::allows('corregir', $documento)) 
+                        @if ($authUser->can('corregir', $documento)) 
                             {{ Form::open([
                                 'url' => "/docs/$documento->id/corregir",
                                 'method'=>'post'
@@ -91,7 +91,7 @@
                         @endif
                     </div>
                     <div class="col-md-4">
-                        @if (Gate::allows('verificar', $documento)) 
+                        @if ($authUser->can('verificar', $documento)) 
                             {{ Form::open([
                                 'url' => "/docs/$documento->id/verificar",
                                 'method'=>'post'
@@ -102,7 +102,7 @@
                         @endif
                     </div>
                     <div class="col-md-4">
-                        @if (Gate::allows('cerrar', $documento)) 
+                        @if ($authUser->can('cerrar', $documento)) 
                             {{ Form::open([
                                 'url' => "/docs/$documento->id/cerrar",
                                 'method'=>'post'
@@ -153,7 +153,7 @@
                     </div>
                     <div class="row" style="margin-top: 1em">
                     @if ($loop->last and 
-                        Gate::allows('rechazarPropuesta', $documento))
+                        $authUser->can('rechazarPropuesta', $documento))
                         <div class="offset-md-6 col-md-3 text-right">
                         {{ Form::open([
                             'url'=>"/docs/$propuesta->id/rechazarPropuesta",
@@ -164,7 +164,7 @@
                         </div>
                     @endif
                     @if ($loop->last and 
-                        Gate::allows('aceptarPropuesta', $documento))
+                        $authUser->can('aceptarPropuesta', $documento))
                         <div class="col-md-3 text-right">
                         {{ Form::open([
                             'url'=>"/docs/$propuesta->id/aceptarPropuesta",
@@ -179,7 +179,7 @@
             </div>
         </div>
         @endforeach
-        @if (Gate::allows('agregarPropuesta', $documento))
+        @if ($authUser->can('agregarPropuesta', $documento))
         <div class="col-md-6" style="margin-top: 1em">
         {{ Form::open([
             'url'=>"/docs/$documento->id/agregarPropuesta", 

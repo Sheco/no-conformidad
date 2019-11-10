@@ -98,12 +98,9 @@ class DocumentosController extends Controller
           ->get()
           ->pluck('name', 'id')->toArray();
 
-        $puedeAsignarResponsable = Gate::allows('asignarResponsable', $documento);
-
         return view('documentos.ver', compact(
             'documento', 
             'responsables',
-            'puedeAsignarResponsable', 
         ));
     }
 

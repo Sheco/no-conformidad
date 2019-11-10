@@ -3,7 +3,7 @@
 <div class="row formaTabular">
     <div class="col-md-6">
         <label>Creador</label>
-        <div>{{ Auth::user()->name }}</div>
+        <div>{{ $authUser->name }}</div>
     </div>
     <div class="col-md-6">
         {{ Form::label('tipo_id', 'Tipo') }}

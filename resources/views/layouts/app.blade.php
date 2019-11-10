@@ -51,18 +51,18 @@
                                 </li>
                             @endif
                         @else
-                        @if (Gate::allows('crear', new App\Documento))
+                        @if ($authUser->can('crear', App\Documento::class))
                             <li class="nav-item">
                                 <a class="nav-link btn btn-success text-light" href="{{ action('DocumentosController@crear') }}"><span class="oi oi-file"></span> Nuevo documento</a>
                             </li>
                         @endif
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                    {{ $authUser->name }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @if (Auth::user()->hasRole('admin'))
+                                    @if ($authUser->hasRole('admin'))
                                     <a class="dropdown-item" href="{{ url('admin/users') }}">Admin Usuarios</a>
                                     <a class="dropdown-item" href="{{ url('admin/departamentos') }}">Admin Departamentos</a>
                                     @endif
