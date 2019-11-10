@@ -46,8 +46,6 @@ class DocumentosController extends Controller
      */
     public function crear()
     {
-        Gate::authorize('crear', Documento::class);
-
         $documento = new Documento;
         $tipos = Tipo::all()->pluck('nombre', 'id');
         $user = Auth::user();
@@ -105,8 +103,6 @@ class DocumentosController extends Controller
     }
 
     public function archivo(DocumentoArchivo $archivo) {
-        Gate::authorize('ver', $archivo->documento);
-
         return Storage::download("documentos/$archivo->id", $archivo->nombre);
     }
 

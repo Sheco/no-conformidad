@@ -236,7 +236,7 @@ class Documento extends Model
     }
 
     public function rechazarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
-        Gate::forUser($user)->authorize('rechazarPropuesta', $this);
+        Gate::forUser($user)->authorize('rechazar', $propuesta);
 
         if($this->propuestas->last()->id != $propuesta->id)
             throw new \Exception("Solo se puede aceptar la ultima propuesta del documento, ");
@@ -255,7 +255,7 @@ class Documento extends Model
     }
 
     public function aceptarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
-        Gate::forUser($user)->authorize('aceptarPropuesta', $this);
+        Gate::forUser($user)->authorize('aceptar', $propuesta);
 
         if($this->propuestas->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');

@@ -43,25 +43,6 @@ class DocumentoPolicy
         return Response::allow();
     }
 
-    public function rechazarPropuesta(User $user, Documento $doc) {
-        if(!$user->hasRole('director')) 
-            return Response::deny("El usuario $user->name no puede rechazar propuestas, no tiene el rol apropiado.");
-
-        if($doc->status->codigo != 'pendiente-revision')
-            return Response::deny('Solo se puede rechazar propuestas cuando estan pendientes de revisión');
-        
-        return Response::allow();
-    }
-
-    public function aceptarPropuesta(User $user, Documento $doc) {
-        if(!$user->hasRole('director'))
-            return Response::deny("Solo los directores pueden aceptar propuestas.");
-
-        if($doc->status->codigo != 'pendiente-revision')
-            return Response::deny('Solo se puede aceptar propuestas cuando estan pendientes de revisión');
-        
-        return Response::allow();
-    } 
 
     public function corregir(User $user, Documento $doc) {
         if($user->id != $doc->responsable_usr_id)

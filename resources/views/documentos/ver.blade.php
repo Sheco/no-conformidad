@@ -153,10 +153,10 @@
                     </div>
                     <div class="row" style="margin-top: 1em">
                     @if ($loop->last and 
-                        $authUser->can('rechazarPropuesta', $documento))
+                        $authUser->can('rechazar', $propuesta))
                         <div class="offset-md-6 col-md-3 text-right">
                         {{ Form::open([
-                            'url'=>"/docs/$propuesta->id/rechazarPropuesta",
+                            'url'=>action('DocumentosController@rechazarPropuesta', $propuesta->id),
                             'method'=>'post'
                             ]) }}
                             {{ Form::submit('Rechazar', ['class'=>'btn btn-danger']) }}
@@ -164,10 +164,10 @@
                         </div>
                     @endif
                     @if ($loop->last and 
-                        $authUser->can('aceptarPropuesta', $documento))
+                        $authUser->can('aceptar', $propuesta))
                         <div class="col-md-3 text-right">
                         {{ Form::open([
-                            'url'=>"/docs/$propuesta->id/aceptarPropuesta",
+                            'url'=>action('DocumentosController@aceptarPropuesta', $propuesta->id),
                             'method'=>'post',
                             ]) }}
                             {{ Form::submit('Aceptar', ['class'=>'btn btn-primary']) }}
