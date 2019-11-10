@@ -63,6 +63,16 @@
                             <a href="{{ action("DocumentosController@logs", $documento->id) }}">Ver log</a>
                         </div>
                     </div>
+                    @if ($documento->archivos()->count()) 
+                    <div class="col-md-4">
+                        <label>Archivos</label>
+                        <ul>
+                        @foreach ($documento->archivos as $archivo)
+                            <li><a href="{{ action("DocumentosController@archivo", $archivo) }}">{{ $archivo->nombre }}</a></li>
+                        @endforeach
+                        </ul>
+                    </div>
+                    @endif
 
                     <div class="col-md-12 form-group">
                         <label>Descripción</label>

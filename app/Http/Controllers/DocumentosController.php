@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use App\Status;
 use App\Documento;
+use App\DocumentoArchivo;
 use App\Propuesta;
 use App\Tipo;
 use App\Departamento;
@@ -67,13 +69,13 @@ class DocumentosController extends Controller
             "descripcion"=>"required"
         ]);
 
-        $tipo = Tipo::findOrFail($request->input('tipo_id'));
-        $departamento = Departamento::findOrFail($request->input('departamento_id'));
-
         $doc = new Documento;
-        $doc->crear(Auth::user(), $tipo, $departamento,
+        $doc->crear(Auth::user(), 
+            Tipo::findOrFail($request->input('tipo_id')), 
+            Departamento::findOrFail($request->input('departamento_id')),
             $request->input('titulo'),  
-            $request->input('descripcion')
+            $request->input('descripcion'),
+            $request->file('archivo')
         );
 
         return redirect('/docs');
@@ -103,6 +105,12 @@ class DocumentosController extends Controller
             'responsables',
             'puedeAsignarResponsable', 
         ));
+    }
+
+    public function archivo(DocumentoArchivo $archivo) {
+        Gate::authorize('ver', $archivo->documento);
+
+        return Storage::download("documentos/$archivo->id", $archivo->nombre);
     }
 
     public function asignarResponsable(Request $request, Documento $documento) {

@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\DB;
@@ -43,6 +45,10 @@ class Documento extends Model
 
     public function logs() {
         return $this->hasMany('App\DocumentoLog');
+    }
+
+    public function archivos() {
+        return $this->hasMany('App\DocumentoArchivo');
     }
 
     public function puedeAvanzar(User $user) {
@@ -130,7 +136,7 @@ class Documento extends Model
         return Carbon::now()->addDays(90);
     }
 
-    function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion) {
+    function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion, ?UploadedFile $archivo) {
         Gate::forUser($user)->authorize('crear', Documento::class);
 
         if(!$user->departamentos()->where('id', $departamento->id)->exists()) {
@@ -138,7 +144,7 @@ class Documento extends Model
         }
 
         return DB::transaction(function() 
-            use ($user, $tipo, $departamento, $titulo, $descripcion) {
+            use ($user, $tipo, $departamento, $titulo, $descripcion, $archivo) {
             $year = date('y');
 
             $this->creador_usr_id = $user->id;
@@ -155,7 +161,20 @@ class Documento extends Model
             $user->contador_documentos++;
             $user->save();
 
+            if($archivo && $archivo->isValid()) {
+                $this->guardarArchivo($archivo);
+            }
             event(new DocumentoActualizado($this, $user, 'crear'));
+        });
+    }
+
+    function guardarArchivo(\Illuminate\Http\UploadedFile $archivo) {
+        return DB::transaction(function()  use ($archivo) {
+            $docarc = new DocumentoArchivo;
+            $docarc->nombre = $archivo->getClientOriginalName();
+            $this->archivos()->save($docarc);
+
+            $archivo->storeAs('documentos', $docarc->id);
         });
     }
 

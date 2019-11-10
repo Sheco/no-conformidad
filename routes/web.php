@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function() {
     Route::post('docs/{documento}/verificar', 'DocumentosController@verificar');
     Route::post('docs/{documento}/cerrar', 'DocumentosController@cerrar');
     Route::get ('docs/{documento}/logs', 'DocumentosController@logs');
+    Route::get ('docs/archivo/{archivo}', 'DocumentosController@archivo');
     Route::get ('docs/{documento}', 'DocumentosController@ver');
 
     Route::middleware(['role:admin'])->group(function() {

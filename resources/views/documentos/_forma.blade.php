@@ -1,4 +1,4 @@
-{{ Form::model($documento, ['url'=>$url, 'method'=>'post']) }}
+{{ Form::model($documento, ['url'=>$url, 'method'=>'post', 'enctype'=>'multipart/form-data']) }}
 @csrf
 <div class="row formaTabular">
     <div class="col-md-6">
@@ -16,6 +16,10 @@
     <div class="col-md-6">
         {{ Form::label('titulo', 'Título') }}
         {{ Form::text('titulo', null, ['class'=>'form-control']) }}
+    </div>
+    <div class="col-md-6">
+        {{ Form::label('archivo', 'Archivo') }}
+        {{ Form::file('archivo', ['class'=>'form-control']) }}
     </div>
     <div class="col-md-12">
         {{ Form:: label('descripcion', 'Descripción') }}
