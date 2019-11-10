@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-md-4 form-group">
                         <label>Fecha maxima de entrega</label>
-                        <div>{{ $documento->limite_maximo }}</div>
+                        <div>{{ $documento->limite_maximo->format('Y/M/d') }}</div>
                     </div>
                     <div class="col-md-4">
                         <label>Acciones</label>
@@ -126,7 +126,7 @@
                     <div class="row formaTabular">
                         <div class="col-md-6">
                             <label>Fecha creación</label>
-                            <div>{{ $propuesta->created_at }}</div>
+                            <div>{{ $propuesta->created_at->format('Y/M/d') }}</div>
                         </div>
                         <div class="col-md-6">
                             <label>Responsable:</label>
@@ -134,7 +134,7 @@
                         </div>
                         <div class="col-md-6">
                             <label>Fecha propuesta de entrega</label>
-                            <div>{{ $propuesta->fecha_entrega }}</div>
+                            <div>{{ $propuesta->fecha_entrega->format('Y/M/d') }}</div>
                         </div>
                         <div class="col-md-12">
                             <label>Comentarios:</label>

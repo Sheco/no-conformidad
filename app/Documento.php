@@ -18,6 +18,7 @@ use App\Events\DocumentoActualizado;
 class Documento extends Model
 {
     protected $table = 'documentos';
+    protected $dates =  [ 'limite_maximo', 'limite_actual' ];
 
     public function status() {
         return $this->belongsTo('App\Status');
@@ -114,7 +115,7 @@ class Documento extends Model
     }
 
     function getTiempoLimiteAttribute() {
-        $fecha = new Carbon($this->limite_actual);
+        $fecha = $this->limite_actual;
         $now = Carbon::now();
         if($now >= $fecha) {
             return CarbonInterval::hours(0);
@@ -131,7 +132,7 @@ class Documento extends Model
 
     function getLimiteMaximoPropuestaAttribute() {
         if($this->tienePropuestas)
-            return new Carbon($this->limite_maximo);
+            return $this->limite_maximo;
 
         return Carbon::now()->addDays(90);
     }
@@ -211,7 +212,7 @@ class Documento extends Model
     public function agregarPropuesta(User $user, $descripcion, $fecha_entrega) {
         Gate::forUser($user)->authorize('agregarPropuesta', $this);
 
-        $fecha_entrega = new Carbon("$fecha_entrega 12:00:00");
+        $fecha_entrega = new Carbon("$fecha_entrega 17:00:00");
         $limite_maximo = $this->limiteMaximoPropuesta;
 
         if($fecha_entrega > $limite_maximo)

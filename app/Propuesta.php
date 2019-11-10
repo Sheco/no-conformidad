@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 class Propuesta extends Model
 {
     protected $table = 'propuestas';
+    protected $dates = ['fecha_entrega'];
 
     public function responsable() {
         return $this->belongsTo('App\User', 'responsable_usr_id');
