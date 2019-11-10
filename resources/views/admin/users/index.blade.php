@@ -14,7 +14,6 @@
                     <tr>
                         <th>Email</th>
                         <th>Nombre</th>
-                        <th>Departamento</th>
                         <th>Serie</th>
                         <th>Folio</th>
                     </tr>
@@ -26,11 +25,6 @@
                                 {{ $user->email }}
                             </a></td>
                         <td>{{ $user->name }}</td>
-                        <td>@if ($user->departamento_id) 
-                            {{ $user->departamento->nombre }}
-                        @else
-                            N/A
-                        @endif</td>
                         <td>{{ $user->serie_documentos }}</td>
                         <td>{{ $user->contador_documentos }}</td>
                     </tr>
