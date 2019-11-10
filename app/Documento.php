@@ -136,7 +136,7 @@ class Documento extends Model
         return Carbon::now()->addDays(90);
     }
 
-    function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion, ?UploadedFile $archivo) {
+    function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion, ?UploadedFile $archivo = null) {
         Gate::forUser($user)->authorize('crear', Documento::class);
 
         if(!$user->departamentos()->where('id', $departamento->id)->exists()) {

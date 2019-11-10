@@ -5,7 +5,8 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use NoconTableSeeder;
+use TestSeeder;
+use BaseSeeder;
 use App\User;
 use App\Documento;
 use App\Tipo;
@@ -14,19 +15,23 @@ use Carbon\Carbon;
 
 class FlujoTest extends TestCase
 {
+  use RefreshDatabase;
+  protected function setUp():void {
+    parent::setUp();
+    $this->seed(BaseSeeder::class);
+    $this->seed(TestSeeder::class);
+  }
     public function testFlujo() {
-        $this->artisan("migrate:fresh");
-        $this->seed(NoconTableSeeder::class);
         $this->assertDatabaseHas('users', [
-          'email'=>'creador1@nocon.com'
+          'email'=>'creador1@localhost'
         ]);
 
         $tipo = Tipo::find(1);
         $departamento = Departamento::find(1);
 
-        $creador = User::where('email', 'creador1@nocon.com')->first();
-        $director = User::where('email', 'director1@nocon.com')->first();
-        $responsable = User::where('email', 'responsable1@nocon.com')->first();
+        $creador = User::where('email', 'creador1@localhost')->first();
+        $director = User::where('email', 'director1@localhost')->first();
+        $responsable = User::where('email', 'responsable1@localhost')->first();
 
         $doc = new Documento;
         $doc->crear($creador, $tipo, $departamento, 'huecote', 'hay un hueco');
@@ -63,19 +68,21 @@ class FlujoTest extends TestCase
     }
 
     public function testSetup() {
-        $this->artisan('migrate:fresh');
-        $this->seed(NoconTableSeeder::class);
         $this->assertDatabaseHas('users', [
-          'email'=>'creador1@nocon.com'
+          'email'=>'creador1@localhost'
         ]);
+        $this->assertDatabaseHas('tipos', [
+          'id'=>'1'
+        ]);
+        $this->artisan("migrate:status");
 
     } 
 
     public function testDirectorNoPuedeCrear() {
-        $tipo = Tipo::find(1);
+        $tipo = Tipo::where(['id'=>1])->first();
         $departamento1 = Departamento::find(1);
 
-        $director = User::where('email', 'director1@nocon.com')->first();
+        $director = User::where('email', 'director1@localhost')->first();
 
         $doc = new Documento;
         
@@ -87,7 +94,7 @@ class FlujoTest extends TestCase
         $tipo = Tipo::find(1);
         $departamento1 = Departamento::find(1);
 
-        $responsable = User::where('email', 'responsable1@nocon.com')->first();
+        $responsable = User::where('email', 'responsable1@localhost')->first();
 
         $doc = new Documento;
         
@@ -100,8 +107,8 @@ class FlujoTest extends TestCase
         $tipo = Tipo::find(1);
         $departamento1 = Departamento::find(1);
 
-        $creador = User::where('email', 'creador1@nocon.com')->first();
-        $responsable = User::where('email', 'creador1@nocon.com')->first();
+        $creador = User::where('email', 'creador1@localhost')->first();
+        $responsable = User::where('email', 'creador1@localhost')->first();
 
         $doc = new Documento;
         
@@ -114,8 +121,8 @@ class FlujoTest extends TestCase
         $tipo = Tipo::find(1);
         $departamento1 = Departamento::find(1);
 
-        $creador = User::where('email', 'creador1@nocon.com')->first();
-        $responsable = User::where('email', 'creador1@nocon.com')->first();
+        $creador = User::where('email', 'creador1@localhost')->first();
+        $responsable = User::where('email', 'creador1@localhost')->first();
 
         $doc = new Documento;
         
