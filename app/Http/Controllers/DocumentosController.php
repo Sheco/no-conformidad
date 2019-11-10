@@ -64,7 +64,8 @@ class DocumentosController extends Controller
     {
         $request->validate([
             "titulo"=>"required",
-            "descripcion"=>"required"
+            "descripcion"=>"required",
+            "departamento_id"=>'required',
         ]);
 
         $doc = new Documento;
