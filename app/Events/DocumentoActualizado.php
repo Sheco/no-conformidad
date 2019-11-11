@@ -11,6 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 use App\Documento;
+use App\Propuesta;
 use App\User;
 
 class DocumentoActualizado
@@ -22,11 +23,12 @@ class DocumentoActualizado
      *
      * @return void
      */
-    public function __construct(Documento $documento, User $user, $metodo)
+    public function __construct(Documento $documento, User $user, $metodo, ?Propuesta $propuesta=null)
     {
       $this->user = $user;
       $this->documento = $documento;
       $this->metodo = $metodo;
+      $this->propuesta = $propuesta;
     }
 
     /**

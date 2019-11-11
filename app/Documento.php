@@ -52,6 +52,14 @@ class Documento extends Model
         return $this->hasMany('App\DocumentoArchivo');
     }
 
+    public function directores() {
+        return User::whereHas('departamentos', function($q) { 
+            $q->where('id', $this->departamento_id); 
+        })->whereHas('roles', function($q) { 
+            $q->where('name', 'director'); 
+        })->get();
+    }
+
     public function puedeAvanzar(User $user) {
         $politicasAvance = [
             'inicio'=>'asignarResponsable',
@@ -144,7 +152,7 @@ class Documento extends Model
             throw new \Exception("El usuario $user->name no esta suscrito al departamento $departamento->nombre");
         }
 
-        return DB::transaction(function() 
+        DB::transaction(function() 
             use ($user, $tipo, $departamento, $titulo, $descripcion, $archivo) {
             $year = date('y');
 
@@ -165,8 +173,8 @@ class Documento extends Model
             if($archivo && $archivo->isValid()) {
                 $this->guardarArchivo($archivo);
             }
-            event(new DocumentoActualizado($this, $user, 'crear'));
         });
+        event(new DocumentoActualizado($this, $user, 'crear'));
     }
 
     function guardarArchivo(\Illuminate\Http\UploadedFile $archivo) {
@@ -197,14 +205,16 @@ class Documento extends Model
             throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, no tiene el departamento {$this->departamento->nombre}");
         }
 
-        $this->responsable()->associate($responsable);
-        $this->setStatus('pendiente-propuesta');
+        DB::transaction(function() use ($responsable) {
+            $this->responsable()->associate($responsable);
+            $this->setStatus('pendiente-propuesta');
 
-        if(!$this->tienePropuestas) {
-            $this->limite_maximo = Carbon::now()->addDays(3);
-            $this->limite_actual = $this->limite_maximo;
-        }
-        $this->save();
+            if(!$this->tienePropuestas) {
+                $this->limite_maximo = Carbon::now()->addDays(3);
+                $this->limite_actual = $this->limite_maximo;
+            }
+            $this->save();
+        });
 
         event(new DocumentoActualizado($this, $user, 'asignarResponsable'));
     }
@@ -218,7 +228,7 @@ class Documento extends Model
         if($fecha_entrega > $limite_maximo)
             throw new \Exception("La fecha propuesta de entrega no puede exceder la fecha maxima de ". $limite_maximo);
 
-        return DB::transaction(function() 
+        $propuesta = DB::transaction(function() 
             use ($user, $descripcion, $fecha_entrega, $limite_maximo) {
             $propuesta = new Propuesta;
             $propuesta->responsable()->associate($user);
@@ -231,9 +241,12 @@ class Documento extends Model
             $this->limite_maximo = $limite_maximo;
             $this->save();
 
-            event(new DocumentoActualizado($this, $user, 'agregarPropuesta'));
             return $propuesta;
         });
+
+        event(new DocumentoActualizado($this, $user, 'agregarPropuesta', $propuesta));
+
+        return $propuesta;
     }
 
     public function rechazarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
@@ -242,7 +255,7 @@ class Documento extends Model
         if($this->propuestas->last()->id != $propuesta->id)
             throw new \Exception("Solo se puede aceptar la ultima propuesta del documento, ");
 
-        return DB::transaction(function() use ($propuesta, $user, $comentarios) {
+        DB::transaction(function() use ($propuesta, $user, $comentarios) {
             $propuesta->retroalimentador()->associate($user);
             $propuesta->retro = $comentarios;
             $propuesta->status = false;
@@ -250,9 +263,9 @@ class Documento extends Model
 
             $this->setStatus('pendiente-propuesta');
             $this->save();
-
-            event(new DocumentoActualizado($this, $user, 'rechazarPropuesta'));
         });
+
+        event(new DocumentoActualizado($this, $user, 'rechazarPropuesta', $propuesta));
     }
 
     public function aceptarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
@@ -261,7 +274,7 @@ class Documento extends Model
         if($this->propuestas->last()->id != $propuesta->id)
             throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
 
-        return DB::transaction(function() use ($propuesta, $user, $comentarios) {
+        DB::transaction(function() use ($propuesta, $user, $comentarios) {
             $propuesta->retroalimentador()->associate($user);
             $propuesta->retro = $comentarios;
             $propuesta->status = true;
@@ -270,9 +283,9 @@ class Documento extends Model
             $this->setStatus('en-progreso');
             $this->limite_actual = $propuesta->fecha_entrega;
             $this->save();
-
-            event(new DocumentoActualizado($this, $user, 'aceptarPropuesta'));
         });
+
+        event(new DocumentoActualizado($this, $user, 'aceptarPropuesta', $propuesta));
     } 
 
     public function corregir(User $user) {
