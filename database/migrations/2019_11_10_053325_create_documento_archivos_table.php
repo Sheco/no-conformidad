@@ -15,12 +15,14 @@ class CreateDocumentoArchivosTable extends Migration
     {
         Schema::create('documento_archivos', function (Blueprint $table) {
           $table->bigIncrements('id');
+          $table->unsignedBigInteger('user_id');
           $table->unsignedBigInteger('documento_id');
           $table->string('nombre');
           $table->timestamps();  
 
           $table->index('documento_id');
           $table->foreign('documento_id')->references('id')->on('documentos');
+          $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

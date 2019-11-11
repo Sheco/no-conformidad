@@ -171,16 +171,17 @@ class Documento extends Model
             $user->save();
 
             if($archivo && $archivo->isValid()) {
-                $this->guardarArchivo($archivo);
+                $this->guardarArchivo($user, $archivo);
             }
         });
         event(new DocumentoActualizado($this, $user, 'crear'));
     }
 
-    function guardarArchivo(\Illuminate\Http\UploadedFile $archivo) {
-        return DB::transaction(function()  use ($archivo) {
+    function guardarArchivo(User $user, UploadedFile $archivo) {
+        return DB::transaction(function()  use ($user, $archivo) {
             $docarc = new DocumentoArchivo;
             $docarc->nombre = $archivo->getClientOriginalName();
+            $docarc->user_id = $user->id;
             $this->archivos()->save($docarc);
 
             $archivo->storeAs('documentos', $docarc->id);
