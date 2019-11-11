@@ -14,6 +14,10 @@ class DocumentoActualizado extends Mailable
 {
     use Queueable, SerializesModels;
 
+    protected $documento;
+    protected $metodo;
+    protected $propuesta;
+
     /**
      * Create a new message instance.
      *

@@ -67,6 +67,6 @@ class DocumentoEmail
       $mail = new \App\Mail\DocumentoActualizado($documento, 
         $propuesta, $metodo);
 
-      Mail::to($to)->send($mail);
+      Mail::to($to)->queue($mail);
     }
 }
