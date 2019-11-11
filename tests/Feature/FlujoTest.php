@@ -15,12 +15,13 @@ use Carbon\Carbon;
 
 class FlujoTest extends TestCase
 {
-  use RefreshDatabase;
-  protected function setUp():void {
-    parent::setUp();
-    $this->seed(BaseSeeder::class);
-    $this->seed(TestSeeder::class);
-  }
+    use RefreshDatabase;
+    protected function setUp():void {
+        parent::setUp();
+        $this->seed(BaseSeeder::class);
+        $this->seed(TestSeeder::class);
+    }
+
     public function testFlujo() {
         $this->assertDatabaseHas('users', [
           'email'=>'creador1@localhost'
@@ -66,17 +67,6 @@ class FlujoTest extends TestCase
         /* paso 9, cerrar el documento */
         $doc->cerrar($creador);
     }
-
-    public function testSetup() {
-        $this->assertDatabaseHas('users', [
-          'email'=>'creador1@localhost'
-        ]);
-        $this->assertDatabaseHas('tipos', [
-          'id'=>'1'
-        ]);
-        $this->artisan("migrate:status");
-
-    } 
 
     public function testDirectorNoPuedeCrear() {
         $tipo = Tipo::where(['id'=>1])->first();
