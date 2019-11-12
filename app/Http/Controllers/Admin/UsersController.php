@@ -55,11 +55,7 @@ class UsersController extends Controller
             'email'=>'required|email',
         ]);
 
-        $input = $request->input();
-        if(!empty($input['password']))
-            $input['password'] = Hash::make($input['password']);
-
-        $user = User::create($input);
+        $user = User::create($request->input());
         return redirect(action("Admin\UsersController@edit", [$user->id]));
     }
 
@@ -103,7 +99,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->update($request->all());
+        $user->update($request->input());
         return redirect(action("Admin\UsersController@index"));
     }
 

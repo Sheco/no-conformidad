@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -75,4 +76,9 @@ class User extends Authenticatable
         return $this->_role_cache[$name] = $this->roles()->where('name', $name)->exists();
     }
 
+    public function setPasswordAttribute($password) {
+        if(!$password) 
+            return;
+        $this->attributes['password'] = Hash::make($password);
+    }
 }
