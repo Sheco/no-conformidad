@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Authenticatable
 {
@@ -70,10 +71,11 @@ class User extends Authenticatable
     }
 
     public function hasRole($name) {
-        if (isset($this->_role_cache[$name]))
-            return $this->_role_cache[$name];
-
-        return $this->_role_cache[$name] = $this->roles()->where('name', $name)->exists();
+        return Cache::store('array')
+            ->remember("user($this->id)->hasRole($name)", 10, 
+            function() use ($name) {
+            return $this->roles()->where('name', $name)->exists();
+        });
     }
 
     public function setPasswordAttribute($password) {
