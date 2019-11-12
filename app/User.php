@@ -41,9 +41,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // cache de roles, valido solo por request
-    private $_role_cache = [];
-
     public function departamento() {
         return $this->belongsTo('App\Departamento');
     }
