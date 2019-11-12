@@ -106,6 +106,10 @@ class Documento extends Model
                 if($user->hasRole("director")) {
                     $query->orWhere('status_id', '<=', 5);
                 }
+
+                if($user->hasRole("admin")) {
+                    $query->orWhere('status_id', '<=', 7);
+                }
         });
 
     }
