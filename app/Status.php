@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 use App\Documento;
 
@@ -19,9 +20,13 @@ class Status extends Model
     }
 
     public function documentosVisibles(User $user) {
-        return Documento::visible($user)
-            ->statusId($this->id)
-            ->count();
+        return Cache::store('file')
+            ->remember("status($this->id)->documentosVisibles($user->id)", 60, function() use ($user) {
+
+            return Documento::visible($user)
+                ->statusId($this->id)
+                ->count();
+        });
     }
 
     public function documentosVisiblesBadge(User $user) {
