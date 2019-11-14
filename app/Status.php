@@ -30,9 +30,13 @@ class Status extends Model
     }
 
     public function documentosVisiblesBadge(User $user) {
+        if(!$this->codigo) 
+          return "<span class=\"badge badge-light\">-</span>";
+
         $total = $this->documentosVisibles($user);
         if(!$total)
-            return "<span class=\"badge badge-light\">0</span>";
+          return "<span class=\"badge badge-light\">0</span>";
+
         else return "<span class=\"badge badge-danger text-light\">$total</span>";
     }
 
