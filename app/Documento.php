@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Cache;
 
 use App\Status;
 use App\Tipo;
@@ -87,7 +88,10 @@ class Documento extends Model
     public function scopeVisible($query, User $user) {
         // solo se pueden ver documentos de los departamentos a los que uno
         // pertenece.
-        $query->whereIn('departamento_id', $user->departamentos->pluck('id'))
+        $departamentos = Cache::store('file')->remember("user($user->id)->departamentos", 60, function() use ($user) {
+            return $user->departamentos->pluck('id');
+        });
+        $query->whereIn('departamento_id', $departamentos)
            ->where(function($query) use ($user) {
                 // el creador puede siempre ver sus documentos
                 $query->where('creador_usr_id', $user->id)
