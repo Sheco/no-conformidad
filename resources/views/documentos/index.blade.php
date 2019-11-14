@@ -28,6 +28,9 @@
                     <th>Fecha</th>
                     <th>Responsable</th>
                     <th>Tiempo&nbsp;Límite&nbsp;</th>
+                    @if (!$status)
+                        <th>Status</th>
+                    @endif
                 </tr>
                 </thead>
                 @foreach ($docs as $doc) 
@@ -37,7 +40,7 @@
 
                     @endif</td>
                     <td>{{ $doc->id }}</td>
-                    <td><a href="{{ url(action('DocumentosController@ver', $doc->id))}}">{{ $doc->folio }}</a></td>
+                    <td style="white-space: nowrap"><a href="{{ url(action('DocumentosController@ver', $doc->id))}}">{{ $doc->folio }}</a></td>
                     <td>{{ $doc->creador->name }}</td>
                     <td>{{ $doc->titulo }}</td>
                     <td>{{ $doc->tipo->nombre }}</td>
@@ -49,6 +52,9 @@
                         @endif
                     </td>
                     <td>{{ $doc->tiempoLimiteLegible }}</td>
+                    @if (!$status)
+                        <td>{{ $doc->status->nombre }}</td>
+                    @endif
                 </tr>
                 @endforeach
             </table>

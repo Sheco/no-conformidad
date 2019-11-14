@@ -39,4 +39,12 @@ class Status extends Model
     public function getNombreColoreadoAttribute() {
         return "<span class=\"bg-light status-$this->codigo\">$this->nombre</span>";
     }
+
+
+    static function wildcard() {
+        $instance = new self;
+        $instance->codigo = "";
+        $instance->nombre = "Cualquiera";
+        return $instance;
+    }
 }

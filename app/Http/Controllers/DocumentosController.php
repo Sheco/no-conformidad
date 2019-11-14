@@ -23,16 +23,20 @@ class DocumentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($status='inicio')
+    public function index($status='')
     {
         $user  = Auth::user();
-        $statuses = Status::all();
+        $statuses = collect([Status::wildcard()])->concat(Status::all());
         $docs = Documento::with('creador')
             ->with('responsable')
             ->with('tipo')
             ->with('status')
             ->visible($user)
-            ->status($status)
+        ;
+        if($status)
+            $docs = $docs->status($status);
+
+        $docs = $docs
             ->orderBy('fecha_limite', 'asc')
             ->get();
 
