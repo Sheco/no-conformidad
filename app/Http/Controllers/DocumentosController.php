@@ -37,7 +37,7 @@ class DocumentosController extends Controller
             $docs = $docs->status($status);
 
         $docs = $docs
-            ->orderBy('fecha_limite', 'asc')
+            ->orderBy('limite_actual', 'asc')
             ->get();
 
         return view("documentos.index", compact('status', 'statuses', 'docs', 'user'));
