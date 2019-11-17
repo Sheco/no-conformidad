@@ -62,6 +62,7 @@ class UsersController extends Controller
         $request->validate([
             'name'=>'required',
             'email'=>'required|email',
+            'password'=>'required',
         ]);
 
         $user = User::create($request->input());
@@ -108,6 +109,10 @@ class UsersController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $request->validate([
+            'name'=>'required',
+            'email'=>'required|email',
+        ]);
         $user->update($request->input());
         return redirect(action("Admin\UsersController@index"));
     }
