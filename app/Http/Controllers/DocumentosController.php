@@ -38,7 +38,7 @@ class DocumentosController extends Controller
 
         $docs = $docs
             ->orderBy('limite_actual', 'asc')
-            ->get();
+            ->cursor();
 
         return view("documentos.index", compact('status', 'statuses', 'docs', 'user'));
     }
@@ -156,7 +156,7 @@ class DocumentosController extends Controller
 
     public function logs(Documento $documento) {
         Gate::authorize('ver', $documento);
-        $logs = $documento->logs()->orderBy('fecha', 'desc')->get();
+        $logs = $documento->logs()->orderBy('fecha', 'desc')->cursor();
         return view("documentos.logs", compact('documento', 'logs'));
     }
 }
