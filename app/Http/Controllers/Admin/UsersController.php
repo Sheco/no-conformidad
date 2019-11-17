@@ -16,9 +16,18 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::all();
+        $departamento_id = $request->input('departamento');
+        if($departamento_id) {
+            $users = User::whereHas('departamentos', 
+            function($q) use ($departamento_id) {
+                $q->where('id', $departamento_id);
+            })
+                ->cursor();
+        } else
+            $users = User::cursor();
+
         return view("admin/users/index", compact('users'));
     }
 

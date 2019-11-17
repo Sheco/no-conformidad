@@ -10,15 +10,12 @@ class Departamento extends Model
 
     protected $fillable = ['nombre'];
 
-    public function users() {
-        return $this->hasMany('App\User');
-    }
 
     public function documentos() {
         return $this->hasMany('App\Documento');
     }
 
-    public function suscribed_users() {
+    public function users() {
         return $this->belongsToMany('App\User', 'user_departamentos');
     }
 }

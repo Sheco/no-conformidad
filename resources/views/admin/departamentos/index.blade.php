@@ -13,6 +13,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>Nombre</th>
+                        <th>Usuarios</th>
                     </tr>
                 </thead>
                 @foreach ($departamentos as $departamento)
@@ -21,6 +22,7 @@
                                 <span class="oi oi-pencil"></span>
                                 {{ $departamento->nombre }}
                             </a></td>
+                            <td><a href="{{ action("Admin\UsersController@index") }}?departamento={{ $departamento->id }}">Ver {{ $departamento->users->count() }}</a></td>
                     </tr>
                 @endforeach
             </table>

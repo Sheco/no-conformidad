@@ -16,6 +16,7 @@
                         <th>Nombre</th>
                         <th>Serie</th>
                         <th>Folio</th>
+                        <th>Departamentos</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -28,6 +29,7 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->serie_documentos }}</td>
                         <td>{{ $user->contador_documentos }}</td>
+                        <td>{{ $user->departamentos->count() }}</td>
                         <td><a href="{{ action('Admin\UsersController@logs', [$user->id]) }}">Logs</a></td>
                     </tr>
                 @endforeach
