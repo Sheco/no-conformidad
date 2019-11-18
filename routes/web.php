@@ -65,5 +65,6 @@ Route::middleware(['auth'])->group(function() {
             'Admin\UsersController@logs');
 
         Route::resource('admin/departamentos', 'Admin\DepartamentosController');
+        Route::resource('admin/tipos', 'Admin\TiposController');
     });
 });   

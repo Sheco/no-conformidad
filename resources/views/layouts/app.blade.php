@@ -65,6 +65,7 @@
                                     @if ($authUser->hasRole('admin'))
                                     <a class="dropdown-item" href="{{ url('admin/users') }}">Admin Usuarios</a>
                                     <a class="dropdown-item" href="{{ url('admin/departamentos') }}">Admin Departamentos</a>
+                                    <a class="dropdown-item" href="{{ url('admin/tipos') }}">Admin Tipos</a>
                                     @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
