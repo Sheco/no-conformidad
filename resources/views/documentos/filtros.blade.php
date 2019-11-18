@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="text-right">
-                        <a href="{{ url("/docs") }}" class="btn btn-secondary">Cancelar</a>
+                        <a href="#" onclick="window.history.back()" class="btn btn-secondary">Cancelar</a>
                         {{ Form::submit('Aplicar', ['class'=>'btn btn-primary']) }}
                     </div>
 
