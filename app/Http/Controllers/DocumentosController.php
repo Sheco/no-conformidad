@@ -32,6 +32,7 @@ class DocumentosController extends Controller
             ->with('responsable')
             ->with('tipo')
             ->with('status')
+            ->with('departamento')
             ->visible($user)
         ;
 
