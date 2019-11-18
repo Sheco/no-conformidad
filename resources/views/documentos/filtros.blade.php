@@ -13,12 +13,6 @@
                     ]) }}
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Creador</label>
-                            {{ Form::select("creador_id", $usuarios, 
-                                Arr::get($filtros, "creador_id"), 
-                                [ "class"=>"form-control"]) }}
-                        </div>
-                        <div class="col-md-6">
                             <label>Departamento</label>
                             {{ Form::select('departamento_id', $departamentos,
                                 Arr::get($filtros, "departamento_id"), 
@@ -31,6 +25,15 @@
                                 Arr::get($filtros, "tipo_id"),
                                 ["class"=>"form-control"]) }}
                         </div>
+                        @if ($authUser->hasRole('admin') or 
+                             $authUser->hasRole('director')) 
+                        <div class="col-md-6">
+                            <label>Creador</label>
+                            {{ Form::select("creador_id", $usuarios, 
+                                Arr::get($filtros, "creador_id"), 
+                                [ "class"=>"form-control"]) }}
+                        </div>
+                        @endif
                     </div>
 
                     <div class="text-right">

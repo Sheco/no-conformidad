@@ -88,8 +88,15 @@ class DocumentosController extends Controller
     }
 
     function filtrosGuardar(Request $request) {
-        $filtros = $request->only('creador_id', 'departamento_id', 'tipo_id');
+        $user = Auth::user();
+
+        $filtrosValidos = ['departamento_id', 'tipo_id'];
+        if($user->hasRole('admin') or $user->hasRole('director')) 
+            $filtrosValidos[] = 'creador_id';
+
+        $filtros = $request->only($filtrosValidos);
         session(["filtros"=>$filtros]);
+
         return redirect("/docs");
     }
 
