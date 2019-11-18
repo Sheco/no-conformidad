@@ -139,6 +139,7 @@ class DocumentosController extends Controller
             "titulo"=>"required",
             "descripcion"=>"required",
             "departamento_id"=>'required',
+            'tipo_id'=>'required',
         ]);
 
         $doc = new Documento;
