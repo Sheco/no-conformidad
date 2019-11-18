@@ -15,7 +15,12 @@
                     @endforeach
             </nav>
         </div>
+
         <div class="col-md-9">
+            <div>
+                <a href="{{ action("DocumentosController@filtros") }}">Asignar filtros</a>
+            </div>
+
             <table class="table table-sm table-bordered table-hover">
                 <thead class="thead-dark">
                 <tr>

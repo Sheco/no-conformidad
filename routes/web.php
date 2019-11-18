@@ -20,6 +20,8 @@ Route::middleware(['auth'])->group(function() {
     Route::get ('docs', 'DocumentosController@index');
     Route::get('docs/status', 'DocumentosController@index');
     Route::get ('docs/status/{status}', 'DocumentosController@index');
+    Route::get ('docs/filtros', 'DocumentosController@filtros');
+    Route::post('docs/filtros', 'DocumentosController@filtrosGuardar');
     Route::post('docs/crear', 'DocumentosController@guardar')
         ->middleware('can:crear,App\Documento');
     Route::get ('docs/crear', 'DocumentosController@crear')

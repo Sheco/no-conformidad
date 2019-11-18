@@ -13,6 +13,7 @@ use App\Propuesta;
 use App\Tipo;
 use App\Departamento;
 use App\User;
+use Arr;
 
 use Carbon\Carbon;
 
@@ -33,14 +34,63 @@ class DocumentosController extends Controller
             ->with('status')
             ->visible($user)
         ;
+
         if($status)
             $docs = $docs->status($status);
+
+        $filtros = session("filtros");
+        if(Arr::get($filtros, 'creador_id', null)) {
+            $docs = $docs->where('creador_id', 
+                $filtros['creador_id']);
+        }
+        if(Arr::get($filtros, 'departamento_id', null)) {
+            $docs = $docs->where('departamento_id', 
+                $filtros['departamento_id']);
+        }
+        if(Arr::get($filtros, 'tipo_id', null)) {
+            $docs = $docs->where('tipo_id', 
+                $filtros['tipo_id']);
+        }
 
         $docs = $docs
             ->orderBy('limite_actual', 'asc')
             ->cursor();
 
         return view("documentos.index", compact('status', 'statuses', 'docs', 'user'));
+    }
+
+    function filtros() {
+        $filtros = session('filtros', []);
+        $user = Auth::user();
+        $departamentos = $user->departamentos->pluck('id');
+        $usuarios = User::whereHas("departamentos", 
+            function($q) use ($departamentos) {
+                $q->whereIn("id", $departamentos);
+            })->get()
+              ->pluck('name', 'id')
+              ->prepend('-- Cualquiera', '');
+
+        $departamentos = $user->departamentos()
+            ->get()
+            ->pluck('nombre', 'id')
+            ->prepend('-- Cualquiera', '');
+
+        $tipos = Tipo::get()
+            ->pluck('nombre', 'id')
+            ->prepend('-- Cualquiera', '');
+
+        return view("documentos.filtros", compact(
+            'filtros', 
+            'usuarios',
+            'departamentos',
+            'tipos',
+        ));
+    }
+
+    function filtrosGuardar(Request $request) {
+        $filtros = $request->only('creador_id', 'departamento_id', 'tipo_id');
+        session(["filtros"=>$filtros]);
+        return redirect("/docs");
     }
 
     /**
