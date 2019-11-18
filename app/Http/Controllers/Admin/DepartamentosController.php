@@ -15,7 +15,7 @@ class DepartamentosController extends Controller
      */
     public function index()
     {
-        $departamentos = Departamento::all();
+        $departamentos = Departamento::cursor();
         return view('admin.departamentos.index', compact('departamentos'));
     }
 

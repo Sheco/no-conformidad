@@ -15,7 +15,7 @@ class TiposController extends Controller
      */
     public function index()
     {
-        $tipos = Tipo::all();
+        $tipos = Tipo::cursor();
         return view('admin.tipos.index', compact('tipos'));
     }
 

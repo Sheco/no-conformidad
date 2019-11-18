@@ -170,7 +170,7 @@ class DocumentosController extends Controller
         })->whereHas('departamentos', function($q) use ($documento) {
             $q->where('id', $documento->departamento_id);
         })
-          ->get()
+          ->cursor()
           ->pluck('name', 'id')->toArray();
 
         return view('documentos.ver', compact(
