@@ -28,32 +28,28 @@ class DocumentosController extends Controller
     {
         $user  = Auth::user();
         $statuses = collect([Status::wildcard()])->concat(Status::all());
+        $filtros = session("filtros", []);
         $docs = Documento::with('creador')
             ->with('responsable')
             ->with('tipo')
             ->with('status')
             ->with('departamento')
             ->visible($user)
+            ->filtrados($filtros)
         ;
 
         if($status)
             $docs = $docs->status($status);
 
-        $filtros = session("filtros", []);
+
         $ui_filtros = [];
         if(Arr::get($filtros, 'creador_usr_id', null)) {
-            $docs = $docs->where('creador_usr_id', 
-                $filtros['creador_usr_id']);
             $ui_filtros['Creador'] = User::find($filtros['creador_usr_id'])->name;
         }
         if(Arr::get($filtros, 'departamento_id', null)) {
-            $docs = $docs->where('departamento_id', 
-                $filtros['departamento_id']);
             $ui_filtros['Departamento'] = Departamento::find($filtros['departamento_id'])->nombre;
         }
         if(Arr::get($filtros, 'tipo_id', null)) {
-            $docs = $docs->where('tipo_id', 
-                $filtros['tipo_id']);
             $ui_filtros['Tipo'] = Tipo::find($filtros['tipo_id'])->nombre;
         }
 

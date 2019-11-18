@@ -16,6 +16,8 @@ use App\Tipo;
 use App\Departamento;
 use App\Events\DocumentoActualizado;
 
+use Arr;
+
 class Documento extends Model
 {
     protected $table = 'documentos';
@@ -116,6 +118,21 @@ class Documento extends Model
                 }
         });
 
+    }
+
+    function scopeFiltrados($query, $filtros) {
+        if(Arr::get($filtros, 'creador_usr_id', null)) {
+            $query->where('creador_usr_id', 
+                $filtros['creador_usr_id']);
+        }
+        if(Arr::get($filtros, 'departamento_id', null)) {
+            $query->where('departamento_id', 
+                $filtros['departamento_id']);
+        }
+        if(Arr::get($filtros, 'tipo_id', null)) {
+            $query->where('tipo_id', 
+                $filtros['tipo_id']);
+        }
     }
 
     public function scopeStatus($query, $codigo) {

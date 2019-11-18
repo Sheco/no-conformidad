@@ -20,10 +20,15 @@ class Status extends Model
     }
 
     public function documentosVisibles(User $user) {
+        $filtros = session('filtros', []);
+        $filtrosSerializados = serialize($filtros);
+        $cache_key = "status($this->id)->documentosVisibles($user->id)($filtrosSerializados)";
+
         return Cache::store('file')
-            ->remember("status($this->id)->documentosVisibles($user->id)", 60, function() use ($user) {
+            ->remember($cache_key, 60, function() use ($user, $filtros) {
 
             return Documento::visible($user)
+                ->filtrados($filtros)
                 ->statusId($this->id)
                 ->count();
         });
