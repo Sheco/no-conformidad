@@ -7,7 +7,7 @@
             <div class="card">
                 <div class="card-header">Filtros de documentos</div>
 
-                <div class="card-body container">
+                <div class="card-body container formaTabular">
                     {{ Form::open([
                         "url"=>action("DocumentosController@filtrosGuardar")
                     ]) }}
@@ -27,16 +27,20 @@
                                 ["class"=>"form-control",
                                  "placeholder"=>"- Cualquiera"]) }}
                         </div>
-                        @if ($authUser->hasRole('admin') or 
-                             $authUser->hasRole('director')) 
                         <div class="col-md-6">
                             <label>Creador</label>
+                        @if ($authUser->hasRole('admin') or 
+                             $authUser->hasRole('director')) 
                             {{ Form::select("creador_usr_id", $usuarios, 
                                 Arr::get($filtros, "creador_usr_id"), 
                                 [ "class"=>"form-control",
                                   "placeholder"=>"- Cualquiera" ]) }}
-                        </div>
+                        @else
+                            <div><small>
+                            Los directores pueden filtrar por creador del documento.
+                            </small></div>
                         @endif
+                        </div>
                     </div>
 
                     <div class="text-right">
