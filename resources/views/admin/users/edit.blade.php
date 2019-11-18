@@ -13,7 +13,14 @@
               <div class="card-header">Departamentos</div>
               <div class="card-body">
                   {{ Form::open(['url'=>action('Admin\UsersController@addDepartamento', [$user->id]), 'method'=>'post', 'style'=>'margin-bottom: 1em']) }}
-                  {{ Form::select('departamento_id', [''=>'- Asignar un departamento']+$departamentosDisponibles->pluck('nombre', 'id')->toArray(), '', ['class'=>'form-control', 'onchange'=>'this.form.submit()']) }}
+                  {{ Form::select('departamento_id', 
+                        $departamentosDisponibles
+                            ->pluck('nombre', 'id')->toArray(), '', 
+                    [
+                        'class'=>'form-control', 
+                        'onchange'=>'this.form.submit()',
+                        'placeholder'=>'- Asignar un departamento',
+                    ]) }}
                   
                   {{ Form::close() }}
                   
@@ -38,7 +45,13 @@
               <div class="card-header">Roles</div>
               <div class="card-body">
                   {{ Form::open(['url'=>action('Admin\UsersController@addRole', [$user->id]), 'method'=>'post', 'style'=>'margin-bottom: 1em']) }}
-                  {{ Form::select('role_id', [''=>'- Asignar un rol']+$roles->pluck('name', 'id')->toArray(), '', ['class'=>'form-control', 'onchange'=>'this.form.submit()']) }}
+                  {{ Form::select('role_id', $roles
+                    ->pluck('name', 'id')->toArray(), '', 
+                    [
+                        'class'=>'form-control', 
+                        'onchange'=>'this.form.submit()',
+                        'placeholder'=>'- Asignar un rol'
+                    ]) }}
                   
                   {{ Form::close() }}
                   

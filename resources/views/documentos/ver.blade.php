@@ -37,7 +37,14 @@
                             {{ Form::open([
                                 'url'=>"/docs/{$documento->id}/asignarResponsable", 
                                 'method'=>'post']) }}
-                                {{ Form::select('responsable_usr_id', [''=>'- Seleccionar']+$responsables, $documento->responsable_usr_id, ['class'=>'form-control', 'onchange'=>'this.form.submit()']) }}
+                                {{ Form::select('responsable_usr_id', 
+                                    $responsables, 
+                                    $documento->responsable_usr_id, 
+                                    [
+                                        'class'=>'form-control', 
+                                        'onchange'=>'this.form.submit()',
+                                        'placeholder'=>'- Seleccionar',
+                                    ]) }}
                                 <span class="status"></span>
                             {{ Form::close() }}
                         @else

@@ -7,11 +7,19 @@
     </div>
     <div class="col-md-6">
         {{ Form::label('tipo_id', 'Tipo') }}
-        {{ Form::select('tipo_id', $tipos, null, ['class'=>'form-control']) }}
+        {{ Form::select('tipo_id', $tipos, null, 
+            [
+                'class'=>'form-control',
+                'placeholder'=>'- Seleccionar',
+            ]) }}
     </div>
     <div class="col-md-6">
         {{ Form::label('departamento_id', 'Departamento') }}
-        {{ Form::select('departamento_id', $departamentos, null, ['class'=>'form-control'])}}
+        {{ Form::select('departamento_id', $departamentos, null, 
+            [
+                'class'=>'form-control',
+                'placeholder'=>'- Seleccionar',
+            ])}}
     </div>
     <div class="col-md-6">
         {{ Form::label('titulo', 'Título') }}

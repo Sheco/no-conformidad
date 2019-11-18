@@ -78,18 +78,15 @@ class DocumentosController extends Controller
         $usuarios = User::whereHas("departamentos", 
             function($q) use ($departamentos) {
                 $q->whereIn("id", $departamentos);
-            })->get()
-              ->pluck('name', 'id')
-              ->prepend('-- Cualquiera', '');
+            })->cursor()
+              ->pluck('name', 'id');
 
         $departamentos = $user->departamentos()
-            ->get()
-            ->pluck('nombre', 'id')
-            ->prepend('-- Cualquiera', '');
+            ->cursor()
+            ->pluck('nombre', 'id');
 
-        $tipos = Tipo::get()
-            ->pluck('nombre', 'id')
-            ->prepend('-- Cualquiera', '');
+        $tipos = Tipo::cursor()
+            ->pluck('nombre', 'id');
 
         return view("documentos.filtros", compact(
             'filtros', 

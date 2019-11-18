@@ -16,14 +16,16 @@
                             <label>Departamento</label>
                             {{ Form::select('departamento_id', $departamentos,
                                 Arr::get($filtros, "departamento_id"), 
-                                ["class"=>"form-control"]) }}
+                                ["class"=>"form-control",
+                                 "placeholder"=>"- Cualquiera"]) }}
                         </div>
 
                         <div class="col-md-6">
                             <label>Tipo</label>
                             {{ Form::select('tipo_id', $tipos,
                                 Arr::get($filtros, "tipo_id"),
-                                ["class"=>"form-control"]) }}
+                                ["class"=>"form-control",
+                                 "placeholder"=>"- Cualquiera"]) }}
                         </div>
                         @if ($authUser->hasRole('admin') or 
                              $authUser->hasRole('director')) 
@@ -31,7 +33,8 @@
                             <label>Creador</label>
                             {{ Form::select("creador_usr_id", $usuarios, 
                                 Arr::get($filtros, "creador_usr_id"), 
-                                [ "class"=>"form-control"]) }}
+                                [ "class"=>"form-control",
+                                  "placeholder"=>"- Cualquiera" ]) }}
                         </div>
                         @endif
                     </div>
