@@ -29,8 +29,8 @@
                              $authUser->hasRole('director')) 
                         <div class="col-md-6">
                             <label>Creador</label>
-                            {{ Form::select("creador_id", $usuarios, 
-                                Arr::get($filtros, "creador_id"), 
+                            {{ Form::select("creador_usr_id", $usuarios, 
+                                Arr::get($filtros, "creador_usr_id"), 
                                 [ "class"=>"form-control"]) }}
                         </div>
                         @endif

@@ -41,10 +41,10 @@ class DocumentosController extends Controller
 
         $filtros = session("filtros", []);
         $ui_filtros = [];
-        if(Arr::get($filtros, 'creador_id', null)) {
-            $docs = $docs->where('creador_id', 
-                $filtros['creador_id']);
-            $ui_filtros['Creador'] = User::find($filtros['creador_id'])->name;
+        if(Arr::get($filtros, 'creador_usr_id', null)) {
+            $docs = $docs->where('creador_usr_id', 
+                $filtros['creador_usr_id']);
+            $ui_filtros['Creador'] = User::find($filtros['creador_usr_id'])->name;
         }
         if(Arr::get($filtros, 'departamento_id', null)) {
             $docs = $docs->where('departamento_id', 
@@ -104,7 +104,7 @@ class DocumentosController extends Controller
 
         $filtrosValidos = ['departamento_id', 'tipo_id'];
         if($user->hasRole('admin') or $user->hasRole('director')) 
-            $filtrosValidos[] = 'creador_id';
+            $filtrosValidos[] = 'creador_usr_id';
 
         $filtros = collect($request->only($filtrosValidos))
             ->filter(function($x) {
