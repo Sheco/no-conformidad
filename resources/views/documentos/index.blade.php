@@ -16,9 +16,17 @@
             </nav>
         </div>
 
-        <div class="col-md-9">
-            <div>
-                <a href="{{ action("DocumentosController@filtros") }}">Asignar filtros</a>
+        <div class="col-md-9 container">
+            <div class="row" style="margin-bottom: 1em">
+                <div class="col-md-2">
+                    <a href="{{ action("DocumentosController@filtros") }}" class="btn btn-secondary">Manejar filtros</a>
+                </div>
+                @foreach ($ui_filtros as $filtro=>$valor)
+                    <div class="col-md-3 formaTabular">
+                        <label>{{ $filtro }}</label>
+                        <div>{{$valor}}</div>
+                    </div>
+                @endforeach
             </div>
 
             <table class="table table-sm table-bordered table-hover">

@@ -39,25 +39,36 @@ class DocumentosController extends Controller
         if($status)
             $docs = $docs->status($status);
 
-        $filtros = session("filtros");
+        $filtros = session("filtros", []);
+        $ui_filtros = [];
         if(Arr::get($filtros, 'creador_id', null)) {
             $docs = $docs->where('creador_id', 
                 $filtros['creador_id']);
+            $ui_filtros['Creador'] = User::find($filtros['creador_id'])->name;
         }
         if(Arr::get($filtros, 'departamento_id', null)) {
             $docs = $docs->where('departamento_id', 
                 $filtros['departamento_id']);
+            $ui_filtros['Departamento'] = Departamento::find($filtros['departamento_id'])->nombre;
         }
         if(Arr::get($filtros, 'tipo_id', null)) {
             $docs = $docs->where('tipo_id', 
                 $filtros['tipo_id']);
+            $ui_filtros['Tipo'] = Tipo::find($filtros['tipo_id'])->nombre;
         }
 
         $docs = $docs
             ->orderBy('limite_actual', 'asc')
             ->get();
 
-        return view("documentos.index", compact('status', 'statuses', 'docs', 'user'));
+        return view("documentos.index", compact(
+            'status', 
+            'statuses', 
+            'docs', 
+            'user',
+            'filtros',
+            'ui_filtros',
+        ));
     }
 
     function filtros() {
@@ -95,7 +106,10 @@ class DocumentosController extends Controller
         if($user->hasRole('admin') or $user->hasRole('director')) 
             $filtrosValidos[] = 'creador_id';
 
-        $filtros = $request->only($filtrosValidos);
+        $filtros = collect($request->only($filtrosValidos))
+            ->filter(function($x) {
+                return $x != "";
+            })->toArray();
         session(["filtros"=>$filtros]);
 
         return redirect("/docs");
