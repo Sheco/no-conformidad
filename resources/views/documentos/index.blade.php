@@ -33,8 +33,8 @@
                     <th>ID</th>
                     <th>Folio</th>
                     <th>Creador</th>
-                    <th>Departamento</th>
                     <th>Título</th>
+                    <th>Departamento</th>
                     <th>Tipo</th>
                     <th>Fecha</th>
                     <th>Responsable</th>
@@ -53,8 +53,8 @@
                     <td>{{ $doc->id }}</td>
                     <td style="white-space: nowrap"><a href="{{ url(action('DocumentosController@ver', $doc->id))}}">{{ $doc->folio }}</a></td>
                     <td>{{ $doc->creador->name }}</td>
-                    <td>{{ $doc->departamento->nombre }}</td>
                     <td>{{ $doc->titulo }}</td>
+                    <td>{{ $doc->departamento->nombre }}</td>
                     <td>{{ $doc->tipo->nombre }}</td>
                     <td>{{ $doc->created_at->format("Y/M/d") }}</td>
                     <td>@if ($doc->responsable_usr_id) 
