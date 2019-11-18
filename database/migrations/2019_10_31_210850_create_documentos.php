@@ -38,7 +38,9 @@ class CreateDocumentos extends Migration
 
             $table->index('status_id');
             $table->index('responsable_usr_id');
-            $table->index('creador_id');
+            $table->index('creador_usr_id');
+            $table->index('departamento_id');
+            $table->index('tipo_id');
         });
     }
 
