@@ -42,16 +42,17 @@ class DocumentosController extends Controller
             $docs = $docs->status($status);
 
 
-        $ui_filtros = [];
-        if(Arr::get($filtros, 'creador_usr_id', null)) {
-            $ui_filtros['Creador'] = User::find($filtros['creador_usr_id'])->name;
-        }
-        if(Arr::get($filtros, 'departamento_id', null)) {
-            $ui_filtros['Departamento'] = Departamento::find($filtros['departamento_id'])->nombre;
-        }
-        if(Arr::get($filtros, 'tipo_id', null)) {
-            $ui_filtros['Tipo'] = Tipo::find($filtros['tipo_id'])->nombre;
-        }
+        $ui_filtros = collect($filtros)->mapWithKeys(function($value, $key) {
+            if($key == 'creador_usr_id') {
+                return [ 'Creador' => User::find($value)->name ];
+            }
+            if($key == 'departamento_id') {
+                return [ 'Departamento' => Departamento::find($value)->nombre ];
+            }
+            if($key == 'tipo_id') {
+                return [ 'Tipo' => Tipo::find($value)->nombre ];
+            }
+        });
 
         $docs = $docs
             ->orderBy('limite_actual', 'asc')
