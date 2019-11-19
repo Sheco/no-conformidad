@@ -36,11 +36,9 @@ class DocumentosController extends Controller
             ->with('departamento')
             ->visible($user)
             ->filtrados($filtros)
-        ;
-
-        if($status)
-            $docs = $docs->status($status);
-
+            ->status($status)
+            ->orderBy('limite_actual', 'asc')
+            ->get();
 
         $ui_filtros = collect($filtros)->mapWithKeys(function($value, $key) {
             if($key == 'creador_usr_id') {
@@ -53,10 +51,6 @@ class DocumentosController extends Controller
                 return [ 'Tipo' => Tipo::find($value)->nombre ];
             }
         });
-
-        $docs = $docs
-            ->orderBy('limite_actual', 'asc')
-            ->get();
 
         return view("documentos.index", compact(
             'status', 

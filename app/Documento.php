@@ -136,6 +136,9 @@ class Documento extends Model
     }
 
     public function scopeStatus($query, $codigo) {
+        if(!$codigo) 
+            return;
+
         $status = Status::where('codigo', $codigo)->first();
         if(!$status)
             throw new \Exception("No se encontro el status con codigo $codigo");
