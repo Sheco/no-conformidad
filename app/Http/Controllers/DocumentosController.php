@@ -165,7 +165,7 @@ class DocumentosController extends Controller
             $q->where('id', $documento->departamento_id);
         })
           ->cursor()
-          ->pluck('name', 'id')->toArray();
+          ->pluck('name', 'id');
 
         return view('documentos.ver', compact(
             'documento', 
