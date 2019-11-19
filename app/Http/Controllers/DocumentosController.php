@@ -194,14 +194,12 @@ class DocumentosController extends Controller
     }
 
     public function rechazarPropuesta(Request $request, Propuesta $propuesta) {
-        $documento = $propuesta->documento;
-        $documento->rechazarPropuesta(Auth::user(), $propuesta, '');
+        $propuesta->rechazar(Auth::user(), '');
         return back();
     }
 
     public function aceptarPropuesta(Request $request, Propuesta $propuesta) {
-        $documento = $propuesta->documento;
-        $documento->aceptarPropuesta(Auth::user(), $propuesta, '');
+        $propuesta->aceptar(Auth::user(), '');
         return back();
     }
 

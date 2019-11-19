@@ -275,45 +275,6 @@ class Documento extends Model
         return $propuesta;
     }
 
-    public function rechazarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
-        Gate::forUser($user)->authorize('rechazar', $propuesta);
-
-        if($this->propuestas->last()->id != $propuesta->id)
-            throw new \Exception("Solo se puede aceptar la ultima propuesta del documento, ");
-
-        DB::transaction(function() use ($propuesta, $user, $comentarios) {
-            $propuesta->retroalimentador()->associate($user);
-            $propuesta->retro = $comentarios;
-            $propuesta->status = false;
-            $propuesta->save();
-
-            $this->setStatus('pendiente-propuesta');
-            $this->save();
-        });
-
-        event(new DocumentoActualizado($this, $user, 'rechazarPropuesta', $propuesta));
-    }
-
-    public function aceptarPropuesta(User $user, Propuesta $propuesta, $comentarios) {
-        Gate::forUser($user)->authorize('aceptar', $propuesta);
-
-        if($this->propuestas->last()->id != $propuesta->id)
-            throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
-
-        DB::transaction(function() use ($propuesta, $user, $comentarios) {
-            $propuesta->retroalimentador()->associate($user);
-            $propuesta->retro = $comentarios;
-            $propuesta->status = true;
-            $propuesta->save();
-
-            $this->setStatus('en-progreso');
-            $this->limite_actual = $propuesta->fecha_entrega;
-            $this->save();
-        });
-
-        event(new DocumentoActualizado($this, $user, 'aceptarPropuesta', $propuesta));
-    } 
-
     public function corregir(User $user) {
         Gate::forUser($user)->authorize('corregir', $this);
 

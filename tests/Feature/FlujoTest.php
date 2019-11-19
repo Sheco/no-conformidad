@@ -46,17 +46,19 @@ class FlujoTest extends TestCase
             $texto = ($rechazos>0? 'no hacer nada': 'tapar el hueco');
             $fecha = Carbon::now()->addDays(30)->format('Y-m-d');
             $propuesta = $doc->agregarPropuesta($responsable, $texto, $fecha);
-            $doc->refresh();
 
             /* paso 4, rechazar y reasignar */
             if($rechazos>0) {
-                $doc->rechazarPropuesta($director, $propuesta, 'mala idea');
+                $propuesta->rechazar($director, 'mala idea');
+                $doc->refresh();
                 $rechazos--;
-            } else break;
+            } else {
+                /* paso 5, aceptar la propuesta */
+                $propuesta->aceptar($director, 'perfecto');
+                $doc->refresh();
+                break;
+            }
         } while(true);
-
-        /* paso 5, aceptar la propuesta */
-        $doc->aceptarPropuesta($director, $propuesta, 'perfecto');
 
         /* paso 6, marcar como completado */
         $doc->corregir($responsable);
