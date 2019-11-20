@@ -2,10 +2,6 @@
 @csrf
 <div class="row formaTabular">
     <div class="col-md-6">
-        <label>Creador</label>
-        <div>{{ $authUser->name }}</div>
-    </div>
-    <div class="col-md-6">
         {{ Form::label('tipo_id', 'Tipo') }}
         {{ Form::select('tipo_id', $tipos, null, 
             [

@@ -51,11 +51,11 @@
                                 </li>
                             @endif
                         @else
-                        @if ($authUser->can('crear', App\Documento::class))
+                        @can('crear', App\Documento::class)
                             <li class="nav-item">
                                 <a class="nav-link btn btn-success text-light" href="{{ action('DocumentosController@crear') }}"><span class="oi oi-file"></span> Nuevo documento</a>
                             </li>
-                        @endif
+                        @endcan
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ $authUser->name }} <span class="caret"></span>

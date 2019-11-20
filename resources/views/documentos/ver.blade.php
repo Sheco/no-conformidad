@@ -33,7 +33,7 @@
 
                     <div class="col-md-4 form-group">
                         <label>Responsable</label>
-                        @if ($authUser->can('asignarResponsable', $documento))
+                        @can('asignarResponsable', $documento)
                             {{ Form::open([
                                 'url'=>"/docs/{$documento->id}/asignarResponsable", 
                                 'method'=>'post']) }}
@@ -54,7 +54,7 @@
                                     N/A
                                 @endif
                             </div>
-                        @endif
+                        @endcan
                     </div>
                     <div class="col-md-4 form-group">
                         <label>Tiempo límite para la siguiente etapa</label>
@@ -88,17 +88,17 @@
                 </div>
                 <div class="row" style="margin-top: 1em">
                     <div class="col-md-4">
-                        @if ($authUser->can('corregir', $documento)) 
+                        @can('corregir', $documento) 
                             {{ Form::open([
                                 'url' => "/docs/$documento->id/corregir",
                                 'method'=>'post'
                                 ]) }}
                                 {{ Form::submit('Marcar como corregido', ['class'=>'btn btn-info']) }}
                             {{ Form::close() }}
-                        @endif
+                        @endcan
                     </div>
                     <div class="col-md-4">
-                        @if ($authUser->can('verificar', $documento)) 
+                        @can('verificar', $documento)
                             {{ Form::open([
                                 'url' => "/docs/$documento->id/verificar",
                                 'method'=>'post'
@@ -106,10 +106,10 @@
                                 {{ Form::submit('Marcar como verificado', 
                                     ['class'=>'btn btn-success']) }}
                             {{ Form::close() }}
-                        @endif
+                        @endcan
                     </div>
                     <div class="col-md-4">
-                        @if ($authUser->can('cerrar', $documento)) 
+                        @can('cerrar', $documento)
                             {{ Form::open([
                                 'url' => "/docs/$documento->id/cerrar",
                                 'method'=>'post'
@@ -117,7 +117,7 @@
                                 {{ Form::submit('Cerrar', 
                                     ['class'=>'btn btn-secondary']) }}
                             {{ Form::close() }}
-                        @endif
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -159,8 +159,8 @@
                         @endif
                     </div>
                     <div class="row" style="margin-top: 1em">
-                    @if ($loop->last and 
-                        $authUser->can('rechazar', $propuesta))
+                    @if ($loop->last)
+                        @can('rechazar', $propuesta)
                         <div class="offset-md-6 col-md-3 text-right">
                         {{ Form::open([
                             'url'=>action('DocumentosController@rechazarPropuesta', $propuesta->id),
@@ -169,9 +169,8 @@
                             {{ Form::submit('Rechazar', ['class'=>'btn btn-danger']) }}
                         {{ Form::close() }}
                         </div>
-                    @endif
-                    @if ($loop->last and 
-                        $authUser->can('aceptar', $propuesta))
+                        @endcan
+                        @can('aceptar', $propuesta)
                         <div class="col-md-3 text-right">
                         {{ Form::open([
                             'url'=>action('DocumentosController@aceptarPropuesta', $propuesta->id),
@@ -180,13 +179,14 @@
                             {{ Form::submit('Aceptar', ['class'=>'btn btn-primary']) }}
                         {{ Form::close() }}
                         </div>
+                        @endcan
                     @endif
                     </div>
                 </div>
             </div>
         </div>
         @endforeach
-        @if ($authUser->can('agregarPropuesta', $documento))
+        @can('agregarPropuesta', $documento)
         <div class="col-md-6" style="margin-top: 1em">
         {{ Form::open([
             'url'=>"/docs/$documento->id/agregarPropuesta", 
@@ -212,7 +212,7 @@
             </div>
         {{ Form::close() }}
         </div>
-        @endif
+        @endcan
     </div>
 </div>
 @endsection
