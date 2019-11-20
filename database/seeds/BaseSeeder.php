@@ -74,7 +74,7 @@ class BaseSeeder extends Seeder
         $user = User::create([
             'name' =>'Admin',
             'email'=>'admin@localhost',
-            'password'=>Hash::make('admin'),
+            'password'=>'admin',
             'serie_documentos'=>'ADM',
         ]);
         $user->addRole('admin');
