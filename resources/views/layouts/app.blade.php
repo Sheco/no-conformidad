@@ -51,7 +51,7 @@
                                 </li>
                             @endif
                         @else
-                        @can('crear', App\Documento::class)
+                        @can('crearDocumentos', App\Documento::class)
                             <li class="nav-item">
                                 <a class="nav-link btn btn-success text-light" href="{{ action('DocumentosController@crear') }}"><span class="oi oi-file"></span> Nuevo documento</a>
                             </li>

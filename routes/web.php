@@ -22,16 +22,13 @@ Route::middleware(['auth'])->group(function() {
     Route::get ('docs/status/{status}', 'DocumentosController@index');
     Route::get ('docs/filtros', 'DocumentosController@filtros');
     Route::post('docs/filtros', 'DocumentosController@filtrosGuardar');
-    Route::post('docs/crear', 'DocumentosController@guardar')
-        ->middleware('can:crear,App\Documento');
+    Route::post('docs/crear', 'DocumentosController@guardar');
     Route::get ('docs/crear', 'DocumentosController@crear')
-        ->middleware('can:crear,App\Documento');
+        ->middleware('can:crearDocumentos,App\Documento');
     Route::post('docs/{documento}/asignarResponsable', 
-        'DocumentosController@asignarResponsable')
-        ->middleware('can:asignarResponsable,documento');
+        'DocumentosController@asignarResponsable');
     Route::post('docs/{documento}/agregarPropuesta', 
-        'DocumentosController@agregarPropuesta')
-        ->middleware('can:agregarPropuesta,documento');
+        'DocumentosController@agregarPropuesta');
     Route::post('docs/propuesta/{propuesta}/rechazar', 
         'DocumentosController@rechazarPropuesta')
         ->middleware('can:rechazar,propuesta');

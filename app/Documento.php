@@ -65,8 +65,8 @@ class Documento extends Model
 
     public function puedeAvanzar(User $user) {
         $politicasAvance = [
-            'inicio'=>'asignarResponsable',
-            'pendiente-propuesta'=>'agregarPropuesta',
+            'inicio'=>'asignarResponsables',
+            'pendiente-propuesta'=>'agregarPropuestas',
             'pendiente-revision'=>'aceptarPropuesta',
             'en-progreso'=>'corregir',
             'corregido'=>'verificar',
@@ -174,11 +174,7 @@ class Documento extends Model
     }
 
     function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion, ?UploadedFile $archivo = null) {
-        Gate::forUser($user)->authorize('crear', Documento::class);
-
-        if(!$user->departamentos()->where('id', $departamento->id)->exists()) {
-            throw new \Exception("El usuario $user->name no esta suscrito al departamento $departamento->nombre");
-        }
+        Gate::forUser($user)->authorize('crear', [new Documento, $departamento]);
 
         DB::transaction(function() 
             use ($user, $tipo, $departamento, $titulo, $descripcion, $archivo) {
@@ -217,21 +213,12 @@ class Documento extends Model
     }
 
     public function asignarResponsable(User $user, ?User $responsable) {
-        Gate::forUser($user)->authorize('asignarResponsable', $this);
+        Gate::forUser($user)->authorize('asignarResponsable', [$this, $responsable]);
 
         if(!$responsable) {
             $this->responsable()->dissociate();
             $this->setStatus('inicio');
             return;
-        }
-
-        if(!$responsable->hasRole('responsable'))
-            throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, no tiene el rol apropiado.");
-
-        if(!$responsable->departamentos
-            ->where('id', $this->departamento_id) 
-            ->count()) {
-            throw new \Exception("El usuario $responsable->name no puede encargarse de este documento, no tiene el departamento {$this->departamento->nombre}");
         }
 
         DB::transaction(function() use ($responsable) {
@@ -249,13 +236,11 @@ class Documento extends Model
     }
 
     public function agregarPropuesta(User $user, $descripcion, $fecha_entrega) {
-        Gate::forUser($user)->authorize('agregarPropuesta', $this);
 
         $fecha_entrega = new Carbon("$fecha_entrega 17:00:00");
         $limite_maximo = $this->limiteMaximoPropuesta;
 
-        if($fecha_entrega > $limite_maximo)
-            throw new \Exception("La fecha propuesta de entrega no puede exceder la fecha maxima de ". $limite_maximo);
+        Gate::forUser($user)->authorize('agregarPropuesta', [$this, $fecha_entrega]);
 
         $propuesta = DB::transaction(function() 
             use ($user, $descripcion, $fecha_entrega, $limite_maximo) {

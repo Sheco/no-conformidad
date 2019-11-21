@@ -33,7 +33,7 @@
 
                     <div class="col-md-4 form-group">
                         <label>Responsable</label>
-                        @can('asignarResponsable', $documento)
+                        @can('asignarResponsables', $documento)
                             {{ Form::open([
                                 'url'=>"/docs/{$documento->id}/asignarResponsable", 
                                 'method'=>'post']) }}
@@ -186,7 +186,7 @@
             </div>
         </div>
         @endforeach
-        @can('agregarPropuesta', $documento)
+        @can('agregarPropuestas', $documento)
         <div class="col-md-6" style="margin-top: 1em">
         {{ Form::open([
             'url'=>"/docs/$documento->id/agregarPropuesta", 
