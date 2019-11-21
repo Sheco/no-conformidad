@@ -62,13 +62,13 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    @if ($authUser->hasRole('admin'))
+                                    @hasRole(['admin'])
                                     <h6 class="dropdown-header">Admin</h6>
                                     <a class="dropdown-item" href="{{ url('admin/users') }}">Usuarios</a>
                                     <a class="dropdown-item" href="{{ url('admin/departamentos') }}">Departamentos</a>
                                     <a class="dropdown-item" href="{{ url('admin/tipos') }}">Tipos</a>
                                     <div class="dropdown-divider"></div>
-                                    @endif
+                                    @endhasRole
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

@@ -29,8 +29,7 @@
                         </div>
                         <div class="col-md-6">
                             <label>Creador</label>
-                        @if ($authUser->hasRole('admin') or 
-                             $authUser->hasRole('director')) 
+                        @hasRole(['admin', 'director'])
                             {{ Form::select("creador_usr_id", $usuarios, 
                                 Arr::get($filtros, "creador_usr_id"), 
                                 [ "class"=>"form-control",
@@ -39,7 +38,7 @@
                             <div><small>
                             Los directores pueden filtrar por creador del documento.
                             </small></div>
-                        @endif
+                        @endhasRole
                         </div>
                     </div>
 

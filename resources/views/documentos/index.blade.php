@@ -46,10 +46,10 @@
                 </thead>
                 @foreach ($docs as $doc) 
                 <tr>
-                    <td>@if ($doc->puedeAvanzar($authUser)) 
+                    <td>@puedeAvanzar($doc)
                         <span class="oi oi-star text-warning" title="Puedes avanzar este documento" aria-hidden="true"></span>
 
-                    @endif</td>
+                    @endpuedeAvanzar</td>
                     <td>{{ $doc->id }}</td>
                     <td style="white-space: nowrap"><a href="{{ url(action('DocumentosController@ver', $doc->id))}}">{{ $doc->folio }}</a></td>
                     <td>{{ $doc->creador->name }}</td>
