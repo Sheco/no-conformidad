@@ -37,17 +37,17 @@ class FlujoTest extends TestCase
         $doc = new Documento;
         $doc->crear($creador, $tipo, $departamento, 'huecote', 'hay un hueco');
 
+        /* paso 2, se asigna responsable */ 
+        $doc->asignarResponsable($director, $responsable);
+
         $rechazos = 2;
         do {
-            /* paso 2, se asigna responsable */ 
-            $doc->asignarResponsable($director, $responsable);
-
             /* paso 3, el responsable agrega una propuesta */
             $texto = ($rechazos>0? 'no hacer nada': 'tapar el hueco');
             $fecha = Carbon::now()->addDays(30)->format('Y-m-d');
             $propuesta = $doc->agregarPropuesta($responsable, $texto, $fecha);
 
-            /* paso 4, rechazar y reasignar */
+            /* paso 4, rechazar */
             if($rechazos>0) {
                 $propuesta->rechazar($director, 'mala idea');
                 $doc->refresh();
