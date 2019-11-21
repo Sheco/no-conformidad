@@ -22,25 +22,23 @@ Route::middleware(['auth'])->group(function() {
     Route::get ('docs/status/{status}', 'DocumentosController@index');
     Route::get ('docs/filtros', 'DocumentosController@filtros');
     Route::post('docs/filtros', 'DocumentosController@filtrosGuardar');
-    Route::post('docs/crear', 'DocumentosController@guardar');
     Route::get ('docs/crear', 'DocumentosController@crear')
         ->middleware('can:crearDocumentos,App\Documento');
+    Route::post('docs/crear', 'DocumentosController@guardar');
     Route::post('docs/{documento}/asignarResponsable', 
         'DocumentosController@asignarResponsable');
     Route::post('docs/{documento}/agregarPropuesta', 
         'DocumentosController@agregarPropuesta');
     Route::post('docs/propuesta/{propuesta}/rechazar', 
-        'DocumentosController@rechazarPropuesta')
-        ->middleware('can:rechazar,propuesta');
+        'DocumentosController@rechazarPropuesta');
     Route::post('docs/propuesta/{propuesta}/aceptar', 
-        'DocumentosController@aceptarPropuesta')
-        ->middleware('can:aceptar,propuesta');
-    Route::post('docs/{documento}/corregir', 'DocumentosController@corregir')
-        ->middleware('can:corregir,documento');
-    Route::post('docs/{documento}/verificar', 'DocumentosController@verificar')
-        ->middleware('can:verificar,documento');
-    Route::post('docs/{documento}/cerrar', 'DocumentosController@cerrar')
-        ->middleware('can:cerrar,documento');
+        'DocumentosController@aceptarPropuesta');
+    Route::post('docs/{documento}/corregir', 
+        'DocumentosController@corregir');
+    Route::post('docs/{documento}/verificar', 
+        'DocumentosController@verificar');
+    Route::post('docs/{documento}/cerrar', 
+        'DocumentosController@cerrar');
     Route::get ('docs/{documento}/logs', 'DocumentosController@logs')
         ->middleware('can:ver,documento');
     Route::get ('docs/archivo/{archivo}', 'DocumentosController@archivo')

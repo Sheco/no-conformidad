@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 use App\Status;
 use App\Documento;
@@ -214,7 +213,6 @@ class DocumentosController extends Controller
     }
 
     public function logs(Documento $documento) {
-        Gate::authorize('ver', $documento);
         $logs = $documento->logs()->orderBy('fecha', 'desc')->cursor();
         return view("documentos.logs", compact('documento', 'logs'));
     }

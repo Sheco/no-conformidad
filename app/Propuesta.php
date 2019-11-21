@@ -32,9 +32,6 @@ class Propuesta extends Model
     public function rechazar(User $user, $comentarios) {
         Gate::forUser($user)->authorize('rechazar', $this);
 
-        if($this->documento->propuestas->last()->id != $this->id)
-            throw new \Exception("Solo se puede aceptar la ultima propuesta del documento, ");
-
         DB::transaction(function() use ($user, $comentarios) {
             $this->retroalimentador()->associate($user);
             $this->retro = $comentarios;
@@ -50,9 +47,6 @@ class Propuesta extends Model
 
     public function aceptar(User $user, $comentarios) {
         Gate::forUser($user)->authorize('aceptar', $this);
-
-        if($this->documento->propuestas->last()->id != $this->id)
-            throw new \Exception('Solo se puede aceptar la ultima propuesta del documento');
 
         DB::transaction(function() use ($user, $comentarios) {
             $this->retroalimentador()->associate($user);

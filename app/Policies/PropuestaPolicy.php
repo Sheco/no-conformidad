@@ -20,6 +20,9 @@ class PropuestaPolicy
       if($doc->status->codigo != 'pendiente-revision')
           return Response::deny('Solo se puede rechazar propuestas cuando estan pendientes de revisión');
       
+      if($propuesta->documento->propuestas->last()->id != $propuesta->id)
+        return Response::deny("Solo se puede rechazar la ultima propuesta del documento, ");
+
       return Response::allow();
     }
 
@@ -32,6 +35,9 @@ class PropuestaPolicy
       if($doc->status->codigo != 'pendiente-revision')
           return Response::deny('Solo se puede aceptar propuestas cuando estan pendientes de revisión');
       
+      if($propuesta->documento->propuestas->last()->id != $propuesta->id)
+        return Response::deny("Solo se puede aceptar la ultima propuesta del documento, ");
+
       return Response::allow();
     } 
 }
