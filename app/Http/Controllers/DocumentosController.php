@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Status;
 use App\Documento;
@@ -23,9 +22,9 @@ class DocumentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($status='')
+    public function index(Request $request, $status='')
     {
-        $user  = Auth::user();
+        $user  = $request->user();
         $statuses = collect([Status::wildcard()])->concat(Status::all());
         $filtros = session("filtros", []);
         $docs = Documento::with('creador')
@@ -61,9 +60,9 @@ class DocumentosController extends Controller
         ));
     }
 
-    function filtros() {
+    function filtros(Request $request) {
         $filtros = session('filtros', []);
-        $user = Auth::user();
+        $user = $request->user();
         $departamentos = $user->departamentos->pluck('id');
         $usuarios = User::whereHas("departamentos", 
             function($q) use ($departamentos) {
@@ -87,7 +86,7 @@ class DocumentosController extends Controller
     }
 
     function filtrosGuardar(Request $request) {
-        $user = Auth::user();
+        $user = $request->user();
 
         $filtrosValidos = ['departamento_id', 'tipo_id'];
         if($user->hasRole('admin') or $user->hasRole('director')) 
@@ -107,11 +106,11 @@ class DocumentosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function crear()
+    public function crear(Request $request)
     {
         $documento = new Documento;
         $tipos = Tipo::all()->pluck('nombre', 'id');
-        $user = Auth::user();
+        $user = $request->user();
         $departamentos = $user->departamentos->pluck('nombre', 'id');
 
         return view('documentos.crear', compact('documento', 'tipos', 'departamentos'));
@@ -133,7 +132,7 @@ class DocumentosController extends Controller
         ]);
 
         $doc = new Documento;
-        $doc->crear(Auth::user(), 
+        $doc->crear($request->user(), 
             Tipo::findOrFail($request->input('tipo_id')), 
             Departamento::findOrFail($request->input('departamento_id')),
             $request->input('titulo'),  
@@ -150,9 +149,9 @@ class DocumentosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function ver(Documento $documento)
+    public function ver(Request $request, Documento $documento)
     {
-        $user = Auth::user();
+        $user = $request->user();
         $responsables = User::whereHas('roles', function($q) {
             $q->where('name', 'responsable');
         })->whereHas('departamentos', function($q) use ($documento) {
@@ -174,7 +173,7 @@ class DocumentosController extends Controller
     public function asignarResponsable(Request $request, Documento $documento) {
         $responsable = User::find($request->input('responsable_usr_id'));
 
-        $documento->asignarResponsable(Auth::user(), $responsable);
+        $documento->asignarResponsable($request->user(), $responsable);
         return back();
     }
 
@@ -183,32 +182,32 @@ class DocumentosController extends Controller
             'fecha_entrega'=>'required',
             'descripcion'=>'required'
         ]);
-        $documento->agregarPropuesta(Auth::user(), $request->input('descripcion'), $request->input('fecha_entrega'));
+        $documento->agregarPropuesta($request->user(), $request->input('descripcion'), $request->input('fecha_entrega'));
         return back();
     }
 
     public function rechazarPropuesta(Request $request, Propuesta $propuesta) {
-        $propuesta->rechazar(Auth::user(), '');
+        $propuesta->rechazar($request->user(), '');
         return back();
     }
 
     public function aceptarPropuesta(Request $request, Propuesta $propuesta) {
-        $propuesta->aceptar(Auth::user(), '');
+        $propuesta->aceptar($request->user(), '');
         return back();
     }
 
     public function corregir(Request $request, Documento $documento) {
-        $documento->corregir(Auth::user());
+        $documento->corregir($request->user());
         return back();
     }
 
     public function verificar(Request $request, Documento $documento) {
-        $documento->verificar(Auth::user());
+        $documento->verificar($request->user());
         return back();
     }
 
     public function cerrar(Request $request, Documento $documento) {
-        $documento->cerrar(Auth::user());
+        $documento->cerrar($request->user());
         return back();
     }
 
