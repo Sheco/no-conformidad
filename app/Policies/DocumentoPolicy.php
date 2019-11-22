@@ -54,7 +54,7 @@ class DocumentoPolicy
         if(!$responsable->departamentos
             ->where('id', $doc->departamento_id) 
             ->count()) {
-            return Response::deny("El usuario $responsable->name no puede encargarse de este documento, no tiene el departamento {$this->departamento->nombre}");
+            return Response::deny("El usuario $responsable->name no puede encargarse de este documento, no tiene el departamento {$doc->departamento->nombre}");
         }
 
         return Response::allow();
