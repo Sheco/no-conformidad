@@ -37,9 +37,11 @@ class FlujoTest extends TestCase
 
         $doc = new Documento;
         $doc->crear($creador, $tipo, $departamento, 'huecote', 'hay un hueco');
+        $this->assertDatabaseHas('documentos', ['id'=>$doc->id]);
 
         /* paso 2, se asigna responsable */ 
         $doc->asignarResponsable($director, $responsable);
+        $this->assertTrue($doc->responsable_usr_id == $responsable->id);
 
         $rechazos = 2;
         do {
@@ -47,28 +49,38 @@ class FlujoTest extends TestCase
             $texto = ($rechazos>0? 'no hacer nada': 'tapar el hueco');
             $fecha = Carbon::now()->addDays(30)->format('Y-m-d');
             $propuesta = $doc->agregarPropuesta($responsable, $texto, $fecha);
+            $doc->refresh();
+            $this->assertTrue($doc->propuestas->last()->id == $propuesta->id);
 
             /* paso 4, rechazar */
             if($rechazos>0) {
                 $propuesta->rechazar($director, 'mala idea');
                 $doc->refresh();
+                $this->assertTrue($doc->propuestas->last()->status == false);
                 $rechazos--;
             } else {
                 /* paso 5, aceptar la propuesta */
                 $propuesta->aceptar($director, 'perfecto');
                 $doc->refresh();
+                $this->assertTrue($doc->propuestas->last()->status == true);
                 break;
             }
         } while(true);
 
         /* paso 6, marcar como completado */
         $doc->corregir($responsable);
+        $doc->refresh();
+        $this->assertTrue($doc->status->codigo=='corregido');
 
         /* paso 7, marcar como verificado */
         $doc->verificar($creador);
+        $doc->refresh();
+        $this->assertTrue($doc->status->codigo=='verificado');
 
         /* paso 9, cerrar el documento */
         $doc->cerrar($creador);
+        $doc->refresh();
+        $this->assertTrue($doc->status->codigo=='cerrado');
     }
 
     public function testDirectorNoPuedeCrear() {
