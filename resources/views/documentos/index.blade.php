@@ -32,10 +32,16 @@
                     <th><span class="oi oi-star text-warning" title="Puedes avanzar este documento" aria-hidden="true"></span></th>
                     <th>ID</th>
                     <th>Folio</th>
+                    @unless (Arr::has($ui_filtros, 'Creador'))
                     <th>Creador</th>
+                    @endunless
                     <th>Título</th>
+                    @unless (Arr::has($ui_filtros, 'Departamento'))
                     <th>Departamento</th>
+                    @endunless
+                    @unless (Arr::has($ui_filtros, 'Tipo'))
                     <th>Tipo</th>
+                    @endunless
                     <th>Fecha</th>
                     <th>Responsable</th>
                     <th>Tiempo&nbsp;Límite&nbsp;</th>
@@ -52,10 +58,16 @@
                     @endpuedeAvanzar</td>
                     <td>{{ $doc->id }}</td>
                     <td style="white-space: nowrap"><a href="{{ url(action('DocumentosController@ver', $doc->id))}}">{{ $doc->folio }}</a></td>
+                    @unless (Arr::has($ui_filtros, 'Creador'))
                     <td>{{ $doc->creador->name }}</td>
+                    @endunless
                     <td>{{ $doc->titulo }}</td>
+                    @unless (Arr::has($ui_filtros, 'Departamento'))
                     <td>{{ $doc->departamento->nombre }}</td>
+                    @endunless
+                    @unless (Arr::has($ui_filtros, 'Tipo'))
                     <td>{{ $doc->tipo->nombre }}</td>
+                    @endunless
                     <td>{{ $doc->created_at->format("Y/M/d") }}</td>
                     <td>@if ($doc->responsable_usr_id) 
                             {{ $doc->responsable->name }}
