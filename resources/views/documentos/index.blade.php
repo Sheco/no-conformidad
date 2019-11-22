@@ -45,9 +45,9 @@
                     <th>Fecha</th>
                     <th>Responsable</th>
                     <th>Tiempo&nbsp;Límite&nbsp;</th>
-                    @if (!$status)
+                    @unless($status)
                         <th>Status</th>
-                    @endif
+                    @endunless
                 </tr>
                 </thead>
                 @foreach ($docs as $doc) 
@@ -76,9 +76,9 @@
                         @endif
                     </td>
                     <td>{{ $doc->tiempoLimiteLegible }}</td>
-                    @if (!$status)
+                    @unless($status)
                         <td>{{ $doc->status->nombre }}</td>
-                    @endif
+                    @endunless
                 </tr>
                 @endforeach
             </table>
