@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Auth\Access\AuthorizationException;
 use Tests\TestCase;
 use TestSeeder;
 use BaseSeeder;
@@ -78,7 +79,7 @@ class FlujoTest extends TestCase
 
         $doc = new Documento;
         
-        $this->expectException(\Illuminate\Auth\Access\AuthorizationException::class);
+        $this->expectException(AuthorizationException::class);
         $doc->crear($director, $tipo, $departamento1, 'titulo', 'descripcion');
     }
 
@@ -90,35 +91,86 @@ class FlujoTest extends TestCase
 
         $doc = new Documento;
         
-        $this->expectException(\Illuminate\Auth\Access\AuthorizationException::class);
+        $this->expectException(AuthorizationException::class);
         $doc->crear($responsable, $tipo, $departamento1, 'titulo', 'descripcion');
     }
 
     public function testCreadorNoPuedeAsignarResponsable() {
-        $this->expectException(\Illuminate\Auth\Access\AuthorizationException::class);
         $tipo = Tipo::find(1);
         $departamento1 = Departamento::find(1);
 
         $creador = User::where('email', 'creador1@localhost')->first();
-        $responsable = User::where('email', 'creador1@localhost')->first();
+        $responsable = User::where('email', 'responsable1@localhost')->first();
 
         $doc = new Documento;
         
         $doc->crear($creador, $tipo, $departamento1, 'titulo', 'descripcion');
+        $this->expectException(AuthorizationException::class);
         $doc->asignarResponsable($creador, $responsable); 
     }
 
     public function testResponsableNoPuedeAsignarResponsable() {
-        $this->expectException(\Illuminate\Auth\Access\AuthorizationException::class);
         $tipo = Tipo::find(1);
         $departamento1 = Departamento::find(1);
 
         $creador = User::where('email', 'creador1@localhost')->first();
-        $responsable = User::where('email', 'creador1@localhost')->first();
+        $responsable = User::where('email', 'responsable1@localhost')->first();
 
         $doc = new Documento;
         
         $doc->crear($creador, $tipo, $departamento1, 'titulo', 'descripcion');
+        $this->expectException(AuthorizationException::class);
         $doc->asignarResponsable($responsable, $responsable); 
+    }
+
+    public function testCreadorNoPuedeCrearEnOtroDepartamento() {
+        $tipo = Tipo::find(1);
+        $departamento = new Departamento;
+        $departamento->nombre = "test";
+        $departamento->save();
+        $creador = User::where('email', 'creador1@localhost')->first();
+
+        $doc = new Documento;
+        $this->expectException(AuthorizationException::class);
+        $doc->crear($creador, $tipo, $departamento, 'titulo', 'descripcion');
+    }
+
+    public function testDirectorNoPuedeAsignarResponsableConStatusIncorrecto() {
+        $tipo = Tipo::find(1);
+        $departamento1 = Departamento::find(1);
+
+        $creador = User::where('email', 'creador1@localhost')->first();
+        $director = User::where('email', 'director1@localhost')->first();
+        $responsable = User::where('email', 'responsable1@localhost')->first();
+
+        $doc = new Documento;
+        
+        $doc->crear($creador, $tipo, $departamento1, 'titulo', 'descripcion');
+        $doc->asignarResponsable($director, $responsable); 
+        $fecha = Carbon::now()->addDays(30)->format('Y-m-d');
+        $propuesta = $doc->agregarPropuesta($responsable, "test", $fecha);
+
+        $this->expectException(AuthorizationException::class);
+        $doc->asignarResponsable($director, $responsable); 
+    }
+
+    public function testDirectorNoPuedeAsignarResponsableDeOtroDepto() {
+        $tipo = Tipo::find(1);
+        $departamento = new Departamento;
+        $departamento->nombre = "test";
+        $departamento->save();
+
+        $creador = User::where('email', 'creador1@localhost')->first();
+        $creador->departamentos()->attach($departamento);
+
+        $director = User::where('email', 'director1@localhost')->first();
+        $director->departamentos()->attach($departamento);
+        $responsable = User::where('email', 'responsable1@localhost')->first();
+
+        $doc = new Documento;
+        
+        $doc->crear($creador, $tipo, $departamento, 'titulo', 'descripcion');
+        $this->expectException(AuthorizationException::class);
+        $doc->asignarResponsable($director, $responsable); 
     }
 }
