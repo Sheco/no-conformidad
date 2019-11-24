@@ -11,6 +11,7 @@
                     {{ Form::open([
                         "url"=>action("DocumentosController@filtrosGuardar")
                     ]) }}
+                    {{ Form::hidden("redirect", url()->previous('/docs')) }}
                     <div class="row">
                         <div class="col-md-6">
                             <label>Departamento</label>
