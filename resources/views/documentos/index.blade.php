@@ -26,7 +26,7 @@
                 @endforeach
             </div>
 
-            <table class="table table-sm table-bordered table-hover">
+            <table class="table table-sm table-bordered table-hover" style="background: #fff">
                 <thead class="thead-dark">
                 <tr>
                     <th><span class="oi oi-star text-warning" title="Puedes avanzar este documento" aria-hidden="true"></span></th>
