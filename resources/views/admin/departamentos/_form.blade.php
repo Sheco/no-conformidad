@@ -15,21 +15,3 @@
     </div>
 </div>
 {{ Form::close() }}
-
-@if ($departamento->id)
-    <div class="col-md-3 offset-md-9">
-        <div class="card" style="margin-top: 1em">
-        {{ Form::open(['url'=>action('Admin\DepartamentosController@destroy', $departamento->id),
-            'method'=>'delete']) }}
-            <div class="card-header bg-danger text-light">Borrar a este departamento</div>
-            <div class="card-body">
-                <p>Aquí se puede borrar este departamento, esta operación no puede ser revertida, usese con precaución.</p>
-
-                <button onclick="return confirm('Seguro que desea continuar?')" class="btn btn-danger">Borrar</button>
-                
-            </div>
-        </div>
-    </div>
-{{ Form::close() }}
-</div>
-@endif
