@@ -9,7 +9,7 @@
         ])
   <div class="row" style="margin-top: 1em">
       <div class="col-md-6">
-          <div class="card">
+          <div class="card shadow">
               <div class="card-header">Departamentos suscritos</div>
               <div class="card-body">
                   Para asignar departamentos, primero guarde la forma de arriba.
@@ -18,7 +18,7 @@
       </div>
 
       <div class="col-md-6">
-          <div class="card">
+          <div class="card shadow">
               <div class="card-header">Roles</div>
               <div class="card-body">
                   Para asignar roles, primero guarde la forma de arriba.

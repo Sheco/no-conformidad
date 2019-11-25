@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-            <ul class="list-group">
+            <ul class="list-group shadow">
                     @foreach ($statuses as $_status)
                         <li class="list-group-item{{ ($_status->codigo == $status? " active": "") }}">
                             <a class="nav-link {{ ($_status->codigo == $status? " text-warning": "") }}" href="{{ url('docs/status', $_status->codigo) }}">
@@ -26,7 +26,7 @@
                 @endforeach
             </div>
 
-            <table class="table table-sm table-bordered table-hover" style="background: #fff">
+            <table class="table table-sm table-bordered table-hover shadow bg-white">
                 <thead class="thead-dark">
                 <tr>
                     <th><span class="oi oi-star text-warning" title="Puedes avanzar este documento" aria-hidden="true"></span></th>

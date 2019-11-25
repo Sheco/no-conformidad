@@ -4,7 +4,7 @@
 <div class="container">
     <a href="{{ action("DocumentosController@ver", $documento->id) }}" class="btn btn-primary"><span class="oi oi-arrow-thick-left"></span> Regresar</a>
     
-    <table class="table table-sm table-bordered table-hover" style="margin-top: 1em">
+    <table class="table table-sm table-bordered table-hover shadow bg-white" style="margin-top: 1em">
         <thead class="thead-dark">
             <tr>
                 <th>Fecha</th>

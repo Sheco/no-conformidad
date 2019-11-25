@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <div class="card">
+    <div class="card shadow">
         <div class="card-header">Documento {{ $documento->folio }} "{{$documento->titulo}}"</div>
         <div class="card-body">
             <div class="container formaTabular">
@@ -127,7 +127,7 @@
     <div class="row">
         @foreach ($documento->propuestas as $propuesta)
         <div class="col-md-6" style="margin-top: 1em">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header{{ $propuesta->headerStyle }}">Propuesta {{ $loop->iteration }}</div>
                 <div class="card-body container">
                     <div class="row formaTabular">

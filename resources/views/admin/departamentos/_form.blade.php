@@ -1,5 +1,5 @@
 {{ Form::model($departamento, [ 'url'=>$url, 'method'=>$method ]) }}
-<div class="card">
+<div class="card shadow">
     <div class="card-header">{{ $title }}</div>
     <div class="card-body">
         <div class="row formaTabular">

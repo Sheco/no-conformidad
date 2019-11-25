@@ -5,7 +5,7 @@
   <div style="margin-bottom: 1em">
     <a href="{{ action('Admin\UsersController@index') }}" class="btn btn-primary"><span class="oi oi-arrow-thick-left"></span> Regresar</a>
   </div>
-  <table class="table table-sm table-bordered table-hover">
+  <table class="table table-sm table-bordered table-hover shadow bg-white">
     <thead class="thead-dark">
       <tr>
         <th>Fecha</th>
