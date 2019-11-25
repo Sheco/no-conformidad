@@ -4,13 +4,14 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Filtros de documentos</div>
 
                 <div class="card-body container formaTabular">
                     {{ Form::open([
                         "url"=>action("DocumentosController@filtrosGuardar")
                     ]) }}
+                    {{ Form::hidden("redirect", url()->previous('/docs')) }}
                     <div class="row">
                         <div class="col-md-6">
                             <label>Departamento</label>

@@ -137,9 +137,7 @@ class FlujoTest extends TestCase
 
     public function testCreadorNoPuedeCrearEnOtroDepartamento() {
         $tipo = Tipo::find(1);
-        $departamento = new Departamento;
-        $departamento->nombre = "test";
-        $departamento->save();
+        $departamento = Departamento::find(2);
         $creador = User::where('email', 'creador1@localhost')->first();
 
         $doc = new Documento;
@@ -168,16 +166,11 @@ class FlujoTest extends TestCase
 
     public function testDirectorNoPuedeAsignarResponsableDeOtroDepto() {
         $tipo = Tipo::find(1);
-        $departamento = new Departamento;
-        $departamento->nombre = "test";
-        $departamento->save();
 
+        $departamento = Departamento::find(1);
         $creador = User::where('email', 'creador1@localhost')->first();
-        $creador->departamentos()->attach($departamento);
-
         $director = User::where('email', 'director1@localhost')->first();
-        $director->departamentos()->attach($departamento);
-        $responsable = User::where('email', 'responsable1@localhost')->first();
+        $responsable = User::where('email', 'responsable2@localhost')->first();
 
         $doc = new Documento;
         

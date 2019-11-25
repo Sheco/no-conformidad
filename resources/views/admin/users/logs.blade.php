@@ -5,7 +5,7 @@
   <div style="margin-bottom: 1em">
     <a href="{{ action('Admin\UsersController@index') }}" class="btn btn-primary"><span class="oi oi-arrow-thick-left"></span> Regresar</a>
   </div>
-  <table class="table table-sm table-bordered table-hover">
+  <table class="table table-sm table-bordered table-hover shadow bg-white">
     <thead class="thead-dark">
       <tr>
         <th>Fecha</th>
@@ -15,8 +15,8 @@
     </thead>
     @foreach ($logs as $log)
       <tr>
-        <td style="white-space: nowrap">{{ $log->fecha }}</td>
-        <td style="white-space: nowarp"><a href="{{ action("DocumentosController@ver", [$log->documento->id]) }}">
+        <td class="text-nowrap">{{ $log->fecha }}</td>
+        <td class="text-nowarp"><a href="{{ action("DocumentosController@ver", [$log->documento->id]) }}">
             {{ $log->documento->folio }}
           </a></td>
         <td>{{ $log->mensaje }}</td>

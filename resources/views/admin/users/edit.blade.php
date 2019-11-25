@@ -9,7 +9,7 @@
         ])
   <div class="row" style="margin-top: 1em">
       <div class="col-md-6">
-          <div class="card">
+          <div class="card shadow">
               <div class="card-header">Departamentos</div>
               <div class="card-body">
                   {{ Form::open(['url'=>action('Admin\UsersController@addDepartamento', [$user->id]), 'method'=>'post', 'style'=>'margin-bottom: 1em']) }}
@@ -41,7 +41,7 @@
       </div>
 
       <div class="col-md-6">
-          <div class="card">
+          <div class="card shadow">
               <div class="card-header">Roles</div>
               <div class="card-body">
                   {{ Form::open(['url'=>action('Admin\UsersController@addRole', [$user->id]), 'method'=>'post', 'style'=>'margin-bottom: 1em']) }}
@@ -66,7 +66,7 @@
       </div>
 
       <div class="col-md-3 offset-md-9">
-          <div class="card" style="margin-top: 1em">
+          <div class="card shadow" style="margin-top: 1em">
           {{ Form::open(['url'=>action('Admin\UsersController@destroy', $user->id),
               'method'=>'delete']) }}
               <div class="card-header bg-danger text-light">Borrar a este usuario</div>

@@ -1,5 +1,5 @@
 {{ Form::model($tipo, [ 'url'=>$url, 'method'=>$method ]) }}
-<div class="card">
+<div class="card shadow">
     <div class="card-header">{{ $title }}</div>
     <div class="card-body">
         <div class="row formaTabular">
@@ -15,21 +15,3 @@
     </div>
 </div>
 {{ Form::close() }}
-
-@if ($tipo->id)
-    <div class="col-md-3 offset-md-9">
-        <div class="card" style="margin-top: 1em">
-        {{ Form::open(['url'=>action('Admin\TiposController@destroy', $tipo->id),
-            'method'=>'delete']) }}
-            <div class="card-header bg-danger text-light">Borrar a este tipo</div>
-            <div class="card-body">
-                <p>Aquí se puede borrar este tipo, esta operación no puede ser revertida, usese con precaución.</p>
-
-                <button onclick="return confirm('Seguro que desea continuar?')" class="btn btn-danger">Borrar</button>
-                
-            </div>
-        </div>
-    </div>
-{{ Form::close() }}
-</div>
-@endif

@@ -98,7 +98,7 @@ class DocumentosController extends Controller
             })->toArray();
         session(["filtros"=>$filtros]);
 
-        return redirect("/docs");
+        return redirect($request->input('redirect'));
     }
 
     /**
