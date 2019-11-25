@@ -165,7 +165,7 @@ class Documento extends Model
 
         $diff = $this->tiempoLimite;
 
-        if($diff->seconds == 0) return "Vencido";
+        if($diff->total('seconds') == 0) return "Vencido";
 
         return $diff->forHumans(['parts'=>2]);
     }
