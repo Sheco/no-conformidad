@@ -192,7 +192,7 @@
             'url'=>"/docs/$documento->id/agregarPropuesta", 
             'method'=>'post'
             ]) }}
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Nueva Propuesta</div>
                 <div class="card-body container">
                     <div class="row formaTabular">
