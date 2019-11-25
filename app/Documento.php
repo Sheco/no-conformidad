@@ -240,8 +240,9 @@ class Documento extends Model
     }
 
     public function agregarPropuesta(User $user, $descripcion, $fecha_entrega) {
-
-        $fecha_entrega = new Carbon("$fecha_entrega 17:00:00");
+        // la fecha de entrega es el siguiente día a media noche
+        // lo que efectivamente hace da todo el día especificado 
+        $fecha_entrega = (new Carbon($fecha_entrega))->addDays(1);
         $limite_maximo = $this->limiteMaximoPropuesta;
 
         Gate::forUser($user)->authorize('agregarPropuesta', [$this, $fecha_entrega]);
