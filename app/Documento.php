@@ -5,8 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
-use Carbon\Carbon;
-use Carbon\CarbonInterval;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Cache;
@@ -152,17 +151,22 @@ class Documento extends Model
 
     function getTiempoLimiteAttribute() {
         $fecha = $this->limite_actual;
-        $now = Carbon::now();
+        $now = now();
+
+        // si ya pasó la fecha, entonces el tiempo limite es cero
         if($now >= $fecha) {
-            return CarbonInterval::hours(0);
+            $now = $fecha;    
         }
         return $fecha->diffAsCarbonInterval($now);
     }
 
     function getTiempoLimiteLegibleAttribute() {
         if(!$this->limite_actual) return "N/A";
+
         $diff = $this->tiempoLimite;
+
         if($diff->seconds == 0) return "Vencido";
+
         return $diff->forHumans(['parts'=>2]);
     }
 
@@ -170,7 +174,7 @@ class Documento extends Model
         if($this->tienePropuestas)
             return $this->limite_maximo;
 
-        return Carbon::now()->addDays(90);
+        return now()->addDays(90);
     }
 
     function crear(User $user, Tipo $tipo, Departamento $departamento, $titulo, $descripcion, ?UploadedFile $archivo = null) {
@@ -185,7 +189,7 @@ class Documento extends Model
             $this->tipo_id = $tipo->id;
             $this->departamento_id = $departamento->id;
             $this->folio = "$user->serie_documentos $user->contador_documentos/$year";
-            $this->limite_maximo = Carbon::now()->addDays(1);
+            $this->limite_maximo = now()->addDays(1);
             $this->limite_actual = $this->limite_maximo;
             $this->titulo = $titulo;
             $this->descripcion = $descripcion;
@@ -226,7 +230,7 @@ class Documento extends Model
             $this->setStatus('pendiente-propuesta');
 
             if(!$this->tienePropuestas) {
-                $this->limite_maximo = Carbon::now()->addDays(3);
+                $this->limite_maximo = now()->addDays(3);
                 $this->limite_actual = $this->limite_maximo;
             }
             $this->save();
