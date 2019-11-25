@@ -13,7 +13,7 @@
         </thead>
         @foreach ($logs as $log)
             <tr>
-                <td style="white-space: nowrap">{{ $log->fecha }}</td>
+                <td class="text-nowrap">{{ $log->fecha }}</td>
                 <td>{{ $log->mensaje }}</td>
             </tr>
         @endforeach

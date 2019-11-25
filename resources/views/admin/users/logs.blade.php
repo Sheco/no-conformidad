@@ -15,8 +15,8 @@
     </thead>
     @foreach ($logs as $log)
       <tr>
-        <td style="white-space: nowrap">{{ $log->fecha }}</td>
-        <td style="white-space: nowarp"><a href="{{ action("DocumentosController@ver", [$log->documento->id]) }}">
+        <td class="text-nowrap">{{ $log->fecha }}</td>
+        <td class="text-nowarp"><a href="{{ action("DocumentosController@ver", [$log->documento->id]) }}">
             {{ $log->documento->folio }}
           </a></td>
         <td>{{ $log->mensaje }}</td>

@@ -57,7 +57,7 @@
 
                     @endpuedeAvanzar</td>
                     <td>{{ $doc->id }}</td>
-                    <td style="white-space: nowrap"><a href="{{ url(action('DocumentosController@ver', $doc->id))}}">{{ $doc->folio }}</a></td>
+                    <td class="text-nowrap"><a href="{{ url(action('DocumentosController@ver', $doc->id))}}">{{ $doc->folio }}</a></td>
                     @unless (Arr::has($ui_filtros, 'Creador'))
                     <td>{{ $doc->creador->name }}</td>
                     @endunless
