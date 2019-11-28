@@ -103,8 +103,8 @@
                                 'url' => "/docs/$documento->id/verificar",
                                 'method'=>'post'
                                 ]) }}
-                                {{ Form::submit('Marcar como verificado', 
-                                    ['class'=>'btn btn-success']) }}
+                            {{ Form::submit('Marcar como verificado', 
+                                ['class'=>'btn btn-success']) }}
                             {{ Form::close() }}
                         @endcan
                     </div>
@@ -114,8 +114,8 @@
                                 'url' => "/docs/$documento->id/cerrar",
                                 'method'=>'post'
                                 ]) }}
-                                {{ Form::submit('Cerrar', 
-                                    ['class'=>'btn btn-secondary']) }}
+                            {{ Form::submit('Cerrar', 
+                                ['class'=>'btn btn-secondary']) }}
                             {{ Form::close() }}
                         @endcan
                     </div>
@@ -166,7 +166,7 @@
                             'url'=>action('DocumentosController@rechazarPropuesta', $propuesta->id),
                             'method'=>'post'
                             ]) }}
-                            {{ Form::submit('Rechazar', ['class'=>'btn btn-danger']) }}
+                        {{ Form::submit('Rechazar', ['class'=>'btn btn-danger']) }}
                         {{ Form::close() }}
                         </div>
                         @endcan
@@ -176,7 +176,7 @@
                             'url'=>action('DocumentosController@aceptarPropuesta', $propuesta->id),
                             'method'=>'post',
                             ]) }}
-                            {{ Form::submit('Aceptar', ['class'=>'btn btn-primary']) }}
+                        {{ Form::submit('Aceptar', ['class'=>'btn btn-primary']) }}
                         {{ Form::close() }}
                         </div>
                         @endcan
@@ -192,7 +192,7 @@
             'url'=>"/docs/$documento->id/agregarPropuesta", 
             'method'=>'post'
             ]) }}
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Nueva Propuesta</div>
                 <div class="card-body container">
                     <div class="row formaTabular">

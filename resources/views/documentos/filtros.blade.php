@@ -30,16 +30,16 @@
                         </div>
                         <div class="col-md-6">
                             <label>Creador</label>
-                        @hasRole(['admin', 'director'])
-                            {{ Form::select("creador_usr_id", $usuarios, 
-                                Arr::get($filtros, "creador_usr_id"), 
-                                [ "class"=>"form-control",
-                                  "placeholder"=>"- Cualquiera" ]) }}
-                        @else
-                            <div><small>
-                            Los directores pueden filtrar por creador del documento.
-                            </small></div>
-                        @endhasRole
+                            @hasRole(['admin', 'director'])
+                                {{ Form::select("creador_usr_id", $usuarios, 
+                                    Arr::get($filtros, "creador_usr_id"), 
+                                    [ "class"=>"form-control",
+                                      "placeholder"=>"- Cualquiera" ]) }}
+                            @else
+                                <div><small>
+                                Los directores pueden filtrar por creador del documento.
+                                </small></div>
+                            @endhasRole
                         </div>
                     </div>
 
