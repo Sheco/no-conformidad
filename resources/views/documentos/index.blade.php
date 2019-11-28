@@ -82,6 +82,8 @@
                 </tr>
                 @endforeach
             </table>
+
+            {{ $docs->links() }}
         </div>
     </div>
 </div>

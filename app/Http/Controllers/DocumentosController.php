@@ -36,7 +36,7 @@ class DocumentosController extends Controller
             ->filtrados($filtros)
             ->status($status)
             ->orderBy('limite_actual', 'asc')
-            ->get();
+            ->paginate(50);
 
         $ui_filtros = collect($filtros)->mapWithKeys(function($value, $key) {
             if($key == 'creador_usr_id') {
