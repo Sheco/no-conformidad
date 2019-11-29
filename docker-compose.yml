@@ -1,0 +1,15 @@
+---
+version: '2'
+
+services:
+  app:
+    image: php:7.3-fpm-alpine
+    ports:
+      - "9000:9000"
+    volumes:
+      - ".:/app"
+      - "storage:/app/storage"
+    restart: always
+
+volumes:
+  storage:
