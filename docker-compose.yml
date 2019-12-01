@@ -11,5 +11,14 @@ services:
       - "storage:/app/storage"
     restart: always
 
+  web:
+    image: httpd:2.4
+    ports: 
+      - "80:80"
+    volumes:
+      - "./public:/usr/local/apache2/htdocs"
+      - "./httpd.conf:/usr/local/apache2/conf/httpd.conf"
+    restart: always
+
 volumes:
   storage:

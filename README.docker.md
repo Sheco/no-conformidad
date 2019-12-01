@@ -6,7 +6,8 @@ Las instrucciones basicas para arrancar el entorno es:
 
 ```
 docker-compose up -d
-docker cp storage noconformidad_app_1 app:/app/
+docker cp storage noconformidad_app_1:/app/
+docker-compose exec app chown -R www-data:www-data /app/storage
 docker-compose exec app touch /app/storage/database.sqlite
 docker-compose exec app php /app/artisan migrate
 docker-compose exec app php /app/artisan db:seed
