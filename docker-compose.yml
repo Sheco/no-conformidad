@@ -7,7 +7,7 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - ".:/app"
+      - ".:/app:ro"
       - "storage:/app/storage"
     restart: always
 
@@ -16,8 +16,8 @@ services:
     ports: 
       - "80:80"
     volumes:
-      - "./public:/usr/local/apache2/htdocs"
-      - "./httpd.conf:/usr/local/apache2/conf/httpd.conf"
+      - "./public:/usr/local/apache2/htdocs:ro"
+      - "./httpd.conf:/usr/local/apache2/conf/httpd.conf:ro"
     restart: always
 
 volumes:
