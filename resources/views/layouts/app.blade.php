@@ -69,6 +69,7 @@
                                     <a class="dropdown-item" href="{{ url('admin/tipos') }}">Tipos</a>
                                     <div class="dropdown-divider"></div>
                                     @endhasRole
+                                    <a class="dropdown-item" href="{{ url('/twofactor') }}">Two Factor</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

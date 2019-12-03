@@ -160,4 +160,10 @@ class UsersController extends Controller
         $user->roles()->detach($role->id);
         return back();
     }
+
+    public function twofactorDisable(User $user) {
+        $user->twofactor = null;
+        $user->save();
+        return back();
+    }
 }

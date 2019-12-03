@@ -3,7 +3,7 @@ version: '2'
 
 services:
   app:
-    image: php:7.3-fpm-alpine
+    build: .
     ports:
       - "9000:9000"
     volumes:

@@ -13,7 +13,7 @@
 
 Auth::routes(['register'=>false]);
 
-Route::middleware(['auth'])->group(function() {
+Route::middleware(['auth', '2fa'])->group(function() {
     Route::redirect('/', '/docs');
     Route::redirect('/home', '/docs');
     
@@ -46,6 +46,10 @@ Route::middleware(['auth'])->group(function() {
     Route::get ('docs/{documento}', 'DocumentosController@ver')
         ->middleware('can:ver,documento');
 
+    Route::get ('twofactor', 'TwoFactorController@index');
+    Route::post('twofactor', 'TwoFactorController@enable');
+    Route::delete('twofactor', 'TwoFactorController@disable');
+
     Route::middleware(['role:admin'])->group(function() {
         Route::resource('admin/users', 'Admin\UsersController');
         Route::post('admin/users/{user}/delRole/{role}',
@@ -58,6 +62,8 @@ Route::middleware(['auth'])->group(function() {
             'Admin\UsersController@addDepartamento');
         Route::get('admin/users/{user}/logs',
             'Admin\UsersController@logs');
+        Route::post('admin/users/{user}/twofactor/disable',
+            'Admin\UsersController@twofactorDisable');
 
         Route::resource('admin/departamentos', 'Admin\DepartamentosController');
         Route::resource('admin/tipos', 'Admin\TiposController');

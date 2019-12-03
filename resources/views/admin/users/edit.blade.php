@@ -65,7 +65,31 @@
           </div>
       </div>
 
-      <div class="col-md-3 offset-md-9">
+      <div class="col-md-3 offset-md-6">
+          <div class="card shadow" style="margin-top: 1em">
+              <div class="card-header">Autenticación de dos pasos</div>
+              <div class="card-body">
+                  @if ($user->twofactor)
+                  {{ Form::open([
+                      'url'=>action('Admin\UsersController@twofactorDisable', $user->id),
+                      'method'=>'post'
+                      ]) }}
+                      <p>
+                      Este usuario tiene activa la autenticación de dos pasos,
+                      si tiene algún problema con este mecanismo, se puede 
+                      desactivar aquí.
+                      </p>
+                      <input type="submit" class="btn btn-secondary" value="Desactivar 2FA">
+                  {{ Form::close() }}
+                  @else 
+                    <p>Este usuario no esta usando autenticación de dos pasos.
+                  @endif
+              </div>
+          </div>
+
+      </div>
+
+      <div class="col-md-3">
           <div class="card shadow" style="margin-top: 1em">
           {{ Form::open(['url'=>action('Admin\UsersController@destroy', $user->id),
               'method'=>'delete']) }}
